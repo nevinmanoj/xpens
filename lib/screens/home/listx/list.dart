@@ -7,25 +7,15 @@ import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-import 'package:xpens/screens/home/add/time.dart';
 import 'package:xpens/screens/home/listx/deleteItem.dart';
-import 'package:xpens/screens/home/listx/editItem.dart';
-import 'package:xpens/shared/constants.dart';
+import 'package:xpens/screens/home/listx/editMain.dart';
+
 import 'package:intl/intl.dart';
-import 'package:xpens/shared/datamodals.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final User? user = _auth.currentUser;
-var stream = FirebaseFirestore.instance
-    .collection('UserInfo/${user!.uid}/list')
-    .snapshots();
-String year = '2023';
-
-String curDate = DateFormat.yMMMd().format(DateTime.now()).toString();
-
+String curDate = "";
 String iDate = "";
 
 class listx extends StatefulWidget {
@@ -55,7 +45,7 @@ class _listxState extends State<listx> {
           List<Map<String, dynamic>> data = list!
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
-
+          curDate = "";
           return ListView.builder(
             itemCount: data.length,
             itemBuilder: (context, i) {
@@ -69,6 +59,7 @@ class _listxState extends State<listx> {
 Widget item(String id, var item) {
   iDate = DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
   bool dispDate = false;
+
   if (iDate != curDate) {
     curDate = iDate;
     dispDate = true;
@@ -96,7 +87,7 @@ Widget item(String id, var item) {
               transitionDuration: Duration(milliseconds: 500),
               transitionType: ContainerTransitionType.fadeThrough,
               closedBuilder: (context, OpenContainer) => editx(),
-              openBuilder: (context, action) => editxDetails(
+              openBuilder: (context, action) => EditxDetails(
                 id: id,
                 item: item,
               ),

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../services/database.dart';
-import '../../shared/constants.dart';
+import '../../../services/database.dart';
+import '../../../shared/constants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 

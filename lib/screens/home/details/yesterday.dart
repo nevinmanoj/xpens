@@ -2,32 +2,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final User? user = _auth.currentUser;
-String month = DateFormat.MMM().format(DateTime.now()).toString();
-String year = DateTime.now().year.toString();
 
-class ThisMonth extends StatefulWidget {
-  const ThisMonth({super.key});
+class Yesterday extends StatefulWidget {
+  const Yesterday({super.key});
 
   @override
-  State<ThisMonth> createState() => _ThisMonthState();
+  State<Yesterday> createState() => _YesterdayState();
 }
 
-class _ThisMonthState extends State<ThisMonth> {
+class _YesterdayState extends State<Yesterday> {
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
+    String month = DateFormat.MMM().format(DateTime.now()).toString();
+    String year = DateTime.now().year.toString();
+
+    String yesterday =
+        DateTime.now().subtract(const Duration(days: 1)).day.toString();
+
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('UserInfo/${user!.uid}/list')
             .where('month', isEqualTo: month)
             .where('year', isEqualTo: year)
+            .where('day', isEqualTo: yesterday)
             .snapshots(),
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;
@@ -44,18 +48,22 @@ class _ThisMonthState extends State<ThisMonth> {
           List<Map<String, dynamic>> data = list
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
+
           double sum = 0;
           Map<String, double> ranks = {};
           for (var item in data) {
-            sum += item['cost'];
-            if (ranks[item['itemName']] == null) {
-              ranks[item['itemName']] = 0;
+            {
+              sum += item['cost'];
+              if (ranks[item['itemName']] == null) {
+                ranks[item['itemName']] = 0;
+              }
+              ranks[item['itemName']] =
+                  (ranks[item['itemName']]! + item['cost']);
             }
-            ranks[item['itemName']] = (ranks[item['itemName']]! + item['cost']);
           }
           List<MapEntry<String, double>> sortedList = ranks.entries.toList()
             ..sort((a, b) => b.value.compareTo(a.value));
-          // print(ranks);
+
           return Container(
             margin: EdgeInsets.fromLTRB(wt * 0.05, 10, wt * 0.05, 0),
             decoration: BoxDecoration(
@@ -75,7 +83,7 @@ class _ThisMonthState extends State<ThisMonth> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "This Month",
+                        "Yesterday",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -108,5 +116,6 @@ class _ThisMonthState extends State<ThisMonth> {
             ),
           );
         });
+    ;
   }
 }

@@ -23,6 +23,7 @@ List<String> cItems = [
 ];
 DateTime currentPhoneDate = DateTime.now();
 String itemName = cItems[0];
+String remarks = "";
 double cost = 0;
 String costS = "";
 DateTime date = DateTime.now();
@@ -51,14 +52,18 @@ class _AddXState extends State<AddX> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
+
     return Center(
       child: Form(
           key: _formKey,
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ItemName(),
+              SizedBox(
+                height: 15,
+              ),
+              ItemRemark(),
               SizedBox(
                 height: 15,
               ),
@@ -70,6 +75,7 @@ class _AddXState extends State<AddX> {
               SizedBox(
                 height: 15,
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -95,14 +101,17 @@ class _AddXState extends State<AddX> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       cost = double.parse(costS);
+                      print(remarks);
                       bool res = await DatabaseService(uid: user!.uid).addItem(
                           Item(
+                              remarks: remarks,
                               cost: cost,
                               date: date,
                               itemName: itemName,
-                              time: time)) as bool;
+                              time: time));
                       String msg = res ? "successfully" : "failed";
                       showToast(context: context, msg: "Expense added " + msg);
+                      remarks = "";
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                   },
@@ -156,7 +165,7 @@ class _ItemNameState extends State<ItemName> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
-              value: cItems[0],
+              value: cItems.contains(itemName) ? itemName : "Other",
               validator: (value) =>
                   value!.isEmpty ? ' Must select a category for item' : null,
               decoration: InputDecoration(border: InputBorder.none),
@@ -179,7 +188,7 @@ class _ItemNameState extends State<ItemName> {
           ),
         ),
         SizedBox(height: 10),
-        itemName == "Other"
+        (itemName == "Other" || !cItems.contains(itemName))
             ? Container(
                 height: 50,
                 width: 300,
@@ -256,6 +265,50 @@ class _ItemQuantityState extends State<ItemQuantity> {
             border: InputBorder.none,
             hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
             hintText: 'Cost',
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ItemRemark extends StatefulWidget {
+  const ItemRemark({Key? key}) : super(key: key);
+
+  @override
+  State<ItemRemark> createState() => _ItemRemarkState();
+}
+
+class _ItemRemarkState extends State<ItemRemark> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50,
+      width: 300,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200]?.withOpacity(0.6),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        child: TextFormField(
+          // initialValue: remarks,
+          cursorColor: primaryAppColor,
+          cursorWidth: 1,
+          onChanged: (value) {
+            remarks = value;
+            // print(remarks);
+          },
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
+            hintText: 'Remarks',
           ),
         ),
       ),

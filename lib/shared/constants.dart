@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+List<String> cItems = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+  "Tea",
+  "Petrol",
+  "Other"
+];
 const primaryAppColor = Colors.black;
 const secondaryAppColor = Color.fromRGBO(255, 143, 0, 1);
 

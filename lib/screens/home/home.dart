@@ -10,7 +10,7 @@ import 'package:xpens/screens/home/listx/list.dart';
 
 import '../../shared/constants.dart';
 import 'details/details.dart';
-import 'settings.dart';
+import 'settings/settings.dart';
 
 List<String> navOptions = ["addx", "Listx", "Details", "Settings"];
 final FirebaseAuth _auth = FirebaseAuth.instance;

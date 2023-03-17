@@ -6,6 +6,8 @@ import 'package:excel/excel.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:xpens/screens/home/details/downloadPopup.dart';
+import 'package:xpens/screens/home/details/today.dart';
+import 'package:xpens/screens/home/details/yesterday.dart';
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/other.dart';
 import 'package:xpens/shared/constants.dart';
@@ -47,20 +49,20 @@ class _DetailsState extends State<Details> {
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
 
-          return Column(
-            children: [
-              ThisMonth(),
-              SizedBox(
-                height: 5,
-              ),
-              DOwnloadDetails(
-                data: data,
-              ),
-              // ElevatedButton(
-              //     onPressed: () {
-              //     },
-              //     child: Text("data"))
-            ],
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Today(),
+                Yesterday(),
+                ThisMonth(),
+                SizedBox(
+                  height: 5,
+                ),
+                DOwnloadDetails(
+                  data: data,
+                ),
+              ],
+            ),
           );
         });
   }

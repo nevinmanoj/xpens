@@ -43,9 +43,11 @@ class DatabaseService {
 
   Future<bool> addItem(Item I) async {
     String year = I.date.year.toString();
+    String day = I.date.day.toString();
     String key = DateTime.now().toString();
     String month = DateFormat.MMM().format(I.date).toString();
-
+    I.date = DateTime(
+        I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
     String formattedTime = DateFormat('HH:mm')
         .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
 
@@ -56,6 +58,8 @@ class DatabaseService {
           .set({
         "month": month,
         "year": year,
+        "day": day,
+        "remarks": I.remarks,
         "cost": I.cost,
         "date": I.date.toString(),
         "time": formattedTime,
@@ -78,20 +82,24 @@ class DatabaseService {
   }
 
   Future<bool> editItem({required Item I, required String id}) async {
-    try {
-      String year = I.date.year.toString();
-      String key = id;
-      String month = DateFormat.MMM().format(I.date).toString();
+    String year = I.date.year.toString();
 
-      String formattedTime = DateFormat('HH:mm')
-          .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
+    String month = DateFormat.MMM().format(I.date).toString();
+    String day = I.date.day.toString();
+    String formattedTime = DateFormat('HH:mm')
+        .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
+    I.date = DateTime(
+        I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
+    try {
       await FirebaseFirestore.instance
           .collection('UserInfo/$uid/list')
-          .doc(key)
+          .doc(id)
           .set({
         "month": month,
         "year": year,
         "cost": I.cost,
+        "remarks": I.remarks,
+        "day": day,
         "date": I.date.toString(),
         "time": formattedTime,
         "itemName": I.itemName
