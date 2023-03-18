@@ -1,25 +1,9 @@
-import 'package:flutter/material.dart';
-
-import 'package:path_provider/path_provider.dart';
-import 'package:xpens/shared/constants.dart';
-
-import 'package:intl/intl.dart';
-import 'package:excel/excel.dart';
 import 'dart:io';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:share/share.dart';
-
-void showToast({required BuildContext context, required String msg}) {
-  final scaffold = ScaffoldMessenger.of(context);
-  scaffold.showSnackBar(
-    SnackBar(
-      duration: Duration(seconds: 2, milliseconds: 500),
-      backgroundColor: primaryAppColor,
-      content: Text(msg),
-    ),
-  );
-}
+import 'package:excel/excel.dart';
+import 'package:intl/intl.dart';
 
 Future<File> jsonToExcel(
     {required List<Map<String, dynamic>> list,
@@ -30,12 +14,19 @@ Future<File> jsonToExcel(
   var sheet = excel[month];
 
   // Add the header row to the sheet
-  sheet.appendRow(['Name', 'Cost', 'Date']);
+  sheet.appendRow(['Name', 'Cost', 'Date', 'Remarks']);
   for (int i = 0; i < list.length; i++) {
     jsonData = list[i];
-    if ((jsonData['year'] == year) && (jsonData['month'] == month))
-      sheet.appendRow(
-          [jsonData['itemName'], jsonData['cost'], jsonData['date']]);
+    if ((jsonData['year'] == year) && (jsonData['month'] == month)) {
+      String formattedDate =
+          DateFormat.yMd().format(jsonData['date']).toString();
+      sheet.appendRow([
+        jsonData['itemName'],
+        jsonData['cost'],
+        formattedDate,
+        jsonData['remarks']
+      ]);
+    }
   }
 
   final directory = await getExternalStorageDirectory();

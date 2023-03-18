@@ -18,31 +18,3 @@ class Loading extends StatelessWidget {
     );
   }
 }
-
-class MarketLoading extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[100]?.withOpacity(0.5),
-      child: Center(
-          child: Lottie.network(
-              "https://assets3.lottiefiles.com/packages/lf20_2KNQ1X.json",
-              repeat: true,
-              animate: true)),
-    );
-  }
-}
-
-class WalletLoading extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.grey[100]?.withOpacity(0.5),
-      child: Center(
-          child: Lottie.network(
-              "https://assets3.lottiefiles.com/packages/lf20_2KNQ1X.json",
-              repeat: true,
-              animate: true)),
-    );
-  }
-}

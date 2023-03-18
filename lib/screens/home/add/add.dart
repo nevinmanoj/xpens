@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/other.dart';
+import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
@@ -151,17 +150,7 @@ class _ItemNameState extends State<ItemName> {
       children: [
         Container(
           width: 300,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.grey[200]?.withOpacity(0.6),
-            boxShadow: [
-              BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-                // spreadRadius: 4, blurRadius: 4,
-                // offset: Offset(6, 4),
-              ),
-            ],
-          ),
+          decoration: addInputDecoration,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
@@ -192,18 +181,7 @@ class _ItemNameState extends State<ItemName> {
             ? Container(
                 height: 50,
                 width: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.grey[200]?.withOpacity(0.6),
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-                      // spreadRadius: 4, blurRadius: 4,
-                      // offset: Offset(6, 4),
-                    ),
-                  ],
-                ),
+                decoration: addInputDecoration,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: TextFormField(
@@ -240,17 +218,7 @@ class _ItemQuantityState extends State<ItemQuantity> {
     return Container(
       height: 50,
       width: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200]?.withOpacity(0.6),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-            // spreadRadius: 4, blurRadius: 4,
-            // offset: Offset(6, 4),
-          ),
-        ],
-      ),
+      decoration: addInputDecoration,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: TextFormField(
@@ -285,15 +253,7 @@ class _ItemRemarkState extends State<ItemRemark> {
     return Container(
       height: 50,
       width: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200]?.withOpacity(0.6),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-          ),
-        ],
-      ),
+      decoration: addInputDecoration,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: TextFormField(

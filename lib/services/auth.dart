@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'database.dart';
-import 'other.dart';
+import 'toast.dart';
 
 class AuthSerivice {
   final FirebaseAuth _auth = FirebaseAuth.instance;

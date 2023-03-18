@@ -15,15 +15,7 @@ class _ItemRemarkState extends State<ItemRemark> {
     return Container(
       height: 50,
       width: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.grey[200]?.withOpacity(0.6),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-          ),
-        ],
-      ),
+      decoration: addInputDecoration,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: TextFormField(
