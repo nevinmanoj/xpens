@@ -36,3 +36,10 @@ var addInputDecoration = BoxDecoration(
     ),
   ],
 );
+
+var buttonDecoration = ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5.0),
+    )),
+    backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));

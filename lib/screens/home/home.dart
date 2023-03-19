@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:xpens/screens/home/add/add.dart';
+import 'package:xpens/screens/home/dev/devDash.dart';
 import 'package:xpens/screens/home/listx/list.dart';
 
 import '../../shared/constants.dart';
@@ -43,6 +44,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => DevDash()));
+              },
+              icon: Icon(Icons.logo_dev))
+        ],
         centerTitle: true,
         title: Text(navOptions[_selectedIndex]),
         backgroundColor: Colors.black,

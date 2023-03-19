@@ -114,13 +114,7 @@ class _AddXState extends State<AddX> {
                       FocusManager.instance.primaryFocus?.unfocus();
                     }
                   },
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      )),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(primaryAppColor)),
+                  style: buttonDecoration,
                   child: Center(
                       child: Text("Add ",
                           style: TextStyle(
