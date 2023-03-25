@@ -6,8 +6,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+// final User? user = _auth.currentUser;
 String month = DateFormat.MMM().format(DateTime.now()).toString();
 String year = DateTime.now().year.toString();
 
@@ -21,6 +21,8 @@ class ThisMonth extends StatefulWidget {
 class _ThisMonthState extends State<ThisMonth> {
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     return StreamBuilder<QuerySnapshot>(

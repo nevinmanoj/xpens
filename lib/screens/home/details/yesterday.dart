@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+// final User? user = _auth.currentUser;
 
 class Yesterday extends StatefulWidget {
   const Yesterday({super.key});
@@ -22,6 +22,8 @@ class _YesterdayState extends State<Yesterday> {
     double wt = MediaQuery.of(context).size.width;
     String month = DateFormat.MMM().format(DateTime.now()).toString();
     String year = DateTime.now().year.toString();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
 
     String yesterday =
         DateTime.now().subtract(const Duration(days: 1)).day.toString();

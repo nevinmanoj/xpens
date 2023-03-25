@@ -8,9 +8,6 @@ import 'package:xpens/services/auth.dart';
 
 import 'Profile.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
-
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -18,6 +15,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
 
     return Column(
       children: [

@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../../services/database.dart';
 import '../../../shared/constants.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-
 bool updateName = false;
 bool updatePhone = false;
 
@@ -33,7 +31,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
-    final User? user = _auth.currentUser;
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+
     String? email123 = user?.email;
 
     // name= DatabaseService(uid: user!.uid).getName().toString();

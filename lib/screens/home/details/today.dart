@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+// final User? user = _auth.currentUser;
 
 class Today extends StatefulWidget {
   const Today({super.key});
@@ -22,15 +22,15 @@ class _TodayState extends State<Today> {
     double wt = MediaQuery.of(context).size.width;
     String month = DateFormat.MMM().format(DateTime.now()).toString();
     String year = DateTime.now().year.toString();
-
-    String Today = DateTime.now().day.toString();
-
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    String today = DateTime.now().day.toString();
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('UserInfo/${user!.uid}/list')
             .where('month', isEqualTo: month)
             .where('year', isEqualTo: year)
-            .where('day', isEqualTo: Today)
+            .where('day', isEqualTo: today)
             .snapshots(),
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;

@@ -10,8 +10,8 @@ import 'package:xpens/shared/datamodals.dart';
 import 'calendar.dart';
 import 'time.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+// final User? user = _auth.currentUser;
 List<String> cItems = [
   "Breakfast",
   "Lunch",
@@ -49,6 +49,8 @@ class _AddXState extends State<AddX> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
 
@@ -102,7 +104,7 @@ class _AddXState extends State<AddX> {
                       cost = double.parse(costS);
                       print(remarks);
                       bool res = await DatabaseService(uid: user!.uid).addItem(
-                          Item(
+                          AddItem(
                               remarks: remarks,
                               cost: cost,
                               date: date,

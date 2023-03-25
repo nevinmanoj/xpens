@@ -38,7 +38,7 @@ class DatabaseService {
     }, SetOptions(merge: true));
   }
 
-  Future<bool> addItem(Item I) async {
+  Future<bool> addItem(AddItem I) async {
     String year = I.date.year.toString();
     String day = I.date.day.toString();
     String key = DateTime.now().toString();
@@ -78,7 +78,7 @@ class DatabaseService {
         .delete();
   }
 
-  Future<bool> editItem({required Item I, required String id}) async {
+  Future<bool> editItem({required AddItem I, required String id}) async {
     String year = I.date.year.toString();
 
     String month = DateFormat.MMM().format(I.date).toString();
@@ -108,32 +108,4 @@ class DatabaseService {
 
     return true;
   }
-
-  // Future injectTestData(
-  //     {required String year,
-  //     required String month,
-  //     required double count}) async {
-  //   List<String> Items = [
-  //     "Breakfast",
-  //     "Lunch",
-  //     "Dinner",
-  //     "Tea",
-  //     "Petrol",
-  //   ];
-
-  //   var formattedTime = TimeOfDay.now();
-  //   for (int i = 0; i < count; i++) {
-  //     DateTime date = DateTime(int.parse(year),
-  //         DateFormat("MMM").parse(month).month, Random().nextInt(28) + 1);
-  //     double cost = Random().nextInt(151) + 50;
-  //     String itemName = Items[Random().nextInt(4)];
-  //     print("injectimg record $i");
-  //     await addItem(Item(
-  //         remarks: "remark $i",
-  //         cost: cost,
-  //         date: date,
-  //         itemName: itemName,
-  //         time: formattedTime));
-  //   }
-  // }
 }

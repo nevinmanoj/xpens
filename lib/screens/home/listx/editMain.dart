@@ -13,9 +13,6 @@ import 'package:xpens/services/toast.dart';
 
 import 'package:xpens/shared/datamodals.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
-
 String costS = "";
 
 class editx extends StatefulWidget {
@@ -81,6 +78,8 @@ class _EditxDetailsState extends State<EditxDetails> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Center(
@@ -166,7 +165,7 @@ class _EditxDetailsState extends State<EditxDetails> {
                             : widget.item['cost'];
                         bool res = await DatabaseService(uid: user!.uid)
                             .editItem(
-                                I: Item(
+                                I: AddItem(
                                     remarks: widget.item['remarks'],
                                     cost: cost,
                                     date: DateTime.parse(widget.item['date']),

@@ -9,8 +9,8 @@ import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
+FirebaseAuth _auth = FirebaseAuth.instance;
+User? user = _auth.currentUser;
 String selectYear = DateTime.now().year.toString();
 String selectMonth = DateFormat.MMM().format(DateTime.now()).toString();
 
@@ -28,7 +28,7 @@ const monthList = [
   "Nov",
   "Dec"
 ];
-var x = Icon(Icons.logo_dev);
+
 const countList = ["2", "25", "50", "75", "100"];
 String selectCount = countList[0];
 const yearList = [
@@ -96,13 +96,11 @@ class _InjectTestDataState extends State<InjectTestData> {
                                                   MaterialStateProperty.all<
                                                       Color>(primaryAppColor)),
                                           onPressed: () async {
-                                            await DevDatabaseService(
-                                                    uid: user!.uid)
-                                                .injectTestData(
-                                                    year: selectYear,
-                                                    month: selectMonth,
-                                                    count: double.parse(
-                                                        selectCount));
+                                            await DevService().injectTestData(
+                                                year: selectYear,
+                                                month: selectMonth,
+                                                count:
+                                                    double.parse(selectCount));
                                           },
                                           child: Text('Inject data')),
                                     ],

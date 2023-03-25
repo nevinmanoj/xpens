@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:xpens/screens/home/add/add.dart';
 import 'package:xpens/screens/home/dev/devDash.dart';
 import 'package:xpens/screens/home/listx/list.dart';
@@ -13,9 +9,8 @@ import '../../shared/constants.dart';
 import 'details/details.dart';
 import 'settings/settings.dart';
 
+var x = Icons.calendar_month;
 List<String> navOptions = ["Addx", "Listx", "Details", "Settings"];
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

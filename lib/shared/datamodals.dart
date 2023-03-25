@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 
-class Item {
+class AddItem {
   double cost;
   String itemName;
   DateTime date;
   TimeOfDay time;
   String remarks;
-  Item(
+  AddItem(
       {required this.cost,
       required this.remarks,
       required this.date,
       required this.itemName,
       required this.time});
+}
+
+class Expense {
+  String key;
+  Map<String, dynamic> data;
+  Expense({required this.key, required this.data});
 }

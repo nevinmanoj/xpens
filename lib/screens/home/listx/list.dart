@@ -13,8 +13,6 @@ import 'package:xpens/screens/home/listx/editMain.dart';
 
 import 'package:intl/intl.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
 String curDate = "";
 String iDate = "";
 
@@ -28,6 +26,8 @@ class listx extends StatefulWidget {
 class _listxState extends State<listx> {
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('UserInfo/${user!.uid}/list')

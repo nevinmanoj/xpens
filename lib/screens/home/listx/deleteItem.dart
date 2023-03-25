@@ -4,9 +4,6 @@ import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final User? user = _auth.currentUser;
-
 class DeleteItem extends StatefulWidget {
   String id;
   String name;
@@ -24,6 +21,8 @@ class DeleteItem extends StatefulWidget {
 class _MyWidgetState extends State<DeleteItem> {
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return IconButton(
