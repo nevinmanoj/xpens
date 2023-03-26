@@ -35,9 +35,13 @@ class _editxState extends State<editx> {
 class EditxDetails extends StatefulWidget {
   String id;
   var item;
+
   String costS = "";
 
-  EditxDetails({required this.id, required this.item});
+  EditxDetails({
+    required this.id,
+    required this.item,
+  });
   @override
   State<EditxDetails> createState() => _EditxDetailsState();
 }
@@ -53,6 +57,7 @@ class _EditxDetailsState extends State<EditxDetails> {
 
   void updateName(String newName) {
     setState(() {
+      print("updated name $newName");
       widget.item['itemName'] = newName.toString();
     });
   }
@@ -85,6 +90,16 @@ class _EditxDetailsState extends State<EditxDetails> {
     return Center(
       child: Scaffold(
         appBar: AppBar(
+            // leading: BackButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       print(widget.itembackup);
+            //       widget.item = widget.itembackup;
+            //     });
+
+            //     // Navigator.pop(context);
+            //   },
+            // ),
             centerTitle: true,
             title: Text(
               "Update Details",
@@ -102,9 +117,8 @@ class _EditxDetailsState extends State<EditxDetails> {
                 ),
                 ItemName(
                   name: widget.item['itemName'],
-                  onNameChanged: (String newId) {
-                    updateName(newId);
-                  },
+                  onNameChanged: updateName,
+                  // hideOther: cItems.contains(widget.item['itemName']),
                 ),
                 SizedBox(
                   height: 15,

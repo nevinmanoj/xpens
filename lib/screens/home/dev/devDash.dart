@@ -21,15 +21,7 @@ class _DevDashState extends State<DevDash> {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     String ac = user!.email == "nevinmanojnew@gmail.com" ? "Main" : "Dev";
-    Map<DateTime, double> events = {
-      DateTime(2023, 3, 19): 522,
-      DateTime(2023, 3, 20): 331,
-      DateTime(2023, 3, 21): 700,
-      DateTime(2023, 3, 22): 10000,
-      DateTime(2023, 3, 23): 1,
-      DateTime(2023, 3, 15): 144,
-      DateTime(2023, 3, 14): 123,
-    };
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryAppColor,
@@ -39,13 +31,13 @@ class _DevDashState extends State<DevDash> {
       body: Center(
           child: Column(children: [
         InjectTestData(),
+        // Test(1),
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
               await DevService().switchAc();
             },
             child: Text("Switch to $ac")),
-        CalendarWidget(events: events),
       ])),
     );
   }

@@ -2,22 +2,18 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
 import 'package:intl/intl.dart';
-import 'package:excel/excel.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:xpens/screens/home/details/detailRadio.dart';
+
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendarDisp.dart';
 import 'package:xpens/screens/home/details/today.dart';
 import 'package:xpens/screens/home/details/yesterday.dart';
-import 'package:xpens/screens/home/dev/test.dart';
+
 import 'package:xpens/shared/datamodals.dart';
-import 'month.dart';
-import 'package:charts_flutter/flutter.dart';
+import 'thisMonth.dart';
 
 DateTime today = DateTime.now();
 
@@ -62,17 +58,22 @@ class _DetailsState extends State<Details> {
           }
           int i = 0;
           List dayx = [];
+          List keys = [];
           for (var item in data) {
             var date = DateTime.parse(item['date']);
             date = DateTime(date.year, date.month, date.day);
             if (testMap[date] == null) {
-              testMap[date] = {'cost': 0, 'list': []};
+              testMap[date] = {'cost': 0, 'listData': [], 'listKeys': []};
             }
 
             testMap[date]!['cost'] = testMap[date]!['cost']! + item['cost'];
-            dayx = testMap[date]!['list'];
-            dayx.add(Expense(key: list[i].id, data: item));
-            testMap[date]!['list'] = dayx;
+            dayx = testMap[date]!['listData'];
+            dayx.add(item);
+            testMap[date]!['listData'] = dayx;
+            keys = testMap[date]!['listKeys'];
+            keys.add(list[i].id);
+            testMap[date]!['listKeys'] = keys;
+
             i++;
           }
 

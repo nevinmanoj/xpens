@@ -1,16 +1,16 @@
 // ignore: file_names
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:xpens/screens/home/details/calendarExpanded.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/datamodals.dart';
 
 class CalendarDisp extends StatefulWidget {
-  // final Map<DateTime, double> events;
   final Map<DateTime, Map<String, dynamic>> testmap;
 
   const CalendarDisp({super.key, required this.testmap});
-
-  // CalendarDisp({required this.events, required this.testmap});
 
   @override
   _CalendarDispState createState() => _CalendarDispState();
@@ -26,13 +26,24 @@ class _CalendarDispState extends State<CalendarDisp> {
   }
 
   void _onDaySelected(DateTime selectedDate, DateTime selectedDate2) {
-    // showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         content: Text("select day $selectedDate"),
-    //       );
-    //     });
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          List data = [];
+          List keys = [];
+          DateTime date =
+              DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+          if (widget.testmap[date] != null) {
+            data = widget.testmap[date]!['listData'];
+            keys = widget.testmap[date]!['listKeys'];
+          }
+
+          return CalendarExp(
+            data: data,
+            keys: keys,
+            date: DateFormat.yMMMd().format(date).toString(),
+          );
+        });
     setState(() {
       _selectedDate =
           DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
@@ -60,7 +71,6 @@ class _CalendarDispState extends State<CalendarDisp> {
         onDaySelected: _onDaySelected,
         selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
         calendarStyle: CalendarStyle(
-          // rowDecoration: BoxDecoration(color: Colors.yellow),
           defaultDecoration: BoxDecoration(
             color: Colors.grey.withOpacity(0.1),
             shape: BoxShape.rectangle,
@@ -83,7 +93,6 @@ class _CalendarDispState extends State<CalendarDisp> {
         ),
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, day, events) {
-            // final value = widget.events[DateTime(day.year, day.month, day.day)];
             var map = widget.testmap[DateTime(day.year, day.month, day.day)];
             if (map == null) return Container();
             final value = map['cost'];

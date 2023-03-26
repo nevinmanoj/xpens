@@ -4,6 +4,7 @@ import 'package:xpens/shared/constants.dart';
 class ItemName extends StatefulWidget {
   final Function(String) onNameChanged;
   String name;
+
   ItemName({required this.onNameChanged, required this.name});
   @override
   State<ItemName> createState() => _ItemNameState();
@@ -12,6 +13,13 @@ class ItemName extends StatefulWidget {
 class _ItemNameState extends State<ItemName> {
   @override
   Widget build(BuildContext context) {
+    TextEditingController otherController = new TextEditingController();
+    otherController.text = cItems.contains(widget.name) ? "" : widget.name;
+    otherController.selection = TextSelection.fromPosition(
+        TextPosition(offset: otherController.text.length));
+
+    // print(
+    //     "rebuilding..${widget.name} with ${cItems.contains(widget.name)} in $cItems");
     return Column(
       children: [
         Container(
@@ -38,15 +46,14 @@ class _ItemNameState extends State<ItemName> {
                 "Category of Item",
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
               ),
-              onChanged: (Value) {
-                widget.name = Value!;
-                if (Value != "Other") {
-                  setState(() {
-                    // itemName = Value!;
-
-                    widget.onNameChanged(Value);
-                  });
-                }
+              onChanged: (value) {
+                setState(() {
+                  widget.name = value!;
+                });
+                // widget.name = value!;
+                // if (widget.name != "Other") {
+                widget.onNameChanged(widget.name);
+                // }
               },
               items: cItems.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
@@ -58,7 +65,7 @@ class _ItemNameState extends State<ItemName> {
           ),
         ),
         SizedBox(height: 10),
-        (widget.name == "Other" || !cItems.contains(widget.name))
+        (widget.name == "Other" || !(cItems.contains(widget.name)))
             ? Container(
                 height: 50,
                 width: 300,
@@ -66,18 +73,15 @@ class _ItemNameState extends State<ItemName> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: TextFormField(
-                    initialValue: widget.name,
-                    onChanged: (value) {
-                      // itemName = value;
-                      widget.name = value;
-                      if (value != "Other") {
-                        setState(() {
-                          // itemName = Value!;
+                    controller: otherController,
 
-                          widget.onNameChanged(value);
-                        });
-                      }
+                    //  initialValue: cItems.contains(widget.name) ? "" : widget.name,
+                    // initialValue: initOtherVal,
+                    onChanged: (value) {
+                      widget.name = value;
+                      widget.onNameChanged(otherController.text);
                     },
+
                     validator: (value) =>
                         value!.isEmpty ? ' Name cannot be empty' : null,
                     keyboardType: TextInputType.name,
@@ -89,7 +93,7 @@ class _ItemNameState extends State<ItemName> {
                   ),
                 ),
               )
-            : Container(),
+            : Container(child: Text(otherController.text)),
       ],
     );
   }
