@@ -160,9 +160,21 @@ Widget item(String id, var item, BuildContext context) {
             : Container(),
         Row(
           children: [
-            Text(item['itemName']),
-            Spacer(),
-            Text(item['cost'].toString()),
+            Container(
+                width: 150,
+                child: Text(
+                  item['itemName'],
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                )),
+            Container(
+                width: 100,
+                child: Text(
+                  "₹ ${item['cost'].toString()}",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                )),
+
             Spacer(),
             // OpenContainer(
             //   closedElevation: 0,

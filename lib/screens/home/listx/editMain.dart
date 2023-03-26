@@ -13,25 +13,6 @@ import 'package:xpens/services/toast.dart';
 
 import 'package:xpens/shared/datamodals.dart';
 
-String costS = "";
-
-class editx extends StatefulWidget {
-  const editx({super.key});
-
-  @override
-  State<editx> createState() => _editxState();
-}
-
-class _editxState extends State<editx> {
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(
-      color: primaryAppColor,
-      Icons.edit,
-    );
-  }
-}
-
 class EditxDetails extends StatefulWidget {
   String id;
   var item;
@@ -70,7 +51,7 @@ class _EditxDetailsState extends State<EditxDetails> {
 
   void updateCost(String newCost) {
     setState(() {
-      costS = newCost;
+      widget.costS = newCost;
     });
   }
 
@@ -174,8 +155,8 @@ class _EditxDetailsState extends State<EditxDetails> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        double cost = costS != ""
-                            ? double.parse(costS)
+                        double cost = widget.costS != ""
+                            ? double.parse(widget.costS)
                             : widget.item['cost'];
                         bool res = await DatabaseService(uid: user!.uid)
                             .editItem(

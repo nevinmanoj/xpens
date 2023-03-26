@@ -1,6 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:xpens/screens/home/listx/deleteItem.dart';
+import 'package:xpens/screens/home/listx/editMain.dart';
+import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
 class CalendarExp extends StatefulWidget {
@@ -16,17 +21,31 @@ class CalendarExp extends StatefulWidget {
 class _CalendarExpState extends State<CalendarExp> {
   @override
   Widget build(BuildContext context) {
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.height;
     List<Widget> items = [];
     for (int i = 0; i < widget.data.length; i++) {
-      items.add(buildItem(data: widget.data[i], key: widget.keys[i]));
+      items.add(
+        buildItem(data: widget.data[i], key: widget.keys[i], context: context),
+      );
     }
-    return AlertDialog(
-      title: Center(child: Text(widget.date)),
-      content: Container(
-        // height: 300,
-        child: SingleChildScrollView(
-          child: Column(
-            children: items,
+    return SizedBox(
+      width: wt * 0.9,
+      child: AlertDialog(
+        insetPadding: EdgeInsets.fromLTRB(
+          0,
+          0,
+          0,
+          ht * 0.1,
+        ),
+        title: Center(child: Text(widget.date)),
+        content: Container(
+          // height: 300,
+          width: wt * 0.8,
+          child: SingleChildScrollView(
+            child: Column(
+              children: items,
+            ),
           ),
         ),
       ),
@@ -34,16 +53,43 @@ class _CalendarExpState extends State<CalendarExp> {
   }
 }
 
-Widget buildItem({required var data, required var key}) {
+Widget buildItem(
+    {required var data, required var key, required BuildContext context}) {
+  String iDate =
+      DateFormat.yMMMd().format(DateTime.parse(data['date'])).toString();
   return Row(
     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Text(data['itemName']),
-      Spacer(),
+      SizedBox(
+          width: 90,
+          child: Text(
+            data['itemName'],
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+          )),
+      // Spacer(),
       Text(data['cost'].toString()),
       Spacer(),
-      IconButton(onPressed: () {}, icon: Icon(Icons.info_outline)),
-      IconButton(onPressed: () {}, icon: Icon(Icons.info_outline))
+      IconButton(
+          onPressed: () {
+            Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (context) => EditxDetails(
+                          id: key,
+                          item: data,
+                        )));
+          },
+          icon: Icon(
+            color: primaryAppColor,
+            Icons.edit,
+          )),
+      DeleteItem(
+        id: key,
+        name: data['itemName'],
+        cost: data['cost'].toString(),
+        date: iDate,
+      )
     ],
   );
 }
