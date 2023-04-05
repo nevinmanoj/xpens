@@ -1,5 +1,5 @@
 // ignore: file_names
-import 'package:charts_flutter/flutter.dart' as charts;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -31,14 +31,17 @@ class _CalendarDispState extends State<CalendarDisp> {
         builder: (BuildContext context) {
           List data = [];
           List keys = [];
+          double cost = 0;
           DateTime date =
               DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
           if (widget.testmap[date] != null) {
             data = widget.testmap[date]!['listData'];
             keys = widget.testmap[date]!['listKeys'];
+            cost = widget.testmap[date]!['cost'];
           }
 
           return CalendarExp(
+            cost: cost,
             data: data,
             keys: keys,
             date: DateFormat.yMMMd().format(date).toString(),

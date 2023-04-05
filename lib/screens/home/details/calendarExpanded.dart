@@ -12,8 +12,13 @@ class CalendarExp extends StatefulWidget {
   String date;
   List data;
   List keys;
+  double cost;
   CalendarExp(
-      {super.key, required this.data, required this.date, required this.keys});
+      {super.key,
+      required this.data,
+      required this.date,
+      required this.keys,
+      required this.cost});
   @override
   State<CalendarExp> createState() => _CalendarExpState();
 }
@@ -24,10 +29,14 @@ class _CalendarExpState extends State<CalendarExp> {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     List<Widget> items = [];
+
     for (int i = 0; i < widget.data.length; i++) {
       items.add(
         buildItem(data: widget.data[i], key: widget.keys[i], context: context),
       );
+    }
+    if (items != []) {
+      items.add(buildLastRow(widget.cost));
     }
     return SizedBox(
       width: wt * 0.9,
@@ -60,15 +69,20 @@ Widget buildItem(
   return Row(
     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      SizedBox(
-          width: 90,
+      Container(
+          width: 120,
           child: Text(
             data['itemName'],
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           )),
-      // Spacer(),
-      Text(data['cost'].toString()),
+      Container(
+          width: 90,
+          child: Text(
+            "₹ ${data['cost'].toString()}",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+          )),
       Spacer(),
       IconButton(
           onPressed: () {
@@ -90,6 +104,27 @@ Widget buildItem(
         cost: data['cost'].toString(),
         date: iDate,
       )
+    ],
+  );
+}
+
+Widget buildLastRow(double cost) {
+  return Row(
+    children: [
+      Container(
+          width: 120,
+          child: Text(
+            "TOTAL",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          )),
+      Container(
+          width: 90,
+          child: Text(
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            "₹ $cost",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+          )),
     ],
   );
 }

@@ -6,7 +6,7 @@
    <application
         android:label="xpens"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/debug_white">
         <activity
             android:name=".MainActivity"
             android:exported="true"
