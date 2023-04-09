@@ -60,6 +60,7 @@ class DatabaseService {
         "cost": I.cost,
         "date": I.date.toString(),
         "time": formattedTime,
+        "location": I.location,
         "itemName":
             I.itemName.substring(0, 1).toUpperCase() + I.itemName.substring(1)
       }, SetOptions(merge: true));
@@ -99,7 +100,8 @@ class DatabaseService {
         "day": day,
         "date": I.date.toString(),
         "time": formattedTime,
-        "itemName": I.itemName
+        "itemName": I.itemName,
+        "location": I.location
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());

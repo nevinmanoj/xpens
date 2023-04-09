@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/add/calendar.dart';
+import 'package:xpens/screens/home/add/location.dart';
 import 'package:xpens/screens/home/add/time.dart';
 import 'package:xpens/screens/home/listx/editCost.dart';
 import 'package:xpens/screens/home/listx/editName.dart';
@@ -29,6 +30,11 @@ class EditxDetails extends StatefulWidget {
 
 class _EditxDetailsState extends State<EditxDetails> {
   final _formKey = GlobalKey<FormState>();
+  void updateLocation(String val) {
+    setState(() {
+      widget.item['location'] = val;
+    });
+  }
 
   void updateDate(DateTime newDate) {
     setState(() {
@@ -93,6 +99,10 @@ class _EditxDetailsState extends State<EditxDetails> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Location(
+                  location: widget.item['location'],
+                  onLocationChanged: updateLocation,
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -161,10 +171,15 @@ class _EditxDetailsState extends State<EditxDetails> {
                         bool res = await DatabaseService(uid: user!.uid)
                             .editItem(
                                 I: AddItem(
-                                    remarks: widget.item['remarks'],
+                                    location: widget.item['location'],
+                                    remarks: widget.item['remarks']
+                                        .toString()
+                                        .trim(),
                                     cost: cost,
                                     date: DateTime.parse(widget.item['date']),
-                                    itemName: widget.item['itemName'],
+                                    itemName: widget.item['itemName']
+                                        .toString()
+                                        .trim(),
                                     time: TimeOfDay(
                                         hour: int.parse(
                                             widget.item['time'].split(":")[0]),

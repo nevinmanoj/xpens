@@ -1,13 +1,5 @@
 import 'package:flutter/material.dart';
 
-List<String> cItems = [
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Tea",
-  "Petrol",
-  "Other"
-];
 const primaryAppColor = Colors.black;
 const secondaryAppColor = Color.fromRGBO(255, 143, 0, 1);
 
@@ -43,3 +35,17 @@ var buttonDecoration = ButtonStyle(
       borderRadius: BorderRadius.circular(5.0),
     )),
     backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));
+
+List<String> cItems = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+  "Tea and Snacks",
+  "Petrol",
+  "Icecream",
+  "Other"
+];
+
+List locationList = ["Hostel", "Home"];
+
+List<String> filterList = ["All", "Hostel", "Home"];

@@ -9,7 +9,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 // final User? user = _auth.currentUser;
 
 class Today extends StatefulWidget {
-  const Today({super.key});
+  final Query<Map<String, dynamic>> stream;
+  const Today({super.key, required this.stream});
 
   @override
   State<Today> createState() => _TodayState();
@@ -22,12 +23,10 @@ class _TodayState extends State<Today> {
     double wt = MediaQuery.of(context).size.width;
     String month = DateFormat.MMM().format(DateTime.now()).toString();
     String year = DateTime.now().year.toString();
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
+
     String today = DateTime.now().day.toString();
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('UserInfo/${user!.uid}/list')
+        stream: widget.stream
             .where('month', isEqualTo: month)
             .where('year', isEqualTo: year)
             .where('day', isEqualTo: today)

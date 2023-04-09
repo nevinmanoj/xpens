@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:xpens/screens/home/add/location.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
@@ -10,16 +11,6 @@ import 'package:xpens/shared/datamodals.dart';
 import 'calendar.dart';
 import 'time.dart';
 
-// final FirebaseAuth _auth = FirebaseAuth.instance;
-// final User? user = _auth.currentUser;
-List<String> cItems = [
-  "Breakfast",
-  "Lunch",
-  "Dinner",
-  "Tea and Snacks",
-  "Petrol",
-  "Other"
-];
 DateTime currentPhoneDate = DateTime.now();
 String itemName = cItems[0];
 String remarks = "";
@@ -27,6 +18,7 @@ double cost = 0;
 String costS = "";
 DateTime date = DateTime.now();
 TimeOfDay time = TimeOfDay.now();
+String location = locationList[0];
 
 class AddX extends StatefulWidget {
   @override
@@ -35,6 +27,12 @@ class AddX extends StatefulWidget {
 
 class _AddXState extends State<AddX> {
   final _formKey = GlobalKey<FormState>();
+  void updateLocation(String val) {
+    setState(() {
+      location = val;
+    });
+  }
+
   void updateDate(DateTime newDate) {
     setState(() {
       date = newDate;
@@ -59,7 +57,19 @@ class _AddXState extends State<AddX> {
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // LocationText(),
+              // SizedBox(
+              //   height: 15,
+              // ),
+              Location(
+                location: location,
+                onLocationChanged: updateLocation,
+              ),
+              SizedBox(
+                height: 15,
+              ),
               ItemName(),
               SizedBox(
                 height: 15,
@@ -105,10 +115,11 @@ class _AddXState extends State<AddX> {
                       print(remarks);
                       bool res = await DatabaseService(uid: user!.uid).addItem(
                           AddItem(
-                              remarks: remarks,
+                              location: location,
+                              remarks: remarks.trim(),
                               cost: cost,
                               date: date,
-                              itemName: itemName,
+                              itemName: itemName.trim(),
                               time: time));
                       String msg = res ? "successfully" : "failed";
                       showToast(context: context, msg: "Expense added " + msg);

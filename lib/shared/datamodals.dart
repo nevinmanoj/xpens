@@ -6,9 +6,11 @@ class AddItem {
   DateTime date;
   TimeOfDay time;
   String remarks;
+  String location;
   AddItem(
       {required this.cost,
       required this.remarks,
+      required this.location,
       required this.date,
       required this.itemName,
       required this.time});

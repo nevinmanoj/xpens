@@ -9,8 +9,10 @@ import 'package:intl/intl.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendarDisp.dart';
+import 'package:xpens/screens/home/details/filter.dart';
 import 'package:xpens/screens/home/details/today.dart';
 import 'package:xpens/screens/home/details/yesterday.dart';
+import 'package:xpens/shared/constants.dart';
 
 import 'package:xpens/shared/datamodals.dart';
 import 'thisMonth.dart';
@@ -18,21 +20,35 @@ import 'thisMonth.dart';
 DateTime today = DateTime.now();
 
 class Details extends StatefulWidget {
+  String filter = filterList[0];
+
+  var stream = FirebaseFirestore.instance
+      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+      .orderBy('date', descending: true);
   @override
   State<Details> createState() => _DetailsState();
 }
 
 class _DetailsState extends State<Details> {
   @override
+  void onFilterChanged(String val) {
+    setState(() {
+      widget.filter = val;
+      widget.stream = FirebaseFirestore.instance
+          .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+          .orderBy('date', descending: true);
+      if (val == "Hostel" || val == "Home") {
+        widget.stream = widget.stream.where('location', isEqualTo: val);
+      }
+    });
+  }
+
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
 
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('UserInfo/${user!.uid}/list')
-            .orderBy('date', descending: true)
-            .snapshots(),
+        stream: widget.stream.snapshots(),
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;
 
@@ -80,12 +96,22 @@ class _DetailsState extends State<Details> {
           return SingleChildScrollView(
             child: Column(
               children: [
+                FilterDetails(
+                  onFilterChanged: onFilterChanged,
+                  filter: widget.filter,
+                ),
                 CalendarDisp(
                   testmap: testMap,
                 ),
-                Today(),
-                Yesterday(),
-                ThisMonth(),
+                Today(
+                  stream: widget.stream,
+                ),
+                Yesterday(
+                  stream: widget.stream,
+                ),
+                ThisMonth(
+                  stream: widget.stream,
+                ),
                 SizedBox(
                   height: 5,
                 ),

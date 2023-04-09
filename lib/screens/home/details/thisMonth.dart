@@ -12,7 +12,8 @@ String month = DateFormat.MMM().format(DateTime.now()).toString();
 String year = DateTime.now().year.toString();
 
 class ThisMonth extends StatefulWidget {
-  const ThisMonth({super.key});
+  final Query<Map<String, dynamic>> stream;
+  const ThisMonth({super.key, required this.stream});
 
   @override
   State<ThisMonth> createState() => _ThisMonthState();
@@ -26,8 +27,7 @@ class _ThisMonthState extends State<ThisMonth> {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('UserInfo/${user!.uid}/list')
+        stream: widget.stream
             .where('month', isEqualTo: month)
             .where('year', isEqualTo: year)
             .snapshots(),

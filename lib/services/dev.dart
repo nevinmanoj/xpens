@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/shared/constants.dart';
 import '../shared/datamodals.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,8 +43,10 @@ class DevService {
           DateFormat("MMM").parse(month).month, Random().nextInt(28) + 1);
       double cost = Random().nextInt(151) + 50;
       String itemName = Items[Random().nextInt(4)];
+      String location = locationList[Random().nextInt(2)];
       print("injectimg record $i");
       await DatabaseService(uid: user!.uid).addItem(AddItem(
+          location: location,
           remarks: "remark $i",
           cost: cost,
           date: date,
