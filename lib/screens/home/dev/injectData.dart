@@ -29,7 +29,7 @@ const monthList = [
   "Dec"
 ];
 
-const countList = ["2", "25", "50", "75", "100"];
+const countList = ["2", "10" "25", "50", "75", "100"];
 String selectCount = countList[0];
 const yearList = [
   '2023',

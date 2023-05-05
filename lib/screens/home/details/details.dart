@@ -20,6 +20,7 @@ import 'thisMonth.dart';
 DateTime today = DateTime.now();
 
 class Details extends StatefulWidget {
+  DateTime mY = DateTime.now();
   String filter = filterList[0];
 
   var stream = FirebaseFirestore.instance
@@ -111,6 +112,7 @@ class _DetailsState extends State<Details> {
                 ),
                 ThisMonth(
                   stream: widget.stream,
+                  mY: DateTime(widget.mY.year, widget.mY.month),
                 ),
                 SizedBox(
                   height: 5,

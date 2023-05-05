@@ -38,6 +38,7 @@ class _DevDashState extends State<DevDash> {
               await DevService().switchAc();
             },
             child: Text("Switch to $ac")),
+        Test()
       ])),
     );
   }
