@@ -7,12 +7,14 @@ class AddItem {
   TimeOfDay time;
   String remarks;
   String location;
+  bool isOther;
   AddItem(
       {required this.cost,
       required this.remarks,
       required this.location,
       required this.date,
       required this.itemName,
+      required this.isOther,
       required this.time});
 }
 

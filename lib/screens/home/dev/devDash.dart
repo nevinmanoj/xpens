@@ -20,7 +20,7 @@ class _DevDashState extends State<DevDash> {
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    String ac = user!.email == "nevinmanojnew@gmail.com" ? "Main" : "Dev";
+    bool isDev = user!.email == "nevinmanojnew@gmail.com";
 
     return Scaffold(
       appBar: AppBar(
@@ -31,14 +31,23 @@ class _DevDashState extends State<DevDash> {
       body: Center(
           child: Column(children: [
         InjectTestData(),
-        // Test(1),
+        isDev
+            ? SizedBox(
+                height: 1,
+              )
+            : ElevatedButton(
+                style: buttonDecoration,
+                onPressed: () async {
+                  await DevService().switchAc();
+                },
+                child: Text("Switch to dev")),
+        Test(),
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
-              await DevService().switchAc();
+              await DevService().addFieldToDocuments();
             },
-            child: Text("Switch to $ac")),
-        Test()
+            child: Text("modify"))
       ])),
     );
   }

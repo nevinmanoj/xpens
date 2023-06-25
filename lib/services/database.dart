@@ -56,6 +56,7 @@ class DatabaseService {
         "month": month,
         "year": year,
         "day": day,
+        "isOther": I.isOther,
         "remarks": I.remarks,
         "cost": I.cost,
         "date": I.date.toString(),
@@ -94,6 +95,7 @@ class DatabaseService {
           .doc(id)
           .set({
         "month": month,
+        "isOther": I.isOther,
         "year": year,
         "cost": I.cost,
         "remarks": I.remarks,

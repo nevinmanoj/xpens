@@ -113,8 +113,17 @@ class _AddXState extends State<AddX> {
                     if (_formKey.currentState!.validate()) {
                       cost = double.parse(costS);
                       print(remarks);
+                      List<String> Items = [
+                        "Breakfast",
+                        "Lunch",
+                        "Dinner",
+                        "Tea and Snacks",
+                        "Petrol",
+                        "Icecream",
+                      ];
                       bool res = await DatabaseService(uid: user!.uid).addItem(
                           AddItem(
+                              isOther: !Items.contains(itemName.trim()),
                               location: location,
                               remarks: remarks.trim(),
                               cost: cost,
@@ -129,7 +138,7 @@ class _AddXState extends State<AddX> {
                   },
                   style: buttonDecoration,
                   child: Center(
-                      child: Text("Add ",
+                      child: Text("Add",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

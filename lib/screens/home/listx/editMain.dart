@@ -168,9 +168,21 @@ class _EditxDetailsState extends State<EditxDetails> {
                         double cost = widget.costS != ""
                             ? double.parse(widget.costS)
                             : widget.item['cost'];
+                        List<String> Items = [
+                          "Breakfast",
+                          "Lunch",
+                          "Dinner",
+                          "Tea and Snacks",
+                          "Petrol",
+                          "Icecream",
+                        ];
                         bool res = await DatabaseService(uid: user!.uid)
                             .editItem(
                                 I: AddItem(
+                                    isOther: !Items.contains(widget
+                                        .item['itemName']
+                                        .toString()
+                                        .trim()),
                                     location: widget.item['location'],
                                     remarks: widget.item['remarks']
                                         .toString()
