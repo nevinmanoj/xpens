@@ -9,10 +9,11 @@ class FilterBtns extends StatefulWidget {
   final Function() toggleFilter;
   final Function(dynamic) onStreamChange;
   String? name;
-
+  String order;
   String? location;
   FilterBtns(
       {required this.clearFilters,
+      required this.order,
       required this.onStreamChange,
       required this.name,
       required this.location,
@@ -49,11 +50,18 @@ class _FilterBtnsState extends State<FilterBtns> {
           child: ElevatedButton(
             style: buttonDecoration,
             onPressed: () {
-              var base = FirebaseFirestore.instance
-                  .collection(
-                      'UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
-                  .orderBy('date', descending: true);
-
+              var base;
+              if (widget.order == "Spent Date") {
+                base = FirebaseFirestore.instance
+                    .collection(
+                        'UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+                    .orderBy('date', descending: true);
+              } else {
+                base = FirebaseFirestore.instance
+                    .collection(
+                        'UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+                    .orderBy(FieldPath.documentId, descending: false);
+              }
               if (widget.name != null) {
                 if (widget.name != 'Other') {
                   base = base.where("itemName", isEqualTo: widget.name);

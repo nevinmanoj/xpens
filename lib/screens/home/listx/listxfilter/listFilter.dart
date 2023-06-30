@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/listx/listxfilter/filterButtons.dart';
 import 'package:xpens/screens/home/listx/listxfilter/locationFilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/namefilter.dart';
+import 'package:xpens/screens/home/listx/listxfilter/orderBy.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterWindow extends StatefulWidget {
@@ -19,10 +20,12 @@ class _FilterWindowState extends State<FilterWindow> {
   double _height = 0;
   String? name;
   String? location;
+  String order = "Spent Date";
   void clearFilters() {
     setState(() {
       name = null;
       location = null;
+      order = "Spent Date";
       widget.onStreamChange(FirebaseFirestore.instance
           .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
           .orderBy('date', descending: true));
@@ -39,6 +42,12 @@ class _FilterWindowState extends State<FilterWindow> {
   void locchange(newLoc) {
     setState(() {
       location = newLoc;
+    });
+  }
+
+  void orderchange(newOrder) {
+    setState(() {
+      order = newOrder;
     });
   }
 
@@ -105,13 +114,17 @@ class _FilterWindowState extends State<FilterWindow> {
                           onLocChange: locchange,
                           selectedOption: location,
                         ),
+                        OrderByRadioAccordion(
+                          selectedOption: order,
+                          onOrderChange: orderchange,
+                        ),
                         FilterBtns(
-                          clearFilters: clearFilters,
-                          toggleFilter: toggleFilter,
-                          onStreamChange: widget.onStreamChange,
-                          name: name,
-                          location: location,
-                        )
+                            clearFilters: clearFilters,
+                            toggleFilter: toggleFilter,
+                            onStreamChange: widget.onStreamChange,
+                            name: name,
+                            location: location,
+                            order: order)
                       ]),
                     ),
                     Padding(

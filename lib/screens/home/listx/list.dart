@@ -64,10 +64,12 @@ class StreamBodyState extends StatefulWidget {
 }
 
 class _StreamBodyStateState extends State<StreamBodyState> {
+  int count = 20;
   @override
   Widget build(BuildContext context) {
+    double wt = MediaQuery.of(context).size.width;
     return StreamBuilder<QuerySnapshot>(
-        stream: widget.curstream.limit(50).snapshots(),
+        stream: widget.curstream.limit(count).snapshots(),
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;
 
@@ -83,10 +85,36 @@ class _StreamBodyStateState extends State<StreamBodyState> {
           curDate = "";
           flag = true;
           return ListView.builder(
-            itemCount: data.length,
+            itemCount: data.length + 1,
             itemBuilder: (context, i) {
-              return item(list[i].id, data[i], context);
-              // return itemBuild(id: list[i].id, item: data[i]);
+              if (i < data.length)
+                return item(list[i].id, data[i], context);
+              else
+                return Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    width: wt,
+                    // alignment: Alignment.center,
+                    child: TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            Color.fromRGBO(255, 145, 0, 0.212)),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromARGB(255, 58, 58, 58)),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          count += 10;
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: wt,
+                        child: Text(
+                          "Show More",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ));
             },
           );
         });
@@ -166,8 +194,10 @@ Widget item(String id, var item, BuildContext context) {
               // label: 'Delete',
             ),
             VerticalDivider(
-              color: Colors.white,
+              // color: Color.fromARGB(255, 29, 29, 29),
+              color: secondaryAppColor,
               width: 1,
+              thickness: 1,
             ),
             SlidableAction(
               // An action can be bigger than the others.

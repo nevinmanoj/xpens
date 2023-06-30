@@ -9,7 +9,7 @@ import '../../shared/constants.dart';
 import 'details/details.dart';
 import 'settings/settings.dart';
 
-var x = Icons.calendar_month;
+// var x = Icons.calendar_month;
 List<String> navOptions = ["Addx", "Listx", "Details", "Settings"];
 
 class HomeScreen extends StatefulWidget {

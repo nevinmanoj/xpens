@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
-class LocRadioAccordion extends StatefulWidget {
-  final Function(String?) onLocChange;
+class OrderByRadioAccordion extends StatefulWidget {
+  final Function(String?) onOrderChange;
   String? selectedOption;
-  LocRadioAccordion({required this.onLocChange, required this.selectedOption});
+  OrderByRadioAccordion(
+      {required this.onOrderChange, required this.selectedOption});
   @override
-  _LocRadioAccordionState createState() => _LocRadioAccordionState();
+  _OrderByRadioAccordionState createState() => _OrderByRadioAccordionState();
 }
 
-class _LocRadioAccordionState extends State<LocRadioAccordion> {
+class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
   bool isExpanded = false;
 
   @override
@@ -34,7 +35,7 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                   headerBuilder: (BuildContext context, bool _isExpanded) {
                     return ListTile(
                       title: Text(
-                        "Location",
+                        "Order By",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -46,31 +47,31 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                     children: [
                       RadioListTile(
                         activeColor: primaryAppColor,
-                        toggleable: true,
-                        title: Text("Personel"),
-                        value: "Personel",
+                        // toggleable: true,
+                        title: Text("Spent Date"),
+                        value: "Spent Date",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {
                           // if (value != null) {
                           setState(() {
                             widget.selectedOption = value;
-                            widget.onLocChange(value);
+                            widget.onOrderChange(value);
                           });
                           // }
                         },
                       ),
                       RadioListTile(
                         activeColor: primaryAppColor,
-                        toggleable: true,
-                        title: Text("Home"),
-                        value: "Home",
+                        // toggleable: true,
+                        title: Text("Date added"),
+                        value: "Date added",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {
                           // if (value != null) {
 
                           setState(() {
                             widget.selectedOption = value;
-                            widget.onLocChange(value);
+                            widget.onOrderChange(value);
                           });
                           // }
                         },
