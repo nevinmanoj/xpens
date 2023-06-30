@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/services/toast.dart';
 
@@ -29,7 +28,7 @@ class _loginState extends State<login> {
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
-    double wt = MediaQuery.of(context).size.width;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(

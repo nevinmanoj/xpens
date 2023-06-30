@@ -17,8 +17,6 @@ import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 import 'thisMonth.dart';
 
-DateTime today = DateTime.now();
-
 class Details extends StatefulWidget {
   DateTime mY = DateTime.now();
   String filter = filterList[0];
@@ -31,98 +29,101 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
-  @override
   void onFilterChanged(String val) {
     setState(() {
       widget.filter = val;
       widget.stream = FirebaseFirestore.instance
           .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
           .orderBy('date', descending: true);
-      if (val == "Hostel" || val == "Home") {
+      if (val == "Personel" || val == "Home") {
         widget.stream = widget.stream.where('location', isEqualTo: val);
       }
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     // FirebaseAuth auth = FirebaseAuth.instance;
     // User? user = auth.currentUser;
+    double ht = MediaQuery.of(context).size.height;
+    return Padding(
+      padding: EdgeInsets.only(top: ht * 0.02),
+      child: StreamBuilder<QuerySnapshot>(
+          stream: widget.stream.snapshots(),
+          builder: (context, listSnapshot) {
+            var list = listSnapshot.data?.docs;
 
-    return StreamBuilder<QuerySnapshot>(
-        stream: widget.stream.snapshots(),
-        builder: (context, listSnapshot) {
-          var list = listSnapshot.data?.docs;
+            if (listSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          if (listSnapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
+            List<Map<String, dynamic>> data = list!
+                .map((document) => document.data() as Map<String, dynamic>)
+                .toList();
+
+            Map<DateTime, double> events = {};
+            Map<DateTime, Map<String, dynamic>> testMap = {};
+            for (var item in data) {
+              var date = DateTime.parse(item['date']);
+              date = DateTime(date.year, date.month, date.day);
+              if (events[date] == null) {
+                events[date] = 0;
+              }
+              events[date] = events[date]! + item['cost'];
+            }
+            int i = 0;
+            List dayx = [];
+            List keys = [];
+            for (var item in data) {
+              var date = DateTime.parse(item['date']);
+              date = DateTime(date.year, date.month, date.day);
+              if (testMap[date] == null) {
+                testMap[date] = {'cost': 0, 'listData': [], 'listKeys': []};
+              }
+
+              testMap[date]!['cost'] = testMap[date]!['cost']! + item['cost'];
+              dayx = testMap[date]!['listData'];
+              dayx.add(item);
+              testMap[date]!['listData'] = dayx;
+              keys = testMap[date]!['listKeys'];
+              keys.add(list[i].id);
+              testMap[date]!['listKeys'] = keys;
+
+              i++;
+            }
+
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  FilterDetails(
+                    onFilterChanged: onFilterChanged,
+                    filter: widget.filter,
+                  ),
+                  CalendarDisp(
+                    testmap: testMap,
+                  ),
+                  Today(
+                    stream: widget.stream,
+                  ),
+                  Yesterday(
+                    stream: widget.stream,
+                  ),
+                  ThisMonth(
+                    stream: widget.stream,
+                    mY: DateTime(widget.mY.year, widget.mY.month),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  DOwnloadDetails(
+                    data: data,
+                  ),
+                ],
+              ),
             );
-          }
-
-          List<Map<String, dynamic>> data = list!
-              .map((document) => document.data() as Map<String, dynamic>)
-              .toList();
-
-          Map<DateTime, double> events = {};
-          Map<DateTime, Map<String, dynamic>> testMap = {};
-          for (var item in data) {
-            var date = DateTime.parse(item['date']);
-            date = DateTime(date.year, date.month, date.day);
-            if (events[date] == null) {
-              events[date] = 0;
-            }
-            events[date] = events[date]! + item['cost'];
-          }
-          int i = 0;
-          List dayx = [];
-          List keys = [];
-          for (var item in data) {
-            var date = DateTime.parse(item['date']);
-            date = DateTime(date.year, date.month, date.day);
-            if (testMap[date] == null) {
-              testMap[date] = {'cost': 0, 'listData': [], 'listKeys': []};
-            }
-
-            testMap[date]!['cost'] = testMap[date]!['cost']! + item['cost'];
-            dayx = testMap[date]!['listData'];
-            dayx.add(item);
-            testMap[date]!['listData'] = dayx;
-            keys = testMap[date]!['listKeys'];
-            keys.add(list[i].id);
-            testMap[date]!['listKeys'] = keys;
-
-            i++;
-          }
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                FilterDetails(
-                  onFilterChanged: onFilterChanged,
-                  filter: widget.filter,
-                ),
-                CalendarDisp(
-                  testmap: testMap,
-                ),
-                Today(
-                  stream: widget.stream,
-                ),
-                Yesterday(
-                  stream: widget.stream,
-                ),
-                ThisMonth(
-                  stream: widget.stream,
-                  mY: DateTime(widget.mY.year, widget.mY.month),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                DOwnloadDetails(
-                  data: data,
-                ),
-              ],
-            ),
-          );
-        });
+          }),
+    );
   }
 }

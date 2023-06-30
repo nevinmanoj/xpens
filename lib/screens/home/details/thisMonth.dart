@@ -26,9 +26,9 @@ class ThisMonth extends StatefulWidget {
 class _ThisMonthState extends State<ThisMonth> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    double ht = MediaQuery.of(context).size.height;
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    // double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
 
     String heading =

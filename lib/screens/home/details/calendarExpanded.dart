@@ -98,12 +98,22 @@ Widget buildItem(
             color: primaryAppColor,
             Icons.edit,
           )),
-      DeleteItem(
-        id: key,
-        name: data['itemName'],
-        cost: data['cost'].toString(),
-        date: iDate,
-      )
+      IconButton(
+          onPressed: () => showDialog(
+                context: context,
+                builder: (context) {
+                  return edittrial(
+                    id: key,
+                    name: data['itemName'],
+                    cost: data['cost'].toString(),
+                    date: iDate,
+                  );
+                },
+              ),
+          icon: Icon(
+            color: primaryAppColor,
+            Icons.delete,
+          )),
     ],
   );
 }

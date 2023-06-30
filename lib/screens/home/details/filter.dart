@@ -14,6 +14,8 @@ class FilterDetails extends StatefulWidget {
 class _FilterDetailsState extends State<FilterDetails> {
   @override
   Widget build(BuildContext context) {
+    double ht = MediaQuery.of(context).size.height;
+    double wt = MediaQuery.of(context).size.width;
     List<bool> _selectedfilter = [];
     for (int i = 0; i < filterList.length; i++) {
       _selectedfilter.add(widget.filter == filterList[i]);
@@ -33,9 +35,9 @@ class _FilterDetailsState extends State<FilterDetails> {
       selectedColor: Colors.white,
       fillColor: primaryAppColor,
       color: primaryAppColor,
-      constraints: const BoxConstraints(
-        minHeight: 40.0,
-        minWidth: 80.0,
+      constraints: BoxConstraints(
+        minHeight: ht * 0.05,
+        minWidth: wt * 0.28,
       ),
       isSelected: _selectedfilter,
       children: widgetList(filterList),
@@ -46,7 +48,7 @@ class _FilterDetailsState extends State<FilterDetails> {
 List<Widget> widgetList(List<String> list) {
   List<Widget> res = [];
   for (String item in list) {
-    res.add(Text(item));
+    res.add(Container(child: Text(item)));
   }
   return res;
 }

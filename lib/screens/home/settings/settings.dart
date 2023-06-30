@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:xpens/screens/home/dev/devDash.dart';
 
 import 'package:xpens/services/auth.dart';
 
@@ -91,6 +93,28 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
                     child: Text(
                       "Log Out",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
+          child: InkWell(
+            onTap: () async => Navigator.push(
+                context, CupertinoPageRoute(builder: (context) => DevDash())),
+            child: Container(
+              // decoration: ,
+              color: Colors.grey[300],
+              width: wt,
+              height: ht * 0.06,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
+                    child: Text(
+                      "Dev Center",
                       style: TextStyle(fontSize: 18),
                     ),
                   )),

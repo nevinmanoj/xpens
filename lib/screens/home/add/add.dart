@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
+import 'package:xpens/screens/home/add/cost.dart';
+import 'package:xpens/screens/home/add/itemName.dart';
 import 'package:xpens/screens/home/add/location.dart';
+import 'package:xpens/screens/home/add/remarks.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
@@ -11,31 +14,48 @@ import 'package:xpens/shared/datamodals.dart';
 import 'calendar.dart';
 import 'time.dart';
 
-DateTime currentPhoneDate = DateTime.now();
-String itemName = cItems[0];
-String remarks = "";
-double cost = 0;
-String costS = "";
-DateTime date = DateTime.now();
-TimeOfDay time = TimeOfDay.now();
-String location = locationList[0];
-
 class AddX extends StatefulWidget {
   @override
   State<AddX> createState() => _AddXState();
 }
 
 class _AddXState extends State<AddX> {
+  // DateTime currentPhoneDate = DateTime.now();
+  String itemName = cItems[0];
+  DateTime date = DateTime.now();
+  TimeOfDay time = TimeOfDay.now();
+  double cost = 0;
+  String costS = "";
+  String remarks = "";
+  String location = locationList[0];
   final _formKey = GlobalKey<FormState>();
+  void updateName(String newName) {
+    setState(() {
+      itemName = newName;
+    });
+  }
+
   void updateLocation(String val) {
     setState(() {
       location = val;
     });
   }
 
+  void updateCost(String val) {
+    setState(() {
+      costS = val;
+    });
+  }
+
   void updateDate(DateTime newDate) {
     setState(() {
       date = newDate;
+    });
+  }
+
+  void updateRemarks(String newRemark) {
+    setState(() {
+      remarks = newRemark;
     });
   }
 
@@ -70,15 +90,21 @@ class _AddXState extends State<AddX> {
               SizedBox(
                 height: 15,
               ),
-              ItemName(),
+              ItemName(
+                onNameChange: updateName,
+                itemName: itemName,
+              ),
               SizedBox(
                 height: 15,
               ),
-              ItemRemark(),
+              ItemRemark(
+                onRemarkChanged: updateRemarks,
+                remarks: remarks,
+              ),
               SizedBox(
                 height: 15,
               ),
-              ItemQuantity(),
+              ItemQuantity(onCostChanged: updateCost, costs: costS),
               SizedBox(
                 height: 15,
               ),
@@ -97,7 +123,7 @@ class _AddXState extends State<AddX> {
                     },
                   ),
                   clock(
-                    SelectTime: time,
+                    selectTime: time,
                     onTimeChanged: (TimeOfDay newId) {
                       updateTIme(newId);
                     },
@@ -149,145 +175,5 @@ class _AddXState extends State<AddX> {
           )),
     );
     ;
-  }
-}
-
-class ItemName extends StatefulWidget {
-  const ItemName({Key? key}) : super(key: key);
-
-  @override
-  State<ItemName> createState() => _ItemNameState();
-}
-
-class _ItemNameState extends State<ItemName> {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 300,
-          decoration: addInputDecoration,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: DropdownButtonFormField<String>(
-              value: cItems.contains(itemName) ? itemName : "Other",
-              validator: (value) =>
-                  value!.isEmpty ? ' Must select a category for item' : null,
-              decoration: InputDecoration(border: InputBorder.none),
-              hint: Text(
-                "Category of Item",
-                style: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              ),
-              onChanged: (Value) {
-                setState(() {
-                  itemName = Value!;
-                });
-              },
-              items: cItems.map<DropdownMenuItem<String>>((value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        (itemName == "Other" || !cItems.contains(itemName))
-            ? Container(
-                height: 50,
-                width: 300,
-                decoration: addInputDecoration,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: TextFormField(
-                    onChanged: (value) {
-                      itemName = value;
-                    },
-                    validator: (value) =>
-                        value!.isEmpty ? ' Name cannot be empty' : null,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                      hintText: 'Item Name',
-                    ),
-                  ),
-                ),
-              )
-            : Container(),
-      ],
-    );
-  }
-}
-
-class ItemQuantity extends StatefulWidget {
-  const ItemQuantity({Key? key}) : super(key: key);
-
-  @override
-  State<ItemQuantity> createState() => _ItemQuantityState();
-}
-
-class _ItemQuantityState extends State<ItemQuantity> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 300,
-      decoration: addInputDecoration,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: TextFormField(
-          cursorColor: primaryAppColor,
-          cursorWidth: 1,
-          onChanged: (value) {
-            costS = value;
-          },
-          validator: (value) => value!.isEmpty ? 'Cost must not be null' : null,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-            hintText: 'Cost',
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ItemRemark extends StatefulWidget {
-  const ItemRemark({Key? key}) : super(key: key);
-
-  @override
-  State<ItemRemark> createState() => _ItemRemarkState();
-}
-
-class _ItemRemarkState extends State<ItemRemark> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 300,
-      decoration: addInputDecoration,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        child: TextFormField(
-          // initialValue: remarks,
-          cursorColor: primaryAppColor,
-          cursorWidth: 1,
-          onChanged: (value) {
-            remarks = value;
-            // print(remarks);
-          },
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-            hintText: 'Remarks',
-          ),
-        ),
-      ),
-    );
   }
 }

@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/shared/constants.dart';
-import '../shared/datamodals.dart';
+import '../../../shared/datamodals.dart';
 
 class DevService {
   Future switchAc() async {
@@ -20,28 +20,19 @@ class DevService {
   Future addFieldToDocuments() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final User? user = _auth.currentUser;
-    print("adding fields");
-    List<String> Items = [
-      "Breakfast",
-      "Lunch",
-      "Dinner",
-      "Tea and Snacks",
-      "Petrol",
-      "Icecream",
-    ];
+    print("adding fields ");
+
     CollectionReference collectionRef =
         FirebaseFirestore.instance.collection('UserInfo/${user!.uid}/list');
 
     QuerySnapshot snapshot =
-        await collectionRef.where('isOther', isEqualTo: true).get();
+        await collectionRef.where('location', isEqualTo: "Hostel").get();
 
     for (QueryDocumentSnapshot doc in snapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      print("uncomment");
-
       // DocumentReference docRef = collectionRef.doc(doc.id);
-      // await docRef.update({'isOther': newData});
+      // await docRef.update({'location': "Personel"});
     }
   }
 

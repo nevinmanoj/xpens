@@ -39,21 +39,23 @@ class _HomeScreenState extends State<HomeScreen> {
     double wt = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    CupertinoPageRoute(builder: (context) => DevDash()));
-              },
-              icon: Icon(Icons.logo_dev))
-        ],
-        centerTitle: true,
-        title: Text(navOptions[_selectedIndex]),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-        child: _widgetOptions.elementAt(_selectedIndex),
+
+      // appBar: AppBar(
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           Navigator.push(context,CupertinoPageRoute(builder: (context) => DevDash()));
+      //         },
+      //         icon: Icon(Icons.logo_dev))
+      //   ],
+      //   centerTitle: true,
+      //   title: Text(navOptions[_selectedIndex]),
+      //   backgroundColor: Colors.black,
+      // ),
+      body: SafeArea(
+        child: Container(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[

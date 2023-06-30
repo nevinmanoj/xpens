@@ -7,8 +7,8 @@ typedef void TimeCallback(TimeOfDay time);
 
 class clock extends StatefulWidget {
   final TimeCallback onTimeChanged;
-  TimeOfDay SelectTime;
-  clock({required this.onTimeChanged, required this.SelectTime});
+  TimeOfDay selectTime;
+  clock({required this.onTimeChanged, required this.selectTime});
   @override
   State<clock> createState() => _clockState();
 }
@@ -33,14 +33,14 @@ class _clockState extends State<clock> {
               foregroundColor:
                   MaterialStatePropertyAll<Color>(primaryAppColor)),
           onPressed: () => displayTimePicker(context),
-          child: Text(widget.SelectTime.format(context))),
+          child: Text(widget.selectTime.format(context))),
     );
   }
 
   Future displayTimePicker(BuildContext context) async {
     var time = await showTimePicker(
         context: context,
-        initialTime: widget.SelectTime,
+        initialTime: widget.selectTime,
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
@@ -63,9 +63,9 @@ class _clockState extends State<clock> {
 
     if (time != null) {
       setState(() {
-        widget.SelectTime = time;
+        widget.selectTime = time;
       });
     }
-    widget.onTimeChanged(widget.SelectTime);
+    widget.onTimeChanged(widget.selectTime);
   }
 }

@@ -46,6 +46,6 @@ List<String> cItems = [
   "Other"
 ];
 
-List locationList = ["Hostel", "Home"];
+List locationList = ["Personel", "Home"];
 
-List<String> filterList = ["All", "Hostel", "Home"];
+List<String> filterList = ["All", "Personel", "Home"];

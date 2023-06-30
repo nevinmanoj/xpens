@@ -146,7 +146,7 @@ class _EditxDetailsState extends State<EditxDetails> {
                       },
                     ),
                     clock(
-                      SelectTime: TimeOfDay(
+                      selectTime: TimeOfDay(
                           hour: int.parse(widget.item['time'].split(":")[0]),
                           minute: int.parse(widget.item['time'].split(":")[1])),
                       onTimeChanged: (TimeOfDay newId) {
