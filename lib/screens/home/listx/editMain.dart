@@ -16,9 +16,7 @@ import 'package:xpens/shared/datamodals.dart';
 
 class EditxDetails extends StatefulWidget {
   String id;
-  var item;
-
-  String costS = "";
+  final dynamic item;
 
   EditxDetails({
     required this.id,
@@ -30,40 +28,64 @@ class EditxDetails extends StatefulWidget {
 
 class _EditxDetailsState extends State<EditxDetails> {
   final _formKey = GlobalKey<FormState>();
+
+  String itemName = "";
+  String remarks = "";
+  String location = "";
+  String date = "";
+  String time = "";
+  String costS = "";
+  @override
+  void initState() {
+    super.initState();
+    location = widget.item['location'];
+    itemName = widget.item['itemName'];
+    remarks = widget.item['remarks'];
+    date = widget.item['date'];
+    time = widget.item['time'];
+    costS = widget.item['cost'].toString();
+  }
+
   void updateLocation(String val) {
     setState(() {
-      widget.item['location'] = val;
+      // widget.item['location'] = val;
+      location = val;
     });
   }
 
   void updateDate(DateTime newDate) {
     setState(() {
-      widget.item['date'] = newDate.toString();
+      // widget.item['date'] = newDate.toString();
+      date = newDate.toString();
     });
   }
 
   void updateName(String newName) {
     setState(() {
-      print("updated name $newName");
-      widget.item['itemName'] = newName.toString();
+      // widget.item['itemName'] = newName.toString();
+      itemName = newName;
     });
   }
 
   void updateRemark(String newRemark) {
     setState(() {
-      widget.item['remarks'] = newRemark;
+      // widget.item['remarks'] = newRemark;
+      remarks = newRemark;
     });
   }
 
   void updateCost(String newCost) {
     setState(() {
-      widget.costS = newCost;
+      // widget.costS = newCost;
+      costS = newCost;
     });
   }
 
   void updateTIme(TimeOfDay newTime) {
     setState(() {
-      widget.item['time'] = DateFormat('HH:mm')
+      // widget.item['time'] = DateFormat('HH:mm')
+      //     .format(DateTime(0, 0, 0, newTime.hour, newTime.minute));
+      time = DateFormat('HH:mm')
           .format(DateTime(0, 0, 0, newTime.hour, newTime.minute));
     });
   }
@@ -80,11 +102,10 @@ class _EditxDetailsState extends State<EditxDetails> {
             // leading: BackButton(
             //   onPressed: () {
             //     setState(() {
-            //       print(widget.itembackup);
-            //       widget.item = widget.itembackup;
+            //       widget.item = widget.item;
             //     });
 
-            //     // Navigator.pop(context);
+            //     Navigator.pop(context);
             //   },
             // ),
             centerTitle: true,
@@ -100,7 +121,8 @@ class _EditxDetailsState extends State<EditxDetails> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Location(
-                  location: widget.item['location'],
+                  // location: widget.item['location'],
+                  location: location,
                   onLocationChanged: updateLocation,
                 ),
                 SizedBox(
@@ -165,9 +187,11 @@ class _EditxDetailsState extends State<EditxDetails> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        double cost = widget.costS != ""
-                            ? double.parse(widget.costS)
-                            : widget.item['cost'];
+                        // double cost = widget.costS != ""
+                        //     ? double.parse(widget.costS)
+                        //     : widget.item['cost'];
+                        double cost = double.parse(costS);
+
                         List<String> Items = [
                           "Breakfast",
                           "Lunch",
@@ -179,24 +203,16 @@ class _EditxDetailsState extends State<EditxDetails> {
                         bool res = await DatabaseService(uid: user!.uid)
                             .editItem(
                                 I: AddItem(
-                                    isOther: !Items.contains(widget
-                                        .item['itemName']
-                                        .toString()
-                                        .trim()),
-                                    location: widget.item['location'],
-                                    remarks: widget.item['remarks']
-                                        .toString()
-                                        .trim(),
+                                    isOther: !Items.contains(
+                                        itemName.toString().trim()),
+                                    location: location,
+                                    remarks: remarks.toString().trim(),
                                     cost: cost,
-                                    date: DateTime.parse(widget.item['date']),
-                                    itemName: widget.item['itemName']
-                                        .toString()
-                                        .trim(),
+                                    date: DateTime.parse(date),
+                                    itemName: itemName.toString().trim(),
                                     time: TimeOfDay(
-                                        hour: int.parse(
-                                            widget.item['time'].split(":")[0]),
-                                        minute: int.parse(widget.item['time']
-                                            .split(":")[1]))),
+                                        hour: int.parse(time.split(":")[0]),
+                                        minute: int.parse(time.split(":")[1]))),
                                 id: widget.id);
                         String msg = res ? "successfully" : "failed";
                         showToast(

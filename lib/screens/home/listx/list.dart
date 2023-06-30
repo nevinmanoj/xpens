@@ -6,11 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:xpens/screens/home/dev/test.dart';
 
 import 'package:xpens/screens/home/listx/editMain.dart';
 
 import 'package:intl/intl.dart';
+import 'package:xpens/screens/home/listx/itemExpanded.dart';
 import 'package:xpens/screens/home/listx/listxfilter/listFilter.dart';
 import 'package:xpens/screens/home/listx/deleteItem.dart';
 import 'package:xpens/shared/constants.dart';
@@ -29,8 +29,7 @@ class listx extends StatefulWidget {
 class _listxState extends State<listx> {
   var curstream = FirebaseFirestore.instance
       .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
-      .orderBy('date', descending: true)
-      .limit(50);
+      .orderBy('date', descending: true);
 
   void onStreamChange(var newStream) {
     setState(() {
@@ -68,7 +67,7 @@ class _StreamBodyStateState extends State<StreamBodyState> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: widget.curstream.snapshots(),
+        stream: widget.curstream.limit(50).snapshots(),
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;
 
@@ -154,7 +153,7 @@ Widget item(String id, var item, BuildContext context) {
               onPressed: (BuildContext context) => showDialog(
                 context: context,
                 builder: (context) {
-                  return edittrial(
+                  return DeleteItem(
                       id: id,
                       name: item['itemName'],
                       cost: item['cost'].toString(),
@@ -197,11 +196,7 @@ Widget item(String id, var item, BuildContext context) {
             showDialog(
               context: context,
               builder: (context) {
-                return edittrial(
-                    id: id,
-                    name: item['itemName'],
-                    cost: item['cost'].toString(),
-                    date: iDate);
+                return ExpandItem(item: item, id: id, date: iDate);
               },
             );
           },
@@ -253,7 +248,7 @@ Widget item(String id, var item, BuildContext context) {
                       onPressed: () => showDialog(
                             context: context,
                             builder: (context) {
-                              return edittrial(
+                              return DeleteItem(
                                   id: id,
                                   name: item['itemName'],
                                   cost: item['cost'].toString(),

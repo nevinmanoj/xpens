@@ -4,21 +4,21 @@ import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
-class edittrial extends StatefulWidget {
+class DeleteItem extends StatefulWidget {
   String id;
   String name;
   String cost;
   String date;
-  edittrial(
+  DeleteItem(
       {required this.id,
       required this.name,
       required this.cost,
       required this.date});
   @override
-  State<edittrial> createState() => _MyWidgetState();
+  State<DeleteItem> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<edittrial> {
+class _MyWidgetState extends State<DeleteItem> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth _auth = FirebaseAuth.instance;
