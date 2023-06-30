@@ -21,7 +21,7 @@ class AddX extends StatefulWidget {
 
 class _AddXState extends State<AddX> {
   // DateTime currentPhoneDate = DateTime.now();
-  String itemName = cItems[0];
+  String itemName = allItems[0];
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   double cost = 0;
@@ -139,17 +139,10 @@ class _AddXState extends State<AddX> {
                     if (_formKey.currentState!.validate()) {
                       cost = double.parse(costS);
                       print(remarks);
-                      List<String> Items = [
-                        "Breakfast",
-                        "Lunch",
-                        "Dinner",
-                        "Tea and Snacks",
-                        "Petrol",
-                        "Icecream",
-                      ];
+
                       bool res = await DatabaseService(uid: user!.uid).addItem(
                           AddItem(
-                              isOther: !Items.contains(itemName.trim()),
+                              isOther: !mainItems.contains(itemName.trim()),
                               location: location,
                               remarks: remarks.trim(),
                               cost: cost,

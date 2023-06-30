@@ -36,7 +36,16 @@ var buttonDecoration = ButtonStyle(
     )),
     backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));
 
-List<String> cItems = [
+// List<String> cItems = [
+//   "Breakfast",
+//   "Lunch",
+//   "Dinner",
+//   "Tea and Snacks",
+//   "Petrol",
+//   "Icecream",
+//   "Other"
+// ];
+List<String> allItems = [
   "Breakfast",
   "Lunch",
   "Dinner",
@@ -44,6 +53,14 @@ List<String> cItems = [
   "Petrol",
   "Icecream",
   "Other"
+];
+List<String> mainItems = [
+  "Breakfast",
+  "Lunch",
+  "Dinner",
+  "Tea and Snacks",
+  "Petrol",
+  "Icecream",
 ];
 
 List locationList = ["Personel", "Home"];

@@ -14,7 +14,7 @@ class _ItemNameState extends State<ItemName> {
   @override
   Widget build(BuildContext context) {
     TextEditingController otherController = new TextEditingController();
-    otherController.text = cItems.contains(widget.name) ? "" : widget.name;
+    otherController.text = allItems.contains(widget.name) ? "" : widget.name;
     otherController.selection = TextSelection.fromPosition(
         TextPosition(offset: otherController.text.length));
 
@@ -38,7 +38,7 @@ class _ItemNameState extends State<ItemName> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
-              value: cItems.contains(widget.name) ? widget.name : "Other",
+              value: allItems.contains(widget.name) ? widget.name : "Other",
               validator: (value) =>
                   value!.isEmpty ? ' Must select a category for item' : null,
               decoration: InputDecoration(border: InputBorder.none),
@@ -55,7 +55,7 @@ class _ItemNameState extends State<ItemName> {
                 widget.onNameChanged(widget.name);
                 // }
               },
-              items: cItems.map<DropdownMenuItem<String>>((value) {
+              items: allItems.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -65,7 +65,7 @@ class _ItemNameState extends State<ItemName> {
           ),
         ),
         SizedBox(height: 10),
-        (widget.name == "Other" || !(cItems.contains(widget.name)))
+        (widget.name == "Other" || !(allItems.contains(widget.name)))
             ? Container(
                 height: 50,
                 width: 300,

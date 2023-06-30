@@ -45,12 +45,12 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
                   },
                   body: Column(
                     children: [
-                      for (int i = 0; i < cItems.length; i++)
+                      for (int i = 0; i < allItems.length; i++)
                         RadioListTile(
                           activeColor: primaryAppColor,
                           toggleable: true,
-                          title: Text(cItems[i]),
-                          value: cItems[i],
+                          title: Text(allItems[i]),
+                          value: allItems[i],
                           groupValue: widget.selectedOption,
                           onChanged: (value) {
                             // if (value != null) {

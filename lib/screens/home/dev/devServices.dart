@@ -42,20 +42,13 @@ class DevService {
       required double count}) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final User? user = _auth.currentUser;
-    List<String> Items = [
-      "Breakfast",
-      "Lunch",
-      "Dinner",
-      "Tea",
-      "Petrol",
-    ];
 
     var formattedTime = TimeOfDay.now();
     for (int i = 0; i < count; i++) {
       DateTime date = DateTime(int.parse(year),
           DateFormat("MMM").parse(month).month, Random().nextInt(28) + 1);
       double cost = Random().nextInt(151) + 50;
-      String itemName = Items[Random().nextInt(4)];
+      String itemName = mainItems[Random().nextInt(4)];
       String location = locationList[Random().nextInt(2)];
       print("injectimg record $i");
       await DatabaseService(uid: user!.uid).addItem(AddItem(

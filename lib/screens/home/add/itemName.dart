@@ -22,8 +22,9 @@ class _ItemNameState extends State<ItemName> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
-              value:
-                  cItems.contains(widget.itemName) ? widget.itemName : "Other",
+              value: allItems.contains(widget.itemName)
+                  ? widget.itemName
+                  : "Other",
               validator: (value) =>
                   value!.isEmpty ? ' Must select a category for item' : null,
               decoration: InputDecoration(border: InputBorder.none),
@@ -34,7 +35,7 @@ class _ItemNameState extends State<ItemName> {
               onChanged: (value) {
                 widget.onNameChange(value!);
               },
-              items: cItems.map<DropdownMenuItem<String>>((value) {
+              items: allItems.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -44,7 +45,7 @@ class _ItemNameState extends State<ItemName> {
           ),
         ),
         SizedBox(height: 10),
-        (widget.itemName == "Other" || !cItems.contains(widget.itemName))
+        (widget.itemName == "Other" || !allItems.contains(widget.itemName))
             ? Container(
                 height: 50,
                 width: 300,
