@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:xpens/shared/constants.dart';
 
 class Test extends StatefulWidget {
   @override
@@ -16,13 +13,9 @@ class _TestState extends State<Test> {
     return ElevatedButton(
       onPressed: () {
         // Navigator.push(
-        //     context, CupertinoPageRoute(builder: (context) => NewTest()));
+        //     context, CupertinoPageRoute(builder: (context) => MyHomePage()));
       },
       child: Text("maps"),
     );
   }
-}
-
-void doNothing(BuildContext context) {
-  print("hihihi");
 }
