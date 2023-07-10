@@ -6,12 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
 import 'package:intl/intl.dart';
+import 'package:xpens/screens/home/details/PerDay.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendarDisp.dart';
 import 'package:xpens/screens/home/details/filter.dart';
-import 'package:xpens/screens/home/details/today.dart';
-import 'package:xpens/screens/home/details/yesterday.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'package:xpens/shared/datamodals.dart';
@@ -43,8 +42,8 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    // FirebaseAuth auth = FirebaseAuth.instance;
-    // User? user = auth.currentUser;
+    DateTime yesterday = DateTime.now().subtract(const Duration(days: 1));
+    DateTime today = DateTime.now();
     double ht = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.only(top: ht * 0.02),
@@ -104,12 +103,24 @@ class _DetailsState extends State<Details> {
                   CalendarDisp(
                     testmap: testMap,
                   ),
-                  Today(
-                    stream: widget.stream,
-                  ),
-                  Yesterday(
-                    stream: widget.stream,
-                  ),
+                  PerDay(
+                      stream: widget.stream
+                          .where('month',
+                              isEqualTo:
+                                  DateFormat.MMM().format(today).toString())
+                          .where('year', isEqualTo: today.year.toString())
+                          .where('day', isEqualTo: today.day.toString())
+                          .snapshots(),
+                      heading: "Today"),
+                  PerDay(
+                      stream: widget.stream
+                          .where('month',
+                              isEqualTo:
+                                  DateFormat.MMM().format(yesterday).toString())
+                          .where('year', isEqualTo: yesterday.year.toString())
+                          .where('day', isEqualTo: yesterday.day.toString())
+                          .snapshots(),
+                      heading: "Yesterday"),
                   ThisMonth(
                     stream: widget.stream,
                     mY: DateTime(widget.mY.year, widget.mY.month),

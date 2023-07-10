@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:xpens/screens/home/add/add.dart';
+import 'package:xpens/screens/home/add/addMain.dart';
 import 'package:xpens/screens/home/dev/devDash.dart';
-import 'package:xpens/screens/home/listx/list.dart';
+import 'package:xpens/screens/home/listx/listMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/details.dart';
@@ -37,21 +40,34 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
+    final user = Provider.of<User?>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
-      // appBar: AppBar(
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () {
-      //           Navigator.push(context,CupertinoPageRoute(builder: (context) => DevDash()));
-      //         },
-      //         icon: Icon(Icons.logo_dev))
-      //   ],
-      //   centerTitle: true,
-      //   title: Text(navOptions[_selectedIndex]),
-      //   backgroundColor: Colors.black,
-      // ),
+      appBar: _selectedIndex == 1
+          ? AppBar(
+              centerTitle: true,
+              title: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('UserInfo/${user!.uid}/list')
+                      .snapshots(),
+                  builder: (context, snap) {
+                    if (snap.connectionState == ConnectionState.waiting) {
+                      return Container();
+                    }
+                    return Text(
+                      "Total Expenses Count: ${snap.data?.docs.length}",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 168, 168, 168)),
+                    );
+                  }),
+              backgroundColor: Colors.black,
+            )
+          : AppBar(
+              backgroundColor: primaryAppColor,
+              toolbarHeight: 0,
+            ),
       body: SafeArea(
         child: Container(
           child: _widgetOptions.elementAt(_selectedIndex),

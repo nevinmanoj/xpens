@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-import 'package:share/share.dart';
 import 'package:excel/excel.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 
 Future<File> jsonToExcel(
     {required List<Map<String, dynamic>> list,
@@ -18,8 +18,8 @@ Future<File> jsonToExcel(
   for (int i = 0; i < list.length; i++) {
     jsonData = list[i];
     if ((jsonData['year'] == year) && (jsonData['month'] == month)) {
-      String formattedDate =
-          DateFormat.yMd().format(jsonData['date']).toString();
+      var formattedDate =
+          DateFormat.yMd().format(DateTime.parse(jsonData['date'])).toString();
       sheet.appendRow([
         jsonData['itemName'],
         jsonData['cost'],
@@ -28,14 +28,18 @@ Future<File> jsonToExcel(
       ]);
     }
   }
-
-  final directory = await getExternalStorageDirectory();
-
-  var file = File('${directory!.path}/$year-$month.xlsx');
+  Directory? directory;
+  var file;
+  try {
+    directory = await getExternalStorageDirectory();
+    file = File('${directory!.path}/$year-$month.xlsx');
+  } catch (e) {
+    print(e);
+  }
 
   if (await file.exists()) {
     await file.open();
-    print(directory.path);
+    print(directory!.path);
   } else {
     print('file created');
   }
@@ -58,7 +62,7 @@ void shareFile({
     await jsonToExcel(list: list, year: year, month: month);
   }
   try {
-    Share.shareFiles([filePath], text: "excel file");
+    Share.shareXFiles([XFile(filePath)], subject: "Excel file");
   } catch (e) {
     print(e.toString());
   }

@@ -53,6 +53,7 @@ class _ItemNameState extends State<ItemName> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: TextFormField(
+                    initialValue: widget.itemName,
                     onChanged: (value) {
                       widget.onNameChange(value);
                     },

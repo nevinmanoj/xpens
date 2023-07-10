@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:xpens/screens/home/add/time.dart';
+import 'package:xpens/screens/home/components/time.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 

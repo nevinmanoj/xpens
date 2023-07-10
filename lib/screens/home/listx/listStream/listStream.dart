@@ -1,59 +1,15 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors
 
-import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-import 'package:xpens/screens/home/listx/editMain.dart';
-
 import 'package:intl/intl.dart';
-import 'package:xpens/screens/home/listx/itemExpanded.dart';
-import 'package:xpens/screens/home/listx/listxfilter/listFilter.dart';
-import 'package:xpens/screens/home/listx/deleteItem.dart';
+import 'package:xpens/screens/home/listx/listStream/deleteItem.dart';
+import 'package:xpens/screens/home/listx/listStream/editMain.dart';
+import 'package:xpens/screens/home/listx/listStream/itemExpanded.dart';
+import 'package:xpens/screens/home/listx/listStream/listHeader.dart';
 import 'package:xpens/shared/constants.dart';
-
-String curDate = "";
-String iDate = "";
-bool flag = true;
-
-class listx extends StatefulWidget {
-  const listx({super.key});
-
-  @override
-  State<listx> createState() => _listxState();
-}
-
-class _listxState extends State<listx> {
-  var curstream = FirebaseFirestore.instance
-      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
-      .orderBy('date', descending: true);
-
-  void onStreamChange(var newStream) {
-    setState(() {
-      curstream = newStream;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // double ht = MediaQuery.of(context).size.height;
-    // double wt = MediaQuery.of(context).size.width;
-
-    return Stack(
-      children: [
-        StreamBodyState(
-          curstream: curstream,
-        ),
-        FilterWindow(
-          onStreamChange: onStreamChange,
-        ),
-      ],
-    );
-  }
-}
 
 class StreamBodyState extends StatefulWidget {
   final curstream;
@@ -82,14 +38,25 @@ class _StreamBodyStateState extends State<StreamBodyState> {
           List<Map<String, dynamic>> data = list!
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
-          curDate = "";
-          flag = true;
+          String curDate = "";
+          bool flag = true;
           return ListView.builder(
-            itemCount: data.length + 1,
+            itemCount: data.length + 2,
             itemBuilder: (context, i) {
-              if (i < data.length)
-                return item(list[i].id, data[i], context);
-              else
+              if (i == 0) return ListHeader();
+              if (i - 1 < data.length) {
+                bool dispDate = false;
+                String iDate = DateFormat.yMMMd()
+                    .format(DateTime.parse(data[i - 1]['date']))
+                    .toString();
+                if (iDate != curDate) {
+                  curDate = iDate;
+                  dispDate = true;
+                }
+                flag = !flag;
+                return item(
+                    list[i - 1].id, data[i - 1], context, dispDate, flag);
+              } else
                 return Container(
                     padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                     width: wt,
@@ -121,15 +88,12 @@ class _StreamBodyStateState extends State<StreamBodyState> {
   }
 }
 
-Widget item(String id, var item, BuildContext context) {
-  iDate = DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
+Widget item(
+    String id, var item, BuildContext context, bool dispDate, bool flag) {
+  String iDate =
+      DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
   double wt = MediaQuery.of(context).size.width;
-  bool dispDate = false;
-  flag = !flag;
-  if (iDate != curDate) {
-    curDate = iDate;
-    dispDate = true;
-  }
+
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
@@ -150,29 +114,7 @@ Widget item(String id, var item, BuildContext context) {
           : Container(),
       Slidable(
         groupTag: 'same',
-        // Specify a key if the Slidable is dismissible.
 
-        // The start action pane is the one at the left or the top side.
-        // startActionPane: ActionPane(
-        //   // A motion is a widget used to control how the pane animates.
-        //   motion: ScrollMotion(),
-        //   dragDismissible: false,
-        //   // A pane can dismiss the Slidable.
-
-        //   // All actions are defined in the children parameter.
-        //   children: [
-        //     // A SlidableAction can have an icon and/or a label.
-        //     SlidableAction(
-        //       onPressed: (BuildContext context) {},
-        //       backgroundColor: primaryAppColor,
-        //       foregroundColor: secondaryAppColor,
-        //       icon: Icons.delete,
-        //       // label: 'Delete',
-        //     ),
-        //   ],
-        // ),
-
-        // The end action pane is the one at the right or the bottom side.
         startActionPane: ActionPane(
           dragDismissible: true,
           motion: ScrollMotion(),

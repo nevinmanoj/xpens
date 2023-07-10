@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:xpens/screens/home/listx/deleteItem.dart';
-import 'package:xpens/screens/home/listx/editMain.dart';
+import 'package:xpens/screens/home/listx/listStream/deleteItem.dart';
+import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/shared/constants.dart';
 
 class CalendarExp extends StatefulWidget {

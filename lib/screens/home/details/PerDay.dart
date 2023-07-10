@@ -8,15 +8,16 @@ import 'package:flutter/src/widgets/placeholder.dart';
 // final FirebaseAuth _auth = FirebaseAuth.instance;
 // final User? user = _auth.currentUser;
 
-class Today extends StatefulWidget {
-  final Query<Map<String, dynamic>> stream;
-  const Today({super.key, required this.stream});
+class PerDay extends StatefulWidget {
+  final Stream<QuerySnapshot<Map<String, dynamic>>> stream;
+  final String heading;
+  const PerDay({super.key, required this.stream, required this.heading});
 
   @override
-  State<Today> createState() => _TodayState();
+  State<PerDay> createState() => _PerDayState();
 }
 
-class _TodayState extends State<Today> {
+class _PerDayState extends State<PerDay> {
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
@@ -24,13 +25,11 @@ class _TodayState extends State<Today> {
     String month = DateFormat.MMM().format(DateTime.now()).toString();
     String year = DateTime.now().year.toString();
 
-    String today = DateTime.now().day.toString();
+    String yesterday =
+        DateTime.now().subtract(const Duration(days: 1)).day.toString();
+
     return StreamBuilder<QuerySnapshot>(
-        stream: widget.stream
-            .where('month', isEqualTo: month)
-            .where('year', isEqualTo: year)
-            .where('day', isEqualTo: today)
-            .snapshots(),
+        stream: widget.stream,
         builder: (context, listSnapshot) {
           var list = listSnapshot.data?.docs;
 
@@ -80,9 +79,9 @@ class _TodayState extends State<Today> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Today",
-                        style: TextStyle(
+                      Text(
+                        widget.heading,
+                        style: const TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       Text(

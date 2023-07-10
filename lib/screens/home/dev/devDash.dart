@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +50,22 @@ class _DevDashState extends State<DevDash> {
             onPressed: () async {
               await DevService().addFieldToDocuments();
             },
-            child: Text("modify"))
+            child: Text("modify")),
+        StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection('UserInfo/${user.uid}/list')
+                .snapshots(),
+            builder: (context, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Text(
+                "Expense count: ${snap.data?.docs.length}",
+                style: TextStyle(fontSize: 25),
+              );
+            })
       ])),
     );
   }

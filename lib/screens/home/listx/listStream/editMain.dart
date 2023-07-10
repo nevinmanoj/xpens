@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:xpens/screens/home/add/calendar.dart';
-import 'package:xpens/screens/home/add/location.dart';
-import 'package:xpens/screens/home/add/time.dart';
-import 'package:xpens/screens/home/listx/editCost.dart';
-import 'package:xpens/screens/home/listx/editName.dart';
-import 'package:xpens/screens/home/listx/editRemark.dart';
+import 'package:xpens/screens/home/components/calendar.dart';
+import 'package:xpens/screens/home/components/cost.dart';
+import 'package:xpens/screens/home/components/itemName.dart';
+import 'package:xpens/screens/home/components/location.dart';
+import 'package:xpens/screens/home/components/remarks.dart';
+import 'package:xpens/screens/home/components/time.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'package:intl/intl.dart';
@@ -98,6 +98,7 @@ class _EditxDetailsState extends State<EditxDetails> {
     double ht = MediaQuery.of(context).size.height;
     return Center(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
             // leading: BackButton(
             //   onPressed: () {
@@ -129,15 +130,15 @@ class _EditxDetailsState extends State<EditxDetails> {
                   height: 15,
                 ),
                 ItemName(
-                  name: widget.item['itemName'],
-                  onNameChanged: updateName,
+                  itemName: widget.item['itemName'],
+                  onNameChange: updateName,
                   // hideOther: cItems.contains(widget.item['itemName']),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 ItemRemark(
-                  remark: widget.item['remarks'],
+                  remarks: widget.item['remarks'],
                   onRemarkChanged: (String newId) {
                     updateRemark(newId);
                   },
@@ -146,7 +147,7 @@ class _EditxDetailsState extends State<EditxDetails> {
                   height: 15,
                 ),
                 ItemQuantity(
-                  cost: widget.item['cost'].toString(),
+                  costs: widget.item['cost'].toString(),
                   onCostChanged: (String newId) {
                     updateCost(newId);
                   },

@@ -21,6 +21,7 @@ class _ItemQuantityState extends State<ItemQuantity> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: TextFormField(
+          initialValue: widget.costs,
           cursorColor: primaryAppColor,
           cursorWidth: 1,
           onChanged: (value) {
