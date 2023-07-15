@@ -26,13 +26,20 @@ class DevService {
         FirebaseFirestore.instance.collection('UserInfo/${user!.uid}/list');
 
     QuerySnapshot snapshot =
-        await collectionRef.where('location', isEqualTo: "Hostel").get();
-
+        await collectionRef.where("month", isEqualTo: "May").get();
+    // int count = 0;
+    // int size = snapshot.size;
     for (QueryDocumentSnapshot doc in snapshot.docs) {
       Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-      // DocumentReference docRef = collectionRef.doc(doc.id);
-      // await docRef.update({'location': "Personel"});
+      DocumentReference docRef = collectionRef.doc(doc.id);
+      // await docRef.update({'test': "values"});
+      // docRef.update({
+      //   "test": FieldValue.delete(),
+      // });
+      docRef.delete();
+      // count++;
+      // print("completed: ${(count / size) * 100}%");
     }
   }
 
@@ -51,7 +58,7 @@ class DevService {
       String itemName = mainItems[Random().nextInt(4)];
       String location = locationList[Random().nextInt(2)];
       print("injectimg record $i");
-      await DatabaseService(uid: user!.uid).addItem(AddItem(
+      DatabaseService(uid: user!.uid).addItem(AddItem(
           isOther: false,
           location: location,
           remarks: "remark $i",

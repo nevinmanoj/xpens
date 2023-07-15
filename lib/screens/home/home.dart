@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
-import 'package:xpens/screens/home/dev/devDash.dart';
+
 import 'package:xpens/screens/home/listx/listMain.dart';
 
 import '../../shared/constants.dart';
@@ -39,10 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
     final user = Provider.of<User?>(context);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       appBar: _selectedIndex == 1
           ? AppBar(
               centerTitle: true,

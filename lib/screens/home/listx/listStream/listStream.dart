@@ -21,8 +21,17 @@ class StreamBodyState extends StatefulWidget {
 
 class _StreamBodyStateState extends State<StreamBodyState> {
   int count = 20;
+  ScrollController _scrollController = ScrollController();
+  double _oldScrollPosition = 0;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("rebuulding listxxxxxxxx");
+
     double wt = MediaQuery.of(context).size.width;
     return StreamBuilder<QuerySnapshot>(
         stream: widget.curstream.limit(count).snapshots(),
@@ -41,8 +50,13 @@ class _StreamBodyStateState extends State<StreamBodyState> {
           String curDate = "";
           bool flag = true;
           return ListView.builder(
+            controller: _scrollController,
             itemCount: data.length + 2,
             itemBuilder: (context, i) {
+              if (_scrollController.hasClients && _oldScrollPosition != null) {
+                print(_scrollController);
+                // _scrollController.jumpTo(_oldScrollPosition);
+              }
               if (i == 0) return ListHeader();
               if (i - 1 < data.length) {
                 bool dispDate = false;
@@ -71,6 +85,7 @@ class _StreamBodyStateState extends State<StreamBodyState> {
                       onPressed: () {
                         setState(() {
                           count += 10;
+                          _oldScrollPosition = _scrollController.offset;
                         });
                       },
                       child: Container(

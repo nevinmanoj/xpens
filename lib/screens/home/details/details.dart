@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/PerDay.dart';
+import 'package:xpens/screens/home/details/carousal.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendarDisp.dart';
@@ -93,6 +94,8 @@ class _DetailsState extends State<Details> {
               i++;
             }
 
+            // return SingleChildScrollView(
+            // child:
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -128,12 +131,16 @@ class _DetailsState extends State<Details> {
                   SizedBox(
                     height: 5,
                   ),
+                  // Caroursal(
+                  //   stream: widget.stream,
+                  // ),
                   DOwnloadDetails(
                     data: data,
                   ),
                 ],
               ),
             );
+            // );
           }),
     );
   }

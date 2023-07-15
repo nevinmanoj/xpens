@@ -115,122 +115,127 @@ class _EditxDetailsState extends State<EditxDetails> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             backgroundColor: primaryAppColor),
-        body: Form(
-            key: _formKey,
-            child: Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Location(
-                  // location: widget.item['location'],
-                  location: location,
-                  onLocationChanged: updateLocation,
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                ItemName(
-                  itemName: widget.item['itemName'],
-                  onNameChange: updateName,
-                  // hideOther: cItems.contains(widget.item['itemName']),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                ItemRemark(
-                  remarks: widget.item['remarks'],
-                  onRemarkChanged: (String newId) {
-                    updateRemark(newId);
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                ItemQuantity(
-                  costs: widget.item['cost'].toString(),
-                  onCostChanged: (String newId) {
-                    updateCost(newId);
-                  },
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                // Date(),
-                SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: Center(
+          child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    calendar(
-                      dateToDisplay: DateTime.parse(widget.item['date']),
-                      onDateChanged: (DateTime newId) {
-                        updateDate(newId);
+                    Location(
+                      // location: widget.item['location'],
+                      location: location,
+                      onLocationChanged: updateLocation,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ItemName(
+                      itemName: itemName,
+                      onNameChange: updateName,
+                      // hideOther: cItems.contains(widget.item['itemName']),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ItemRemark(
+                      remarks: remarks,
+                      onRemarkChanged: (String newId) {
+                        updateRemark(newId);
                       },
                     ),
-                    clock(
-                      selectTime: TimeOfDay(
-                          hour: int.parse(widget.item['time'].split(":")[0]),
-                          minute: int.parse(widget.item['time'].split(":")[1])),
-                      onTimeChanged: (TimeOfDay newId) {
-                        updateTIme(newId);
+                    SizedBox(
+                      height: 15,
+                    ),
+                    ItemQuantity(
+                      costs: costS,
+                      onCostChanged: (String newId) {
+                        updateCost(newId);
                       },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Date(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        calendar(
+                          dateToDisplay: DateTime.parse(date),
+                          onDateChanged: (DateTime newId) {
+                            updateDate(newId);
+                          },
+                        ),
+                        clock(
+                          selectTime: TimeOfDay(
+                              hour: int.parse(time.split(":")[0]),
+                              minute: int.parse(time.split(":")[1])),
+                          onTimeChanged: (TimeOfDay newId) {
+                            updateTIme(newId);
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+
+                    SizedBox(
+                      width: 150,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            // double cost = widget.costS != ""
+                            //     ? double.parse(widget.costS)
+                            //     : widget.item['cost'];
+                            double cost = double.parse(costS);
+
+                            bool res = await DatabaseService(uid: user!.uid)
+                                .editItem(
+                                    I: AddItem(
+                                        isOther: !mainItems.contains(
+                                            itemName.toString().trim()),
+                                        location: location,
+                                        remarks: remarks.toString().trim(),
+                                        cost: cost,
+                                        date: DateTime.parse(date),
+                                        itemName: itemName.toString().trim(),
+                                        time: TimeOfDay(
+                                            hour: int.parse(time.split(":")[0]),
+                                            minute:
+                                                int.parse(time.split(":")[1]))),
+                                    id: widget.id);
+                            String msg = res ? "successfully" : "failed";
+                            showToast(
+                                context: context,
+                                msg: "Expense updated " + msg);
+                            Navigator.pop(context);
+                          }
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            )),
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                primaryAppColor)),
+                        child: const Center(
+                            child: Text("Update",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16))),
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-
-                SizedBox(
-                  width: 150,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        // double cost = widget.costS != ""
-                        //     ? double.parse(widget.costS)
-                        //     : widget.item['cost'];
-                        double cost = double.parse(costS);
-
-                        bool res = await DatabaseService(uid: user!.uid)
-                            .editItem(
-                                I: AddItem(
-                                    isOther: !mainItems
-                                        .contains(itemName.toString().trim()),
-                                    location: location,
-                                    remarks: remarks.toString().trim(),
-                                    cost: cost,
-                                    date: DateTime.parse(date),
-                                    itemName: itemName.toString().trim(),
-                                    time: TimeOfDay(
-                                        hour: int.parse(time.split(":")[0]),
-                                        minute: int.parse(time.split(":")[1]))),
-                                id: widget.id);
-                        String msg = res ? "successfully" : "failed";
-                        showToast(
-                            context: context, msg: "Expense updated " + msg);
-                        Navigator.pop(context);
-                      }
-                    },
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        )),
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(primaryAppColor)),
-                    child: const Center(
-                        child: Text("Update",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16))),
-                  ),
-                ),
-              ],
-            )),
+              )),
+        ),
       ),
     );
     ;

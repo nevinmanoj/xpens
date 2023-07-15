@@ -16,14 +16,16 @@ class _AddXState extends State<AddX> {
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
 
-    return Column(
-      children: [
-        Welcome(),
-        SizedBox(
-          height: ht * 0.1,
-        ),
-        AddxInputs()
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Welcome(),
+          SizedBox(
+            height: ht * 0.1,
+          ),
+          AddxInputs()
+        ],
+      ),
     );
   }
 }

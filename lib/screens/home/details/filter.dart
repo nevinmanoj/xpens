@@ -20,27 +20,29 @@ class _FilterDetailsState extends State<FilterDetails> {
     for (int i = 0; i < filterList.length; i++) {
       _selectedfilter.add(widget.filter == filterList[i]);
     }
-    return ToggleButtons(
-      direction: Axis.horizontal,
-      onPressed: (int index) {
-        widget.onFilterChanged(filterList[index]);
-        // setState(() {
-        //   for (int i = 0; i < _selectedfilter.length; i++) {
-        //     _selectedfilter[i] = i == index;
-        //   }
-        // });
-      },
-      borderRadius: const BorderRadius.all(Radius.circular(8)),
-      selectedBorderColor: primaryAppColor,
-      selectedColor: Colors.white,
-      fillColor: primaryAppColor,
-      color: primaryAppColor,
-      constraints: BoxConstraints(
-        minHeight: ht * 0.05,
-        minWidth: wt * 0.28,
+    return Center(
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (int index) {
+          widget.onFilterChanged(filterList[index]);
+          // setState(() {
+          //   for (int i = 0; i < _selectedfilter.length; i++) {
+          //     _selectedfilter[i] = i == index;
+          //   }
+          // });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        selectedBorderColor: primaryAppColor,
+        selectedColor: Colors.white,
+        fillColor: primaryAppColor,
+        color: primaryAppColor,
+        constraints: BoxConstraints(
+          minHeight: ht * 0.05,
+          minWidth: wt * 0.28,
+        ),
+        isSelected: _selectedfilter,
+        children: widgetList(filterList),
       ),
-      isSelected: _selectedfilter,
-      children: widgetList(filterList),
     );
   }
 }
