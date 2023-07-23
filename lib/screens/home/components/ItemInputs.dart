@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/components/calendar.dart';
 import 'package:xpens/screens/home/components/cost.dart';
@@ -6,42 +5,62 @@ import 'package:xpens/screens/home/components/itemName.dart';
 import 'package:xpens/screens/home/components/location.dart';
 import 'package:xpens/screens/home/components/remarks.dart';
 import 'package:xpens/screens/home/components/time.dart';
-import 'package:xpens/services/database.dart';
-import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
-class AddxInputs extends StatefulWidget {
-  const AddxInputs({super.key});
+class ItemInputs extends StatefulWidget {
+  final String itemName;
+  final DateTime date;
+  final TimeOfDay time;
+  final String costS;
+  final String remarks;
+  final String location;
+  final String buttonLabel;
+  final Function(AddItem) buttonfunc;
 
+  ItemInputs(
+      {required this.itemName,
+      required this.costS,
+      required this.date,
+      required this.location,
+      required this.remarks,
+      required this.time,
+      required this.buttonLabel,
+      required this.buttonfunc});
   @override
-  State<AddxInputs> createState() => _AddxInputsState();
+  State<ItemInputs> createState() => _ItemInputsState();
 }
 
-class _AddxInputsState extends State<AddxInputs> {
+class _ItemInputsState extends State<ItemInputs> {
   String itemName = allItems[0];
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
-  double cost = 0;
-  String costS = "";
-  String remarks = "";
   String location = locationList[0];
   final _formKey = GlobalKey<FormState>();
-  void updateName(String newName) {
+  TextEditingController costController = TextEditingController();
+  TextEditingController remarksController = TextEditingController();
+  @override
+  void initState() {
+    date = widget.date;
+    time = widget.time;
+    itemName = widget.itemName;
+    location = widget.location;
+
+    costController = TextEditingController(text: widget.costS);
+
+    remarksController = TextEditingController(text: widget.remarks);
+    super.initState();
+  }
+
+  void updateLocation(String newlocation) {
+    setState(() {
+      location = newlocation;
+    });
+  }
+
+  void updateItemName(String newName) {
     setState(() {
       itemName = newName;
-    });
-  }
-
-  void updateLocation(String val) {
-    setState(() {
-      location = val;
-    });
-  }
-
-  void updateCost(String val) {
-    setState(() {
-      costS = val;
     });
   }
 
@@ -51,9 +70,15 @@ class _AddxInputsState extends State<AddxInputs> {
     });
   }
 
-  void updateRemarks(String newRemark) {
+  void updatecostctrl(newcontroller) {
     setState(() {
-      remarks = newRemark;
+      costController = newcontroller;
+    });
+  }
+
+  void updateRemarkctrl(newcontroller) {
+    setState(() {
+      remarksController = newcontroller;
     });
   }
 
@@ -66,9 +91,6 @@ class _AddxInputsState extends State<AddxInputs> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    double wt = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
         child: Column(
@@ -83,20 +105,25 @@ class _AddxInputsState extends State<AddxInputs> {
               height: 15,
             ),
             ItemName(
-              onNameChange: updateName,
+              onNameChange: updateItemName,
               itemName: itemName,
             ),
             SizedBox(
               height: 15,
             ),
             ItemRemark(
-              onRemarkChanged: updateRemarks,
-              remarks: remarks,
+              // onRemarkChanged: updateRemarks,
+              onctrlchange: updateRemarkctrl,
+              remarks: remarksController.text,
             ),
             SizedBox(
               height: 15,
             ),
-            ItemQuantity(onCostChanged: updateCost, costs: costS),
+            ItemQuantity(
+              // onCostChanged: updateCost,
+              costs: costController.text,
+              onctrlchange: updatecostctrl,
+            ),
             SizedBox(
               height: 15,
             ),
@@ -135,26 +162,28 @@ class _AddxInputsState extends State<AddxInputs> {
                             loading = true;
                           });
 
-                          cost = double.parse(costS);
+                          // cost = double.parse(costS);
+                          double cost = double.parse(costController.text);
+                          AddItem I = AddItem(
+                              isOther: !mainItems.contains(itemName.trim()),
+                              location: location,
+                              remarks: remarksController.text.trim(),
+                              cost: cost,
+                              date: date,
+                              itemName: itemName.trim(),
+                              time: time);
 
-                          bool res = await DatabaseService(uid: user!.uid)
-                              .addItem(AddItem(
-                                  isOther: !mainItems.contains(itemName.trim()),
-                                  location: location,
-                                  remarks: remarks.trim(),
-                                  cost: cost,
-                                  date: date,
-                                  itemName: itemName.trim(),
-                                  time: time));
-                          String msg = res ? "successfully" : "failed";
-
-                          showToast(
-                              context: context, msg: "Expense added " + msg);
-                          remarks = "";
+                          widget.buttonfunc(I);
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          costController.clear();
+                          remarksController.clear();
+                          updateItemName(allItems[0]);
+                          updateDate(DateTime.now());
+                          updateTIme(TimeOfDay.now());
+                          updateLocation(locationList[0]);
                           setState(() {
                             loading = false;
                           });
-                          FocusManager.instance.primaryFocus?.unfocus();
                         }
                       },
                 style: buttonDecoration,
@@ -163,7 +192,7 @@ class _AddxInputsState extends State<AddxInputs> {
                         ? CircularProgressIndicator(
                             color: secondaryAppColor,
                           )
-                        : Text("Add",
+                        : Text(widget.buttonLabel,
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
