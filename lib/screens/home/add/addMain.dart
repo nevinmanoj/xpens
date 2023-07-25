@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/add/welcome.dart';
 import 'package:xpens/screens/home/components/ItemInputs.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/services/providers.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
@@ -16,10 +17,9 @@ class AddX extends StatefulWidget {
 }
 
 class _AddXState extends State<AddX> {
-  // DateTime currentPhoneDate = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
+    List allItems = Provider.of<UserInfoProvider>(context).items;
     double ht = MediaQuery.of(context).size.height;
     final user = Provider.of<User?>(context);
     void addItem(AddItem I) async {

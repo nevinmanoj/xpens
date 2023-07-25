@@ -4,39 +4,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/PerDay.dart';
-import 'package:xpens/screens/home/details/carousal.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendarDisp.dart';
 import 'package:xpens/screens/home/details/filter.dart';
 import 'package:xpens/shared/constants.dart';
 
-import 'package:xpens/shared/datamodals.dart';
 import 'thisMonth.dart';
 
 class Details extends StatefulWidget {
-  DateTime mY = DateTime.now();
-  String filter = filterList[0];
-
-  var stream = FirebaseFirestore.instance
-      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
-      .orderBy('date', descending: true);
   @override
   State<Details> createState() => _DetailsState();
 }
 
 class _DetailsState extends State<Details> {
+  DateTime mY = DateTime.now();
+  String filter = filterList[0];
+  var stream = FirebaseFirestore.instance
+      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+      .orderBy('date', descending: true);
   void onFilterChanged(String val) {
     setState(() {
-      widget.filter = val;
-      widget.stream = FirebaseFirestore.instance
+      filter = val;
+      stream = FirebaseFirestore.instance
           .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
           .orderBy('date', descending: true);
       if (val == "Personel" || val == "Home") {
-        widget.stream = widget.stream.where('location', isEqualTo: val);
+        stream = stream.where('location', isEqualTo: val);
       }
     });
   }
@@ -49,7 +45,7 @@ class _DetailsState extends State<Details> {
     return Padding(
       padding: EdgeInsets.only(top: ht * 0.02),
       child: StreamBuilder<QuerySnapshot>(
-          stream: widget.stream.snapshots(),
+          stream: stream.snapshots(),
           builder: (context, listSnapshot) {
             var list = listSnapshot.data?.docs;
 
@@ -101,13 +97,13 @@ class _DetailsState extends State<Details> {
                 children: [
                   FilterDetails(
                     onFilterChanged: onFilterChanged,
-                    filter: widget.filter,
+                    filter: filter,
                   ),
                   CalendarDisp(
                     testmap: testMap,
                   ),
                   PerDay(
-                      stream: widget.stream
+                      stream: stream
                           .where('month',
                               isEqualTo:
                                   DateFormat.MMM().format(today).toString())
@@ -116,7 +112,7 @@ class _DetailsState extends State<Details> {
                           .snapshots(),
                       heading: "Today"),
                   PerDay(
-                      stream: widget.stream
+                      stream: stream
                           .where('month',
                               isEqualTo:
                                   DateFormat.MMM().format(yesterday).toString())
@@ -125,8 +121,8 @@ class _DetailsState extends State<Details> {
                           .snapshots(),
                       heading: "Yesterday"),
                   ThisMonth(
-                    stream: widget.stream,
-                    mY: DateTime(widget.mY.year, widget.mY.month),
+                    stream: stream,
+                    mY: DateTime(mY.year, mY.month),
                   ),
                   SizedBox(
                     height: 5,

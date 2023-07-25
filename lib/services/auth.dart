@@ -8,9 +8,7 @@ class AuthSerivice {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //auth change user stream
-  Stream<User?> get user {
-    return _auth.authStateChanges();
-  }
+  Stream<User?> get user => _auth.authStateChanges();
 
   //sign in anon
   Future Passwordreset(String email, BuildContext context) async {
@@ -58,6 +56,7 @@ class AuthSerivice {
       await DatabaseService(uid: user!.uid).updateUserName(name);
       await DatabaseService(uid: user.uid).updateUserEmail(email);
       await DatabaseService(uid: user.uid).updateUserPhone("");
+      await DatabaseService(uid: user.uid).createItemsArray();
 
       return user;
     } catch (e) {

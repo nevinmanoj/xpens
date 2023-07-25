@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/calendar.dart';
 import 'package:xpens/screens/home/components/cost.dart';
 import 'package:xpens/screens/home/components/itemName.dart';
 import 'package:xpens/screens/home/components/location.dart';
 import 'package:xpens/screens/home/components/remarks.dart';
 import 'package:xpens/screens/home/components/time.dart';
+import 'package:xpens/services/providers.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
@@ -32,7 +34,7 @@ class ItemInputs extends StatefulWidget {
 }
 
 class _ItemInputsState extends State<ItemInputs> {
-  String itemName = allItems[0];
+  String itemName = "";
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
@@ -91,6 +93,7 @@ class _ItemInputsState extends State<ItemInputs> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
+    List allItems = Provider.of<UserInfoProvider>(context).items;
     return Form(
         key: _formKey,
         child: Column(
@@ -164,8 +167,11 @@ class _ItemInputsState extends State<ItemInputs> {
 
                           // cost = double.parse(costS);
                           double cost = double.parse(costController.text);
+
+                          if (itemName == "Other") {}
                           AddItem I = AddItem(
-                              isOther: !mainItems.contains(itemName.trim()),
+                              isOther: (!allItems.contains(itemName.trim())) ||
+                                  itemName == "Other",
                               location: location,
                               remarks: remarksController.text.trim(),
                               cost: cost,

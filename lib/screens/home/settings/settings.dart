@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:xpens/screens/home/dev/devDash.dart';
+import 'package:xpens/screens/home/settings/items/items.dart';
 
 import 'package:xpens/services/auth.dart';
 
@@ -72,6 +73,30 @@ class SettingsScreen extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
                     child: Text(
                       "Send reset password link ",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  )),
+            ),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, CupertinoPageRoute(builder: (context) => Items()));
+            },
+            child: Container(
+              // decoration: ,
+              color: Colors.grey[300],
+              width: wt,
+              height: ht * 0.06,
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
+                    child: Text(
+                      "Items",
                       style: TextStyle(fontSize: 18),
                     ),
                   )),

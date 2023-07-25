@@ -27,6 +27,60 @@ class DatabaseService {
     }, SetOptions(merge: true));
   }
 
+  Future createItemsArray() async {
+    return await FirebaseFirestore.instance
+        .collection('UserInfo')
+        .doc(uid)
+        .set({
+      'items': [
+        "Breakfast",
+        "Lunch",
+        "Dinner",
+        "Tea and Snacks",
+        "Petrol",
+        "Icecream",
+        "Other"
+      ],
+    }, SetOptions(merge: true));
+  }
+
+  Future updateItemsArray(
+      {required bool add,
+      required String item,
+      required Function(double) progress}) async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('UserInfo/$uid/list')
+        .where("itemName", isEqualTo: item)
+        .get();
+    double count = 0;
+    for (QueryDocumentSnapshot doc in snapshot.docs) {
+      DocumentReference docRef = FirebaseFirestore.instance
+          .collection('UserInfo/$uid/list')
+          .doc(doc.id);
+      docRef.update({'isOther': !add});
+
+      count++;
+      progress(count / snapshot.docs.length * 100);
+    }
+    if (add) {
+      //add item
+      return await FirebaseFirestore.instance
+          .collection('UserInfo')
+          .doc(uid)
+          .update({
+        "items": FieldValue.arrayUnion([item]),
+      });
+    } else {
+      //delete item
+      return await FirebaseFirestore.instance
+          .collection('UserInfo')
+          .doc(uid)
+          .update({
+        "items": FieldValue.arrayRemove([item])
+      });
+    }
+  }
+
   Future updateUserPhone(String PhoneNumber) async {
     return await FirebaseFirestore.instance
         .collection('UserInfo')

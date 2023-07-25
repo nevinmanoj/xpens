@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_final_fields
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/add/addMain.dart';
 
 import 'package:xpens/screens/home/listx/listMain.dart';
+import 'package:xpens/services/providers.dart';
 
 import '../../shared/constants.dart';
 import 'details/details.dart';
@@ -31,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Details(),
     SettingsScreen(),
   ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -39,28 +43,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User?>(context);
+    final userInfo = Provider.of<UserInfoProvider>(context);
+
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       appBar: _selectedIndex == 1
           ? AppBar(
               centerTitle: true,
-              title: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('UserInfo/${user!.uid}/list')
-                      .snapshots(),
-                  builder: (context, snap) {
-                    if (snap.connectionState == ConnectionState.waiting) {
-                      return Container();
-                    }
-                    return Text(
-                      "Total Expenses Count: ${snap.data?.docs.length}",
-                      style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w400,
-                          color: Color.fromARGB(255, 168, 168, 168)),
-                    );
-                  }),
+              title: Text(userInfo.userName),
+              // title: StreamBuilder<QuerySnapshot>(
+              //     stream: FirebaseFirestore.instance
+              //         .collection('UserInfo/${user!.uid}/list')
+              //         .snapshots(),
+              //     builder: (context, snap) {
+              //       if (snap.connectionState == ConnectionState.waiting) {
+              //         return Container();
+              //       }
+              //       return Text(
+              //         "Total Expenses Count: ${snap.data?.docs.length}",
+              //         style: TextStyle(
+              //             fontSize: 22,
+              //             fontWeight: FontWeight.w400,
+              //             color: Color.fromARGB(255, 168, 168, 168)),
+              //       );
+              //     }),
               backgroundColor: Colors.black,
             )
           : AppBar(

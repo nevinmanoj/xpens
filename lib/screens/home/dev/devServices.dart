@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +12,7 @@ import '../../../shared/datamodals.dart';
 
 class DevService {
   Future switchAc() async {
-    await AuthSerivice().signOut();
+    // await AuthSerivice().signOut();
     await AuthSerivice().loginWithEmail("nevinmanojnew@gmail.com", "password");
   }
 
@@ -22,25 +21,42 @@ class DevService {
     final User? user = _auth.currentUser;
     print("adding fields ");
 
-    CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('UserInfo/${user!.uid}/list');
+    // CollectionReference collectionRef =
+    //     FirebaseFirestore.instance.collection('UserInfo');
 
-    QuerySnapshot snapshot =
-        await collectionRef.where("month", isEqualTo: "May").get();
-    // int count = 0;
-    // int size = snapshot.size;
-    for (QueryDocumentSnapshot doc in snapshot.docs) {
-      Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    // QuerySnapshot snapshot = await collectionRef.get();
 
-      DocumentReference docRef = collectionRef.doc(doc.id);
-      // await docRef.update({'test': "values"});
-      // docRef.update({
-      //   "test": FieldValue.delete(),
-      // });
-      docRef.delete();
-      // count++;
-      // print("completed: ${(count / size) * 100}%");
-    }
+    // for (QueryDocumentSnapshot doc in snapshot.docs) {
+    //   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+
+    //   DocumentReference docRef = collectionRef.doc(doc.id);
+    //   await docRef.update({
+    //     'items': [
+    //       "Breakfast",
+    //       "Lunch",
+    //       "Dinner",
+    //       "Tea and Snacks",
+    //       "Petrol",
+    //       "Icecream",
+    //       "Other"
+    //     ]
+    //   });
+
+    //   // docRef.update({
+    //   //   "itemNames": FieldValue.delete(),
+    //   // });
+    // }
+    List items = [
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Tea and Snacks",
+      "Petrol",
+      "Icecream",
+    ];
+    for (var item in items)
+      DatabaseService(uid: user!.uid)
+          .updateItemsArray(add: true, item: item, progress: (_) {});
   }
 
   Future injectTestData(
@@ -49,7 +65,14 @@ class DevService {
       required double count}) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final User? user = _auth.currentUser;
-
+    List<String> mainItems = [
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Tea and Snacks",
+      "Petrol",
+      "Icecream",
+    ];
     var formattedTime = TimeOfDay.now();
     for (int i = 0; i < count; i++) {
       DateTime date = DateTime(int.parse(year),

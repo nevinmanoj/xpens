@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:xpens/screens/home/listx/listStream/deleteItem.dart';
+import 'package:xpens/screens/home/listx/listStream/deleteExpense.dart';
 import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/shared/constants.dart';
 
@@ -100,7 +100,7 @@ Widget buildItem(
           onPressed: () => showDialog(
                 context: context,
                 builder: (context) {
-                  return DeleteItem(
+                  return DeleteExpense(
                     id: key,
                     name: data['itemName'],
                     cost: data['cost'].toString(),

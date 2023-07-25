@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:xpens/screens/home/listx/listStream/deleteItem.dart';
+import 'package:xpens/screens/home/listx/listStream/deleteExpense.dart';
 import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/screens/home/listx/listStream/itemExpanded.dart';
 import 'package:xpens/screens/home/listx/listStream/listHeader.dart';
@@ -138,7 +138,7 @@ Widget item(
               onPressed: (BuildContext context) => showDialog(
                 context: context,
                 builder: (context) {
-                  return DeleteItem(
+                  return DeleteExpense(
                       id: id,
                       name: item['itemName'],
                       cost: item['cost'].toString(),
@@ -235,7 +235,7 @@ Widget item(
                       onPressed: () => showDialog(
                             context: context,
                             builder: (context) {
-                              return DeleteItem(
+                              return DeleteExpense(
                                   id: id,
                                   name: item['itemName'],
                                   cost: item['cost'].toString(),

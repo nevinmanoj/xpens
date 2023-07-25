@@ -21,9 +21,7 @@ class DevDash extends StatefulWidget {
 class _DevDashState extends State<DevDash> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    bool isDev = user!.email == "nevinmanojnew@gmail.com";
+    var user = Provider.of<User?>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,16 +32,12 @@ class _DevDashState extends State<DevDash> {
       body: Center(
           child: Column(children: [
         InjectTestData(),
-        isDev
-            ? SizedBox(
-                height: 1,
-              )
-            : ElevatedButton(
-                style: buttonDecoration,
-                onPressed: () async {
-                  await DevService().switchAc();
-                },
-                child: Text("Switch to dev")),
+        ElevatedButton(
+            style: buttonDecoration,
+            onPressed: () async {
+              await DevService().switchAc();
+            },
+            child: Text("Switch to dev")),
         Test(),
         ElevatedButton(
             style: buttonDecoration,
@@ -51,21 +45,6 @@ class _DevDashState extends State<DevDash> {
               await DevService().addFieldToDocuments();
             },
             child: Text("modify")),
-        StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection('UserInfo/${user.uid}/list')
-                .snapshots(),
-            builder: (context, snap) {
-              if (snap.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Text(
-                "Expense count: ${snap.data?.docs.length}",
-                style: TextStyle(fontSize: 25),
-              );
-            })
       ])),
     );
   }

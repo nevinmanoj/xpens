@@ -108,7 +108,7 @@ class _CalendarDispState extends State<CalendarDisp> {
                     textAlign: TextAlign.center,
                     '₹ $value',
                     style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: isSameDay(_selectedDate, day)
                             ? Colors.white

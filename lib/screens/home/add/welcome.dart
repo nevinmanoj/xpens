@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:xpens/services/providers.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -17,6 +18,8 @@ class Welcome extends StatefulWidget {
 class _WelcomeState extends State<Welcome> {
   @override
   Widget build(BuildContext context) {
+    // final userInfo = Provider.of<UserInfoProvider>(context);
+    var userInfo = context.watch<UserInfoProvider>();
     final user = Provider.of<User?>(context);
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
@@ -31,22 +34,10 @@ class _WelcomeState extends State<Welcome> {
             'Welcome',
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
-          StreamBuilder<DocumentSnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('UserInfo')
-                  .doc(user!.uid)
-                  .snapshots(),
-              builder: (context, snap) {
-                if (snap.connectionState == ConnectionState.waiting) {
-                  return Container();
-                }
-                var x = snap.data!.data() as Map;
-
-                return Text(
-                  x['Name'],
-                  style: TextStyle(fontSize: 25),
-                );
-              })
+          Text(
+            userInfo.userName,
+            style: TextStyle(fontSize: 25),
+          )
         ],
       ),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xpens/services/providers.dart';
 import 'package:xpens/shared/constants.dart';
 
 class ItemName extends StatefulWidget {
@@ -14,6 +16,7 @@ class ItemName extends StatefulWidget {
 class _ItemNameState extends State<ItemName> {
   @override
   Widget build(BuildContext context) {
+    List allItems = Provider.of<UserInfoProvider>(context).items;
     return Column(
       children: [
         Container(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:xpens/services/providers.dart';
 import 'package:xpens/shared/constants.dart';
 
 class NameRadioAccordion extends StatefulWidget {
@@ -15,6 +17,7 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
 
   @override
   Widget build(BuildContext context) {
+    List allItems = Provider.of<UserInfoProvider>(context).items;
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: SingleChildScrollView(
