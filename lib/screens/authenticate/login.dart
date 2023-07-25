@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:xpens/screens/authenticate/components/password.dart';
+import 'package:xpens/screens/authenticate/components/textInput.dart';
 import 'package:xpens/services/toast.dart';
 
 import '../../services/auth.dart';
 import '../../shared/constants.dart';
 import '../../shared/loading.dart';
-
-String password1 = "";
-String email1 = "";
 
 class login extends StatefulWidget {
   final Function toggleView;
@@ -21,6 +20,20 @@ class login extends StatefulWidget {
 final AuthSerivice _auth = AuthSerivice();
 
 class _loginState extends State<login> {
+  String password = "";
+  String email = "";
+  void updatePass(String newPass) {
+    setState(() {
+      password = newPass;
+    });
+  }
+
+  void updateEmail(String newEmail) {
+    setState(() {
+      email = newEmail;
+    });
+  }
+
   bool showSpinner = false;
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -64,11 +77,16 @@ class _loginState extends State<login> {
                       SizedBox(
                         height: ht * 0.02,
                       ),
-                      Lemail(),
+
+                      TextInput(
+                        onValueChange: updateEmail,
+                        label: "Email",
+                      ),
                       SizedBox(
                         height: ht * 0.02,
                       ),
-                      Lpass(),
+                      // Lpass(),
+                      Password(passChange: updatePass),
                       SizedBox(
                         height: ht * 0.02,
                       ),
@@ -104,7 +122,7 @@ class _loginState extends State<login> {
                             if (_formKey.currentState!.validate()) {
                               setState(() => loading = true);
                               dynamic result =
-                                  await _auth.loginWithEmail(email1, password1);
+                                  await _auth.loginWithEmail(email, password);
 
                               if (result == null) {
                                 setState(() {
@@ -147,8 +165,8 @@ class _loginState extends State<login> {
                           ),
                           InkWell(
                             onTap: () {
-                              if (email1 != "") {
-                                AuthSerivice().Passwordreset(email1, context);
+                              if (email != "") {
+                                AuthSerivice().Passwordreset(email, context);
                               } else {
                                 showToast(context: context, msg: "Enter email");
                               }
@@ -167,67 +185,5 @@ class _loginState extends State<login> {
         ],
       ),
     );
-  }
-}
-
-class Lemail extends StatefulWidget {
-  const Lemail({Key? key}) : super(key: key);
-
-  @override
-  State<Lemail> createState() => _emailState();
-}
-
-class _emailState extends State<Lemail> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 300,
-        decoration: authInputDecoration,
-        child: TextFormField(
-            validator: (value) =>
-                value!.isEmpty ? ' Email cannot be empty' : null,
-            keyboardType: TextInputType.emailAddress,
-            textAlign: TextAlign.center,
-            onChanged: (value) {
-              email1 = value;
-              //Do something with the user input.
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              hintText: 'E-Mail',
-            )));
-  }
-}
-
-class Lpass extends StatefulWidget {
-  const Lpass({Key? key}) : super(key: key);
-
-  @override
-  State<Lpass> createState() => _passState();
-}
-
-class _passState extends State<Lpass> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 300,
-        decoration: authInputDecoration,
-        child: TextFormField(
-            validator: (value) => value!.isEmpty ? 'Enter password' : null,
-            obscureText: true,
-            textAlign: TextAlign.center,
-            onChanged: (value) {
-              password1 = value;
-
-              //Do something with the user input.
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              hintText: 'Password',
-            )));
   }
 }

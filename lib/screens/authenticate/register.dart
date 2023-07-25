@@ -1,15 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:xpens/screens/authenticate/components/password.dart';
+import 'package:xpens/screens/authenticate/components/textInput.dart';
 
 import '../../services/auth.dart';
 import '../../shared/constants.dart';
 import '../../shared/loading.dart';
-import 'authenticate.dart';
 
-String Name = "";
-String Remail1 = "";
-String Rpassword1 = "";
 String error = "";
 final AuthSerivice _auth = AuthSerivice();
 final _formKey = GlobalKey<FormState>();
@@ -24,6 +22,27 @@ class signUp extends StatefulWidget {
 }
 
 class _signUpState extends State<signUp> {
+  String password = "";
+  String email = "";
+  String name = "";
+  void updatePass(String newPass) {
+    setState(() {
+      password = newPass;
+    });
+  }
+
+  void updateEmail(String newEmail) {
+    setState(() {
+      email = newEmail;
+    });
+  }
+
+  void updateName(String newName) {
+    setState(() {
+      name = newName;
+    });
+  }
+
   bool loading = false;
   @override
   Widget build(BuildContext context) {
@@ -62,15 +81,24 @@ class _signUpState extends State<signUp> {
                         SizedBox(
                           height: ht * 0.02,
                         ),
-                        name(),
+                        // name(),
+                        TextInput(
+                          onValueChange: updateName,
+                          label: "Name",
+                        ),
                         SizedBox(
                           height: ht * 0.02,
                         ),
-                        Remail(),
+                        // Remail(),
+                        TextInput(
+                          onValueChange: updateEmail,
+                          label: "Email",
+                        ),
                         SizedBox(
                           height: ht * 0.02,
                         ),
-                        Rpass(),
+                        // Rpass(),
+                        Password(passChange: updatePass),
                         SizedBox(
                           height: ht * 0.02,
                         ),
@@ -82,7 +110,7 @@ class _signUpState extends State<signUp> {
                               if (_formKey.currentState!.validate()) {
                                 setState(() => loading = true);
                                 dynamic result = await _auth.registerWithEmail(
-                                    Remail1, Rpassword1, Name);
+                                    email, password, name);
                                 if (result == null) {
                                   setState(() {
                                     loading = false;
@@ -143,125 +171,5 @@ class _signUpState extends State<signUp> {
             if (loading) Loading(),
           ],
         ));
-  }
-}
-
-class name extends StatefulWidget {
-  const name({Key? key}) : super(key: key);
-
-  @override
-  State<name> createState() => _nameState();
-}
-
-class _nameState extends State<name> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 300,
-        decoration: authInputDecoration,
-        child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            textAlign: TextAlign.center,
-            validator: (value) =>
-                value!.isEmpty ? ' Name cannot be empty' : null,
-            onChanged: (value) {
-              Name = value;
-              //Do something with the user input.
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              hintText: 'Name',
-            )));
-  }
-}
-
-// class loginlink extends StatelessWidget {
-//   const loginlink({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        children: [Container(
-//                          child:Text("Have an account?",
-
-//                          ),
-//                        ),
-//                        SizedBox(width: 5,),
-//                        InkWell(
-//                         onTap:() {
-//                           widget.toggleView();
-//                           // Navigator.pop(context);
-//                         },
-//                          child: Container(
-//                            child:Text("Log In",
-//                           style:TextStyle(color: Colors.blue[400]))
-//                          ),
-//                        )],
-//                      );
-//   }
-// }
-class Remail extends StatefulWidget {
-  const Remail({Key? key}) : super(key: key);
-
-  @override
-  State<Remail> createState() => _emailState();
-}
-
-class _emailState extends State<Remail> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 300,
-        decoration: authInputDecoration,
-        child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            textAlign: TextAlign.center,
-            validator: (value) =>
-                value!.isEmpty ? 'Email cannot be empty' : null,
-            onChanged: (value) {
-              Remail1 = value;
-              //Do something with the user input.
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              hintText: 'E-Mail',
-            )));
-  }
-}
-
-class Rpass extends StatefulWidget {
-  const Rpass({Key? key}) : super(key: key);
-
-  @override
-  State<Rpass> createState() => _passState();
-}
-
-class _passState extends State<Rpass> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 50,
-        width: 300,
-        decoration: authInputDecoration,
-        child: TextFormField(
-            obscureText: true,
-            textAlign: TextAlign.center,
-            validator: (value) =>
-                value!.length < 6 ? 'Password too short' : null,
-            onChanged: (value) {
-              Rpassword1 = value;
-
-              //Do something with the user input.
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-              hintText: 'Password',
-            )));
   }
 }
