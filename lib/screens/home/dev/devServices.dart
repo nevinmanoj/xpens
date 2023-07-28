@@ -12,8 +12,7 @@ import '../../../shared/datamodals.dart';
 
 class DevService {
   Future switchAc() async {
-    // await AuthSerivice().signOut();
-    await AuthSerivice().loginWithEmail("nevinmanojnew@gmail.com", "password");
+    await AuthSerivice().loginWithEmail("dev@gmail.com", "password");
   }
 
   Future addFieldToDocuments() async {

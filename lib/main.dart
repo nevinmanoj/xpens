@@ -44,7 +44,8 @@ Future<void> main() async {
         create: (_) => UserInfoProvider(user: _user),
         update: (context, user, userInfoProvider) {
           if (userInfoProvider == null) return UserInfoProvider(user: user);
-          userInfoProvider.user = user;
+          if (user != null) userInfoProvider.setUser(user);
+          // userInfoProvider.user = user;
           return userInfoProvider;
         },
         builder: (context, child) {

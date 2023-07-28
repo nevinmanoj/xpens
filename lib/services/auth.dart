@@ -53,10 +53,10 @@ class AuthSerivice {
           email: email, password: password);
       User? user = result.user;
 
-      await DatabaseService(uid: user!.uid).updateUserName(name);
-      await DatabaseService(uid: user.uid).updateUserEmail(email);
-      await DatabaseService(uid: user.uid).updateUserPhone("");
-      await DatabaseService(uid: user.uid).createItemsArray();
+      DatabaseService(uid: user!.uid).updateUserName(name);
+      DatabaseService(uid: user.uid).updateUserEmail(email);
+      DatabaseService(uid: user.uid).updateUserPhone("");
+      DatabaseService(uid: user.uid).createItemsArray();
 
       return user;
     } catch (e) {
