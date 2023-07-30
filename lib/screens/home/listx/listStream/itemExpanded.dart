@@ -93,6 +93,21 @@ class _MyWidgetState extends State<ExpandItem> {
                 ],
               ),
             ),
+            Container(
+              width: wt * 0.7,
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(width: wt * 0.3, child: Text("Item Tag")),
+                  Text(": "),
+                  Spacer(),
+                  Text(
+                    widget.item['location'],
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
             widget.item['remarks'] != ""
                 ? Container(
                     width: wt * 0.7,

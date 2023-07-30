@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/PerDay.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
-import 'package:xpens/screens/home/details/calendarDisp.dart';
+import 'package:xpens/screens/home/details/calendar/calendarDisp.dart';
 import 'package:xpens/screens/home/details/filter.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'thisMonth.dart';
@@ -23,13 +24,13 @@ class _DetailsState extends State<Details> {
   DateTime mY = DateTime.now();
   String filter = filterList[0];
   var stream = FirebaseFirestore.instance
-      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+      .collection('$db/${FirebaseAuth.instance.currentUser!.uid}/list')
       .orderBy('date', descending: true);
   void onFilterChanged(String val) {
     setState(() {
       filter = val;
       stream = FirebaseFirestore.instance
-          .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+          .collection('$db/${FirebaseAuth.instance.currentUser!.uid}/list')
           .orderBy('date', descending: true);
       if (val == "Personel" || val == "Home") {
         stream = stream.where('location', isEqualTo: val);

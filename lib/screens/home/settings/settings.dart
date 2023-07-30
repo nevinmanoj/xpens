@@ -3,13 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/dev/devDash.dart';
 import 'package:xpens/screens/home/settings/items/items.dart';
 
 import 'package:xpens/services/auth.dart';
+import 'package:xpens/services/providers.dart';
 
-import 'Profile.dart';
+import 'Profile/Profile.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -20,24 +22,17 @@ class SettingsScreen extends StatelessWidget {
     double ht = MediaQuery.of(context).size.height;
     FirebaseAuth _auth = FirebaseAuth.instance;
     User? user = _auth.currentUser;
-
+    var userInfo = Provider.of<UserInfoProvider>(context);
     return Column(
       children: [
         InkWell(
-          onTap: () async {
-            final curUser = await FirebaseFirestore.instance
-                .collection('UserInfo')
-                .doc(user!.uid)
-                .get();
-            String name = curUser.data()!['Name'];
-            String phoneNumber = curUser.data()!['PhoneNumber'];
-
+          onTap: () {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => Profile(
-                          name: name,
-                          phoneNumber: phoneNumber,
+                          name: userInfo.userName,
+                          phoneNumber: userInfo.phone,
                         )));
           },
           child: Container(

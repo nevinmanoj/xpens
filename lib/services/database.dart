@@ -3,35 +3,20 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:intl/intl.dart';
+import 'package:xpens/shared/Db.dart';
 import '../shared/datamodals.dart';
 
 class DatabaseService {
   final String uid;
   DatabaseService({required this.uid});
-
-  Future updateUserName(String Name) async {
-    return await FirebaseFirestore.instance
-        .collection('UserInfo')
-        .doc(uid)
-        .set({
-      'Name': Name,
-    }, SetOptions(merge: true));
-  }
-
-  Future updateUserEmail(String email) async {
-    return await FirebaseFirestore.instance
-        .collection('UserInfo')
-        .doc(uid)
-        .set({
-      'Email': email,
+  Future updateUserInfo(String label, String data) async {
+    return await FirebaseFirestore.instance.collection(db).doc(uid).set({
+      label: data,
     }, SetOptions(merge: true));
   }
 
   Future createItemsArray() async {
-    return await FirebaseFirestore.instance
-        .collection('UserInfo')
-        .doc(uid)
-        .set({
+    return await FirebaseFirestore.instance.collection(db).doc(uid).set({
       'items': [
         "Breakfast",
         "Lunch",
@@ -49,14 +34,13 @@ class DatabaseService {
       required String item,
       required Function(double) progress}) async {
     var snapshot = await FirebaseFirestore.instance
-        .collection('UserInfo/$uid/list')
+        .collection('$db/$uid/list')
         .where("itemName", isEqualTo: item)
         .get();
     double count = 0;
     for (QueryDocumentSnapshot doc in snapshot.docs) {
-      DocumentReference docRef = FirebaseFirestore.instance
-          .collection('UserInfo/$uid/list')
-          .doc(doc.id);
+      DocumentReference docRef =
+          FirebaseFirestore.instance.collection('$db/$uid/list').doc(doc.id);
       docRef.update({'isOther': !add});
 
       count++;
@@ -64,30 +48,15 @@ class DatabaseService {
     }
     if (add) {
       //add item
-      return await FirebaseFirestore.instance
-          .collection('UserInfo')
-          .doc(uid)
-          .update({
+      return await FirebaseFirestore.instance.collection(db).doc(uid).update({
         "items": FieldValue.arrayUnion([item]),
       });
     } else {
       //delete item
-      return await FirebaseFirestore.instance
-          .collection('UserInfo')
-          .doc(uid)
-          .update({
+      return await FirebaseFirestore.instance.collection(db).doc(uid).update({
         "items": FieldValue.arrayRemove([item])
       });
     }
-  }
-
-  Future updateUserPhone(String PhoneNumber) async {
-    return await FirebaseFirestore.instance
-        .collection('UserInfo')
-        .doc(uid)
-        .set({
-      'PhoneNumber': PhoneNumber,
-    }, SetOptions(merge: true));
   }
 
   Future<bool> addItem(AddItem I) async {
@@ -102,7 +71,7 @@ class DatabaseService {
 
     try {
       await FirebaseFirestore.instance
-          .collection('UserInfo/$uid/list')
+          .collection('$db/$uid/list')
           .doc(key)
           .set({
         "month": month,
@@ -126,10 +95,7 @@ class DatabaseService {
   }
 
   Future deleteItem(String id) async {
-    FirebaseFirestore.instance
-        .collection('UserInfo/$uid/list')
-        .doc(id)
-        .delete();
+    FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).delete();
   }
 
   Future<bool> editItem({required AddItem I, required String id}) async {
@@ -142,10 +108,7 @@ class DatabaseService {
     I.date = DateTime(
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
     try {
-      await FirebaseFirestore.instance
-          .collection('UserInfo/$uid/list')
-          .doc(id)
-          .set({
+      await FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).set({
         "month": month,
         "isOther": I.isOther,
         "year": year,

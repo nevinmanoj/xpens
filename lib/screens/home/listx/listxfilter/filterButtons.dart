@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterBtns extends StatefulWidget {
@@ -54,12 +55,12 @@ class _FilterBtnsState extends State<FilterBtns> {
               if (widget.order == "Spent Date") {
                 base = FirebaseFirestore.instance
                     .collection(
-                        'UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+                        '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
                     .orderBy('date', descending: true);
               } else {
                 base = FirebaseFirestore.instance
                     .collection(
-                        'UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+                        '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
                     .orderBy(FieldPath.documentId, descending: false);
               }
               if (widget.name != null) {

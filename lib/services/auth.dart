@@ -10,7 +10,6 @@ class AuthSerivice {
   //auth change user stream
   Stream<User?> get user => _auth.authStateChanges();
 
-  //sign in anon
   Future Passwordreset(String email, BuildContext context) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
@@ -53,9 +52,10 @@ class AuthSerivice {
           email: email, password: password);
       User? user = result.user;
 
-      DatabaseService(uid: user!.uid).updateUserName(name);
-      DatabaseService(uid: user.uid).updateUserEmail(email);
-      DatabaseService(uid: user.uid).updateUserPhone("");
+      DatabaseService(uid: user!.uid).updateUserInfo("Name", name);
+      DatabaseService(uid: user.uid).updateUserInfo("Email", email);
+      DatabaseService(uid: user.uid).updateUserInfo("PhoneNumber", "");
+
       DatabaseService(uid: user.uid).createItemsArray();
 
       return user;

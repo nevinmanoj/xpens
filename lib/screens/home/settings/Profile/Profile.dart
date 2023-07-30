@@ -2,21 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:xpens/services/database.dart';
+import 'package:xpens/services/providers.dart';
 
-import '../../../services/database.dart';
-import '../../../shared/constants.dart';
-
-bool updateName = false;
-bool updatePhone = false;
-
-// String email ="";
-
-final _formKeyN = GlobalKey<FormState>();
-final _formKeyP = GlobalKey<FormState>();
+import '../../../../shared/constants.dart';
 
 class Profile extends StatefulWidget {
-  String name = "";
-  String phoneNumber = "";
+  String name;
+  String phoneNumber;
   Profile({required this.name, required this.phoneNumber});
 
   @override
@@ -24,21 +18,22 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  bool updateName = false;
+  bool updatePhone = false;
   final _formKeyN = GlobalKey<FormState>();
   final _formKeyP = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
     FirebaseAuth _auth = FirebaseAuth.instance;
     User? user = _auth.currentUser;
 
     String? email123 = user?.email;
 
-    // name= DatabaseService(uid: user!.uid).getName().toString();
-
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(backgroundColor: primaryAppColor),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(15, 12, 10, 0),
@@ -106,7 +101,7 @@ class _ProfileState extends State<Profile> {
                             onPressed: () async {
                               if (_formKeyN.currentState!.validate()) {
                                 await DatabaseService(uid: user!.uid)
-                                    .updateUserName(widget.name);
+                                    .updateUserInfo("Name", widget.name);
                                 setState(() => updateName = false);
                               }
                             },
@@ -207,7 +202,8 @@ class _ProfileState extends State<Profile> {
                             onPressed: () async {
                               if (_formKeyP.currentState!.validate()) {
                                 await DatabaseService(uid: user!.uid)
-                                    .updateUserPhone(widget.phoneNumber);
+                                    .updateUserInfo(
+                                        "PhoneNumber", widget.phoneNumber);
                                 setState(() => updatePhone = false);
                               }
                             },

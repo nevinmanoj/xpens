@@ -5,6 +5,7 @@ import 'package:xpens/screens/home/listx/listxfilter/filterButtons.dart';
 import 'package:xpens/screens/home/listx/listxfilter/locationFilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/namefilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/orderBy.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterWindow extends StatefulWidget {
@@ -27,7 +28,7 @@ class _FilterWindowState extends State<FilterWindow> {
       location = null;
       order = "Spent Date";
       widget.onStreamChange(FirebaseFirestore.instance
-          .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+          .collection('$db/${FirebaseAuth.instance.currentUser!.uid}/list')
           .orderBy('date', descending: true));
     });
     toggleFilter();

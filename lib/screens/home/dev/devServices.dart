@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -20,42 +21,68 @@ class DevService {
     final User? user = _auth.currentUser;
     print("adding fields ");
 
-    // CollectionReference collectionRef =
-    //     FirebaseFirestore.instance.collection('UserInfo');
+    copyDocument(
+        sourceCollection: 'UserInfo',
+        sourceDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3",
+        destinationCollection: 'UserInfoProd',
+        destinationDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3");
 
-    // QuerySnapshot snapshot = await collectionRef.get();
+    // copyCollection(
+    //     destinationCollection: 'UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list',
+    //     sourceCollection: 'UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list');
+  }
 
-    // for (QueryDocumentSnapshot doc in snapshot.docs) {
-    //   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  Future<void> copyCollection(
+      {required sourceCollection,
+      required String destinationCollection}) async {
+    try {
+      // Get a reference to the source collection
+      CollectionReference sourceRef =
+          FirebaseFirestore.instance.collection(sourceCollection);
 
-    //   DocumentReference docRef = collectionRef.doc(doc.id);
-    //   await docRef.update({
-    //     'items': [
-    //       "Breakfast",
-    //       "Lunch",
-    //       "Dinner",
-    //       "Tea and Snacks",
-    //       "Petrol",
-    //       "Icecream",
-    //       "Other"
-    //     ]
-    //   });
+      // Get all documents from the source collection
+      QuerySnapshot snapshot = await sourceRef.get();
 
-    //   // docRef.update({
-    //   //   "itemNames": FieldValue.delete(),
-    //   // });
-    // }
-    List items = [
-      "Breakfast",
-      "Lunch",
-      "Dinner",
-      "Tea and Snacks",
-      "Petrol",
-      "Icecream",
-    ];
-    for (var item in items)
-      DatabaseService(uid: user!.uid)
-          .updateItemsArray(add: true, item: item, progress: (_) {});
+      // Create a reference to the destination collection
+      CollectionReference destinationRef =
+          FirebaseFirestore.instance.collection(destinationCollection);
+
+      // Loop through each document in the source collection and copy it to the destination collection
+      for (DocumentSnapshot doc in snapshot.docs) {
+        await destinationRef.doc(doc.id).set(doc.data());
+      }
+
+      print('Collection copied successfully!');
+    } catch (e) {
+      print('Error copying collection: $e');
+    }
+  }
+
+  Future<void> copyDocument(
+      {required sourceCollection,
+      required String sourceDocumentId,
+      required String destinationCollection,
+      required String destinationDocumentId}) async {
+    try {
+      // Get a reference to the source document
+      DocumentReference sourceRef = FirebaseFirestore.instance
+          .collection(sourceCollection)
+          .doc(sourceDocumentId);
+
+      // Get the document data from the source document
+      DocumentSnapshot snapshot = await sourceRef.get();
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+      // Create a reference to the destination collection and set the data in a new document
+      DocumentReference destinationRef = FirebaseFirestore.instance
+          .collection(destinationCollection)
+          .doc(destinationDocumentId);
+      await destinationRef.set(data, SetOptions(merge: true));
+
+      print('Document copied successfully!');
+    } catch (e) {
+      print('Error copying document: $e');
+    }
   }
 
   Future injectTestData(

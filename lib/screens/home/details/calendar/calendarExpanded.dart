@@ -2,12 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:xpens/screens/home/details/calendar/addFromCalendar.dart';
 import 'package:xpens/screens/home/listx/listStream/deleteExpense.dart';
 import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/shared/constants.dart';
 
 class CalendarExp extends StatefulWidget {
-  String date;
+  DateTime date;
   List data;
   List keys;
   double cost;
@@ -39,13 +40,31 @@ class _CalendarExpState extends State<CalendarExp> {
     return SizedBox(
       width: wt * 0.9,
       child: AlertDialog(
+        // actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
         insetPadding: EdgeInsets.fromLTRB(
           0,
           0,
           0,
           ht * 0.1,
         ),
-        title: Center(child: Text(widget.date)),
+        title: Row(
+          children: [
+            Spacer(),
+            Spacer(),
+            Text(DateFormat.yMMMd().format(widget.date).toString()),
+            Spacer(),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => AddFromCal(
+                                date: widget.date,
+                              )));
+                },
+                icon: Icon(Icons.add))
+          ],
+        ),
         content: Container(
           // height: 300,
           width: wt * 0.8,

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:xpens/screens/home/details/calendarExpanded.dart';
+import 'package:xpens/screens/home/details/calendar/calendarExpanded.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
@@ -44,7 +44,7 @@ class _CalendarDispState extends State<CalendarDisp> {
             cost: cost,
             data: data,
             keys: keys,
-            date: DateFormat.yMMMd().format(date).toString(),
+            date: date,
           );
         });
     setState(() {

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/listx/listStream/listStream.dart';
 import 'package:xpens/screens/home/listx/listxfilter/listFilter.dart';
+import 'package:xpens/shared/Db.dart';
 
 class listx extends StatefulWidget {
   const listx({super.key});
@@ -18,7 +19,7 @@ class listx extends StatefulWidget {
 
 class _listxState extends State<listx> {
   var curstream = FirebaseFirestore.instance
-      .collection('UserInfo/${FirebaseAuth.instance.currentUser!.uid}/list')
+      .collection('$db/${FirebaseAuth.instance.currentUser!.uid}/list')
       .orderBy('date', descending: true);
 
   void onStreamChange(var newStream) {
