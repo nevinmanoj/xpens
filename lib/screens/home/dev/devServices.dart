@@ -21,11 +21,11 @@ class DevService {
     final User? user = _auth.currentUser;
     print("adding fields ");
 
-    copyDocument(
-        sourceCollection: 'UserInfo',
-        sourceDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3",
-        destinationCollection: 'UserInfoProd',
-        destinationDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3");
+    // copyDocument(
+    //     sourceCollection: 'UserInfo',
+    //     sourceDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3",
+    //     destinationCollection: 'UserInfoProd',
+    //     destinationDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3");
 
     // copyCollection(
     //     destinationCollection: 'UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list',

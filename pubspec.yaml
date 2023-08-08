@@ -48,6 +48,9 @@ dependencies:
   skeletons: ^0.0.3
   flutter_slidable: ^3.0.0
   share_plus: ^7.0.2
+  flutter_map: ^5.0.0
+  flutter_map_location_marker: ^7.0.2
+  geolocator: ^9.0.2
 
   
   
