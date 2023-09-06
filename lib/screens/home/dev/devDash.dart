@@ -42,7 +42,7 @@ class _DevDashState extends State<DevDash> {
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
-              await DevService().addFieldToDocuments();
+              await DevService().modify();
             },
             child: Text("modify")),
       ])),

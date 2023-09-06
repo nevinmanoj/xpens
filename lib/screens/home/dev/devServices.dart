@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import '../../../shared/datamodals.dart';
 
@@ -16,20 +17,39 @@ class DevService {
     await AuthSerivice().loginWithEmail("dev@gmail.com", "password");
   }
 
-  Future addFieldToDocuments() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final User? user = _auth.currentUser;
-    print("adding fields ");
+  Future<void> modify() async {
+    print("check codebase");
+    // addFieldToDb();
+  }
 
-    // copyDocument(
-    //     sourceCollection: 'UserInfo',
-    //     sourceDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3",
-    //     destinationCollection: 'UserInfoProd',
-    //     destinationDocumentId: "zWxHz89t7qc1KhfSOhhicSTyyJI3");
+  Future<void> addFieldToDb() async {
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection(db);
 
-    // copyCollection(
-    //     destinationCollection: 'UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list',
-    //     sourceCollection: 'UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list');
+    QuerySnapshot querySnapshot = await collection.get();
+
+    querySnapshot.docs.forEach((document) async {
+      addFieldToACollection(
+          collectionPath: "$db/${document.id}/list",
+          fieldName: "group",
+          fieldValue: "none");
+    });
+  }
+
+  Future<void> addFieldToACollection(
+      {required collectionPath,
+      required fieldName,
+      required fieldValue}) async {
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection(collectionPath);
+
+    QuerySnapshot querySnapshot = await collection.get();
+
+    querySnapshot.docs.forEach((document) async {
+      await collection.doc(document.id).update({
+        fieldName: fieldValue,
+      });
+    });
   }
 
   Future<void> copyCollection(
@@ -108,6 +128,7 @@ class DevService {
       String location = locationList[Random().nextInt(2)];
       print("injectimg record $i");
       DatabaseService(uid: user!.uid).addItem(AddItem(
+          group: "none",
           isOther: false,
           location: location,
           remarks: "remark $i",

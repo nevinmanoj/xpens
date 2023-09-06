@@ -74,6 +74,7 @@ class DatabaseService {
           .collection('$db/$uid/list')
           .doc(key)
           .set({
+        "group": I.group,
         "month": month,
         "year": year,
         "day": day,
@@ -109,6 +110,7 @@ class DatabaseService {
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
     try {
       await FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).set({
+        "group": I.group,
         "month": month,
         "isOther": I.isOther,
         "year": year,

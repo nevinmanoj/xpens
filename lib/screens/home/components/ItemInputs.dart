@@ -10,6 +10,8 @@ import 'package:xpens/services/providers.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
+import 'group.dart';
+
 class ItemInputs extends StatefulWidget {
   final String itemName;
   final DateTime date;
@@ -18,10 +20,12 @@ class ItemInputs extends StatefulWidget {
   final String remarks;
   final String location;
   final String buttonLabel;
+  final String group;
   final Function(AddItem) buttonfunc;
 
   ItemInputs(
-      {required this.itemName,
+      {required this.group,
+      required this.itemName,
       required this.costS,
       required this.date,
       required this.location,
@@ -38,6 +42,7 @@ class _ItemInputsState extends State<ItemInputs> {
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
+  String group = "";
   final _formKey = GlobalKey<FormState>();
   TextEditingController costController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
@@ -47,7 +52,7 @@ class _ItemInputsState extends State<ItemInputs> {
     time = widget.time;
     itemName = widget.itemName;
     location = widget.location;
-
+    group = widget.group;
     costController = TextEditingController(text: widget.costS);
 
     remarksController = TextEditingController(text: widget.remarks);
@@ -57,6 +62,12 @@ class _ItemInputsState extends State<ItemInputs> {
   void updateLocation(String newlocation) {
     setState(() {
       location = newlocation;
+    });
+  }
+
+  void updateGroup(String newgrp) {
+    setState(() {
+      group = newgrp;
     });
   }
 
@@ -152,6 +163,13 @@ class _ItemInputsState extends State<ItemInputs> {
                 ),
               ],
             ),
+            ItemGroup(
+              itemGroup: group,
+              onGroupChange: updateGroup,
+            ),
+            SizedBox(
+              height: 15,
+            ),
 
             SizedBox(
               width: 150,
@@ -170,6 +188,7 @@ class _ItemInputsState extends State<ItemInputs> {
 
                           if (itemName == "Other") {}
                           AddItem I = AddItem(
+                              group: group,
                               isOther: (!allItems.contains(itemName.trim())) ||
                                   itemName == "Other",
                               location: location,

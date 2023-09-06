@@ -40,6 +40,7 @@ class _AddXState extends State<AddX> {
           ItemInputs(
               itemName: allItems[0],
               costS: "",
+              group: "none",
               date: DateTime.now(),
               location: locationList[0],
               remarks: "",

@@ -35,6 +35,7 @@ class _AddFromCalState extends State<AddFromCal> {
       appBar: AppBar(backgroundColor: primaryAppColor),
       body: Center(
         child: ItemInputs(
+            group: "none",
             itemName: allItems[0],
             costS: "",
             date: widget.date,

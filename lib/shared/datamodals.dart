@@ -8,6 +8,7 @@ class AddItem {
   String remarks;
   String location;
   bool isOther;
+  String group;
   AddItem(
       {required this.cost,
       required this.remarks,
@@ -15,7 +16,8 @@ class AddItem {
       required this.date,
       required this.itemName,
       required this.isOther,
-      required this.time});
+      required this.time,
+      required this.group});
 }
 
 class Expense {

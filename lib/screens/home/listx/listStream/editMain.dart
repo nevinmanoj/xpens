@@ -44,6 +44,7 @@ class _EditxDetailsState extends State<EditxDetails> {
             backgroundColor: primaryAppColor),
         body: Center(
           child: ItemInputs(
+              group: widget.item['group'],
               itemName: widget.item['itemName'],
               costS: widget.item['cost'].toString(),
               date: DateTime.parse(widget.item['date']),
