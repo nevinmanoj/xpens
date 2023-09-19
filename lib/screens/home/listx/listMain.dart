@@ -39,6 +39,7 @@ class _listxState extends State<listx> {
       children: [
         StreamBodyState(
           curstream: curstream,
+          onStreamChange: onStreamChange,
         ),
         FilterWindow(
           onStreamChange: onStreamChange,

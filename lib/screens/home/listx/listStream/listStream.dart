@@ -14,7 +14,8 @@ import '../search/listSearchMain.dart';
 
 class StreamBodyState extends StatefulWidget {
   final curstream;
-  StreamBodyState({required this.curstream});
+  final Function(dynamic) onStreamChange;
+  StreamBodyState({required this.curstream, required this.onStreamChange});
 
   @override
   State<StreamBodyState> createState() => _StreamBodyStateState();
@@ -50,7 +51,11 @@ class _StreamBodyStateState extends State<StreamBodyState> {
           return ListView.builder(
             itemCount: data.length + 2,
             itemBuilder: (context, i) {
-              if (i == 0) return ListSearchMain();
+              if (i == 0)
+                return ListSearchMain(
+                  curstream: widget.curstream,
+                  onStreamChange: widget.onStreamChange,
+                );
               if (i - 1 < data.length) {
                 bool dispDate = false;
                 String iDate = DateFormat.yMMMd()

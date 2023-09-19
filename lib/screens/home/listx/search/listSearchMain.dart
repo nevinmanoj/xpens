@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../shared/Db.dart';
 import '../../../../shared/constants.dart';
 
 class ListSearchMain extends StatefulWidget {
-  const ListSearchMain({super.key});
+  const ListSearchMain(
+      {super.key, required this.onStreamChange, this.curstream});
+  final Function(dynamic) onStreamChange;
+  final dynamic curstream;
 
   @override
   State<ListSearchMain> createState() => _ListSearchMainState();
@@ -51,10 +57,15 @@ class _ListSearchMainState extends State<ListSearchMain> {
                   // widget.onCostChanged(value);
                   // widget.onctrlchange(costController!);
                 },
-                onFieldSubmitted: (value) {},
+                onFieldSubmitted: (value) {
+                  // print(value);
+                  widget.onStreamChange(FirebaseFirestore.instance
+                      .collection(
+                          '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
+                      .orderBy('date', descending: true)
+                      .where("itemName", isEqualTo: value));
+                },
 
-                validator: (value) =>
-                    value!.isEmpty ? 'Cost must not be null' : null,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   border: InputBorder.none,
