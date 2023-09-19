@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/PerDay.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
@@ -14,6 +14,7 @@ import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'thisMonth.dart';
+import 'thisYear.dart';
 
 class Details extends StatefulWidget {
   @override
@@ -40,8 +41,6 @@ class _DetailsState extends State<Details> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime yesterday = DateTime.now().subtract(const Duration(days: 1));
-    DateTime today = DateTime.now();
     double ht = MediaQuery.of(context).size.height;
     return Padding(
       padding: EdgeInsets.only(top: ht * 0.02),
@@ -103,27 +102,16 @@ class _DetailsState extends State<Details> {
                   CalendarDisp(
                     testmap: testMap,
                   ),
+                  PerDay(data: data, date: DateTime.now(), heading: "Today"),
                   PerDay(
-                      stream: stream
-                          .where('month',
-                              isEqualTo:
-                                  DateFormat.MMM().format(today).toString())
-                          .where('year', isEqualTo: today.year.toString())
-                          .where('day', isEqualTo: today.day.toString())
-                          .snapshots(),
-                      heading: "Today"),
-                  PerDay(
-                      stream: stream
-                          .where('month',
-                              isEqualTo:
-                                  DateFormat.MMM().format(yesterday).toString())
-                          .where('year', isEqualTo: yesterday.year.toString())
-                          .where('day', isEqualTo: yesterday.day.toString())
-                          .snapshots(),
+                      date: DateTime.now().subtract(const Duration(days: 1)),
+                      data: data,
                       heading: "Yesterday"),
-                  ThisMonth(
-                    stream: stream,
-                    mY: DateTime(mY.year, mY.month),
+                  ThisMonth(mY: DateTime(mY.year, mY.month), data: data),
+
+                  ThisYear(
+                    year: mY.year,
+                    data: data,
                   ),
                   SizedBox(
                     height: 5,

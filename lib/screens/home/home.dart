@@ -16,7 +16,7 @@ import 'details/details.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;
-List<String> navOptions = ["Addx", "Listx", "Details", "Settings"];
+List<String> navOptions = ["Addx", "Listx", "Analyze", "Settings"];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -47,32 +47,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: _selectedIndex == 1
-          ? AppBar(
-              centerTitle: true,
-              title: Text(userInfo.userName),
-              // title: StreamBuilder<QuerySnapshot>(
-              //     stream: FirebaseFirestore.instance
-              //         .collection('UserInfo/${user!.uid}/list')
-              //         .snapshots(),
-              //     builder: (context, snap) {
-              //       if (snap.connectionState == ConnectionState.waiting) {
-              //         return Container();
-              //       }
-              //       return Text(
-              //         "Total Expenses Count: ${snap.data?.docs.length}",
-              //         style: TextStyle(
-              //             fontSize: 22,
-              //             fontWeight: FontWeight.w400,
-              //             color: Color.fromARGB(255, 168, 168, 168)),
-              //       );
-              //     }),
-              backgroundColor: Colors.black,
-            )
-          : AppBar(
-              backgroundColor: primaryAppColor,
-              toolbarHeight: 0,
-            ),
+      appBar: AppBar(
+        backgroundColor: primaryAppColor,
+        toolbarHeight: 0,
+      ),
+      // appBar: _selectedIndex == 1
+      //     ? AppBar(
+      //         centerTitle: true,
+      //         title: Text(userInfo.userName),
+      //         // title: StreamBuilder<QuerySnapshot>(
+      //         //     stream: FirebaseFirestore.instance
+      //         //         .collection('UserInfo/${user!.uid}/list')
+      //         //         .snapshots(),
+      //         //     builder: (context, snap) {
+      //         //       if (snap.connectionState == ConnectionState.waiting) {
+      //         //         return Container();
+      //         //       }
+      //         //       return Text(
+      //         //         "Total Expenses Count: ${snap.data?.docs.length}",
+      //         //         style: TextStyle(
+      //         //             fontSize: 22,
+      //         //             fontWeight: FontWeight.w400,
+      //         //             color: Color.fromARGB(255, 168, 168, 168)),
+      //         //       );
+      //         //     }),
+      //         backgroundColor: Colors.black,
+      //       )
+      //     : AppBar(
+      //         backgroundColor: primaryAppColor,
+      //         toolbarHeight: 0,
+      //       ),
       body: SafeArea(
         child: Container(
           child: _widgetOptions.elementAt(_selectedIndex),

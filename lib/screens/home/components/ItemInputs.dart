@@ -164,6 +164,7 @@ class _ItemInputsState extends State<ItemInputs> {
               ],
             ),
             ItemGroup(
+              addToGroup: group != "none",
               itemGroup: group,
               onGroupChange: updateGroup,
             ),
@@ -206,6 +207,7 @@ class _ItemInputsState extends State<ItemInputs> {
                           updateDate(DateTime.now());
                           updateTIme(TimeOfDay.now());
                           updateLocation(locationList[0]);
+                          updateGroup("none");
                           setState(() {
                             loading = false;
                           });

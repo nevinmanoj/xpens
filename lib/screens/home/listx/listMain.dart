@@ -10,6 +10,8 @@ import 'package:xpens/screens/home/listx/listStream/listStream.dart';
 import 'package:xpens/screens/home/listx/listxfilter/listFilter.dart';
 import 'package:xpens/shared/Db.dart';
 
+import 'search/listSearchMain.dart';
+
 class listx extends StatefulWidget {
   const listx({super.key});
 

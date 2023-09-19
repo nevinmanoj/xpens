@@ -1,31 +1,26 @@
-// ignore_for_file: file_names, depend_on_referenced_packages, must_be_immutable
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-
-class ThisMonth extends StatefulWidget {
+class ThisYear extends StatefulWidget {
   List<Map<String, dynamic>> data;
-  DateTime mY;
 
-  ThisMonth({super.key, required this.mY, required this.data});
+  int year;
+
+  ThisYear({super.key, required this.year, required this.data});
 
   @override
-  State<ThisMonth> createState() => _ThisMonthState();
+  State<ThisYear> createState() => _ThisYearState();
 }
 
-class _ThisMonthState extends State<ThisMonth> {
+class _ThisYearState extends State<ThisYear> {
   @override
   Widget build(BuildContext context) {
-    // FirebaseAuth auth = FirebaseAuth.instance;
-    // User? user = auth.currentUser;
-    // double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     double sum = 0;
     Map<String, double> ranks = {};
     for (var item in widget.data) {
-      if (widget.mY.year.toString() == item['year'] &&
-          DateFormat.MMM().format(widget.mY).toString() == item['month']) {
+      if (item['year'] == widget.year.toString()) {
         sum += item['cost'];
         if (ranks[item['itemName']] == null) {
           ranks[item['itemName']] = 0;
@@ -35,21 +30,19 @@ class _ThisMonthState extends State<ThisMonth> {
     }
     List<MapEntry<String, double>> sortedList = ranks.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
+
     String heading =
-        (widget.mY == DateTime(DateTime.now().year, DateTime.now().month))
-            ? "This Month"
-            : "${DateFormat.MMM().format(widget.mY)} ${widget.mY.year}";
+        (widget.year == DateTime.now().year) ? "This Year" : "${widget.year}";
+
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0) {
           setState(() {
-            widget.mY =
-                DateTime(widget.mY.year, widget.mY.month - 1, widget.mY.day);
+            widget.year--;
           });
         } else if (details.primaryVelocity! < 0) {
           setState(() {
-            widget.mY =
-                DateTime(widget.mY.year, widget.mY.month + 1, widget.mY.day);
+            widget.year++;
           });
         }
       },

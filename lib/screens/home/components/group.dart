@@ -3,21 +3,32 @@ import 'package:flutter/material.dart';
 import '../../../shared/constants.dart';
 
 class ItemGroup extends StatefulWidget {
-  ItemGroup({required this.itemGroup, required this.onGroupChange});
+  ItemGroup(
+      {required this.itemGroup,
+      required this.onGroupChange,
+      required this.addToGroup});
   final Function(String) onGroupChange;
-  final String itemGroup;
+  bool addToGroup;
+  String itemGroup;
 
   @override
   State<ItemGroup> createState() => _ItemGroupState();
 }
 
 class _ItemGroupState extends State<ItemGroup> {
-  bool addToGroup = false;
+  // bool addToGroup = false;
   @override
   void initState() {
-    addToGroup = widget.itemGroup != "none";
+    // addToGroup = widget.itemGroup != "none";
+    print("asdawsefvaw earf");
     super.initState();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   print("asda");
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +44,14 @@ class _ItemGroupState extends State<ItemGroup> {
               Checkbox(
                 checkColor: secondaryAppColor,
                 activeColor: primaryAppColor,
-                value: addToGroup,
+                value: widget.addToGroup,
                 onChanged: (bool? value) {
                   try {
                     if (!value!) widget.onGroupChange("none");
                   } catch (e) {}
 
                   setState(() {
-                    addToGroup = value!;
+                    widget.addToGroup = value!;
                   });
                 },
               ),
@@ -48,7 +59,7 @@ class _ItemGroupState extends State<ItemGroup> {
           ),
         ),
         const SizedBox(height: 10),
-        addToGroup
+        widget.addToGroup
             ? Container(
                 height: 50,
                 width: 300,
