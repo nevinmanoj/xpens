@@ -130,6 +130,28 @@ class _MyWidgetState extends State<ExpandItem> {
                     ),
                   )
                 : Container(),
+            (widget.item['group'] == "none" || widget.item['group'] == "")
+                ? Container()
+                : Container(
+                    width: wt * 0.7,
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(width: wt * 0.3, child: Text("Group")),
+                        Text(": "),
+                        Spacer(),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          // color: Colors.amber,
+                          width: wt * 0.35,
+                          child: Text(
+                            widget.item['group'],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
             Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
