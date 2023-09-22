@@ -24,9 +24,9 @@ class _WelcomeState extends State<Welcome> {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Container(
-      padding: EdgeInsets.fromLTRB(wt * 0.03, ht * 0.01, 0, 0),
+      padding: EdgeInsets.fromLTRB(wt * 0.03, ht * 0.009, 0, 0),
       width: wt,
-      height: ht * 0.1,
+      height: ht * 0.11,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

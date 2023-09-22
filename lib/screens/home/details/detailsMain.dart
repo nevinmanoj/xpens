@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
-import 'package:xpens/screens/home/details/PerDay.dart';
+import 'package:xpens/screens/home/details/DetailBoxes/PerDay.dart';
 
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendar/calendarDisp.dart';
@@ -13,8 +13,8 @@ import 'package:xpens/screens/home/details/filter.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
-import 'thisMonth.dart';
-import 'thisYear.dart';
+import 'DetailBoxes/thisMonth.dart';
+import 'DetailBoxes/thisYear.dart';
 
 class Details extends StatefulWidget {
   @override

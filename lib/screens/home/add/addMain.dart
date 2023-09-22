@@ -34,7 +34,7 @@ class _AddXState extends State<AddX> {
         children: [
           Welcome(),
           SizedBox(
-            height: ht * 0.1,
+            height: ht * 0.075,
           ),
           // AddxInputs()
           ItemInputs(

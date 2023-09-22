@@ -20,6 +20,16 @@ class DevService {
   Future<void> modify() async {
     print("check codebase");
     // addFieldToDb();
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection("UserInfo");
+
+    QuerySnapshot querySnapshot = await collection.get();
+
+    querySnapshot.docs.forEach((document) async {
+      updateDocumentsWithWordArray(document.id);
+    });
+
+    // addFieldToACollection(collectionPath: "UserInfo/${user!.uid}/list",fieldName:"tags" ,fieldValue: );
   }
 
   Future<void> addFieldToDb() async {
@@ -34,6 +44,29 @@ class DevService {
           fieldName: "group",
           fieldValue: "none");
     });
+  }
+
+  Future<void> updateDocumentsWithWordArray(uid) async {
+    // final FirebaseAuth _auth = FirebaseAuth.instance;
+    // final User? user = _auth.currentUser;
+    final CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('UserInfo/$uid/list');
+
+    final QuerySnapshot querySnapshot = await collectionRef.get();
+
+    for (final QueryDocumentSnapshot document in querySnapshot.docs) {
+      var data = document.data() as Map;
+      String itemName = data['itemName'];
+
+      // Split the itemName into an array of words
+      final List<String> words =
+          itemName.split(' ').map((word) => word.toLowerCase()).toList();
+
+      // Update the document with the 'words' array
+      collectionRef.doc(document.id).update({'tags': words});
+    }
+
+    print('Updated documents with word arrays.');
   }
 
   Future<void> addFieldToACollection(

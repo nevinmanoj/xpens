@@ -68,12 +68,14 @@ class DatabaseService {
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
     String formattedTime = DateFormat('HH:mm')
         .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
-
+    final List<String> tags =
+        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
     try {
       await FirebaseFirestore.instance
           .collection('$db/$uid/list')
           .doc(key)
           .set({
+        "tags": tags,
         "group": I.group,
         "month": month,
         "year": year,
@@ -108,8 +110,11 @@ class DatabaseService {
         .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
     I.date = DateTime(
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
+    final List<String> tags =
+        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
     try {
       await FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).set({
+        "tags": tags,
         "group": I.group,
         "month": month,
         "isOther": I.isOther,

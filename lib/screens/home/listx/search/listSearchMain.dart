@@ -63,7 +63,10 @@ class _ListSearchMainState extends State<ListSearchMain> {
                       .collection(
                           '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
                       .orderBy('date', descending: true)
-                      .where("itemName", isEqualTo: value));
+                      // .where("itemName", isGreaterThanOrEqualTo: value)
+                      // .where("itemName",
+                      //     isLessThanOrEqualTo: value + "\uf8ff"));
+                      .where("tags", arrayContains: value));
                 },
 
                 keyboardType: TextInputType.name,

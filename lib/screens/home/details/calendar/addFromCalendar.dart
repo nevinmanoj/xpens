@@ -32,6 +32,7 @@ class _AddFromCalState extends State<AddFromCal> {
 
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(backgroundColor: primaryAppColor),
       body: Center(
         child: ItemInputs(

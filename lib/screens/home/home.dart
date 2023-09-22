@@ -12,7 +12,7 @@ import 'package:xpens/screens/home/listx/listMain.dart';
 import 'package:xpens/services/providers.dart';
 
 import '../../shared/constants.dart';
-import 'details/details.dart';
+import 'details/detailsMain.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;

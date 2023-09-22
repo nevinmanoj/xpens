@@ -42,8 +42,13 @@ class _StreamBodyStateState extends State<StreamBodyState> {
               child: CircularProgressIndicator(),
             );
           }
+          if (list == null) {
+            return Center(
+              child: Text("list is empty"),
+            );
+          }
 
-          List<Map<String, dynamic>> data = list!
+          List<Map<String, dynamic>> data = list
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
           String curDate = "";
