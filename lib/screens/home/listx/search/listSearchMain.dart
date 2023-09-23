@@ -6,10 +6,8 @@ import '../../../../shared/Db.dart';
 import '../../../../shared/constants.dart';
 
 class ListSearchMain extends StatefulWidget {
-  const ListSearchMain(
-      {super.key, required this.onStreamChange, this.curstream});
+  const ListSearchMain({super.key, required this.onStreamChange});
   final Function(dynamic) onStreamChange;
-  final dynamic curstream;
 
   @override
   State<ListSearchMain> createState() => _ListSearchMainState();
@@ -59,14 +57,17 @@ class _ListSearchMainState extends State<ListSearchMain> {
                 },
                 onFieldSubmitted: (value) {
                   // print(value);
-                  widget.onStreamChange(FirebaseFirestore.instance
+                  final List<String> tags = value
+                      .split(' ')
+                      .map((word) => word.toLowerCase())
+                      .toList();
+                  var base = FirebaseFirestore.instance
                       .collection(
                           '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
                       .orderBy('date', descending: true)
-                      // .where("itemName", isGreaterThanOrEqualTo: value)
-                      // .where("itemName",
-                      //     isLessThanOrEqualTo: value + "\uf8ff"));
-                      .where("tags", arrayContains: value));
+                      .where("tags", arrayContainsAny: tags);
+
+                  widget.onStreamChange(base);
                 },
 
                 keyboardType: TextInputType.name,

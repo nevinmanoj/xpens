@@ -52,13 +52,11 @@ class _StreamBodyStateState extends State<StreamBodyState> {
               .map((document) => document.data() as Map<String, dynamic>)
               .toList();
           String curDate = "";
-          bool flag = true;
           return ListView.builder(
             itemCount: data.length + 2,
             itemBuilder: (context, i) {
               if (i == 0)
                 return ListSearchMain(
-                  curstream: widget.curstream,
                   onStreamChange: widget.onStreamChange,
                 );
               if (i - 1 < data.length) {
@@ -70,13 +68,8 @@ class _StreamBodyStateState extends State<StreamBodyState> {
                   curDate = iDate;
                   dispDate = true;
                 }
-                flag = !flag;
-                bool is1 = true;
-                // is1 = !is1;
-                return is1
-                    ? item(list[i - 1].id, data[i - 1], context, dispDate, flag)
-                    : item2(
-                        list[i - 1].id, data[i - 1], context, dispDate, flag);
+
+                return item(list[i - 1].id, data[i - 1], context, dispDate);
               } else
                 return Container();
               // return Container(
@@ -111,8 +104,7 @@ class _StreamBodyStateState extends State<StreamBodyState> {
   }
 }
 
-Widget item(
-    String id, var item, BuildContext context, bool dispDate, bool flag) {
+Widget item(String id, var item, BuildContext context, bool dispDate) {
   String iDate =
       DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
   double wt = MediaQuery.of(context).size.width;
@@ -224,159 +216,6 @@ Widget item(
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                         style: TextStyle(fontSize: 18),
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
-Widget item2(
-    String id, var item, BuildContext context, bool dispDate, bool flag) {
-  String iDate =
-      DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
-  double wt = MediaQuery.of(context).size.width;
-
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: [
-      dispDate
-          ? Container(
-              width: wt,
-              // color: flag
-              //     ? const Color.fromARGB(255, 206, 206, 206)
-              //     : const Color.fromARGB(255, 232, 232, 232),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                child: Text(
-                  iDate,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            )
-          : Container(),
-      Slidable(
-        groupTag: 'same',
-
-        startActionPane: ActionPane(
-          dragDismissible: true,
-          motion: ScrollMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (BuildContext context) => showDialog(
-                context: context,
-                builder: (context) {
-                  return DeleteExpense(
-                      id: id,
-                      name: item['itemName'],
-                      cost: item['cost'].toString(),
-                      date: iDate);
-                },
-              ),
-              backgroundColor: primaryAppColor,
-              foregroundColor: secondaryAppColor,
-              icon: Icons.delete,
-              // label: 'Delete',
-            ),
-            VerticalDivider(
-              // color: Color.fromARGB(255, 29, 29, 29),
-              color: secondaryAppColor,
-              width: 1,
-              thickness: 1,
-            ),
-            SlidableAction(
-              // An action can be bigger than the others.
-              flex: 2,
-              onPressed: (BuildContext context) {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) => EditxDetails(
-                              id: id,
-                              item: item,
-                            )));
-              },
-              backgroundColor: primaryAppColor,
-              foregroundColor: secondaryAppColor,
-              icon: Icons.edit,
-              // label: 'Edit',
-            ),
-          ],
-        ),
-
-        // The child of the Slidable is what the user sees when the
-        // component is not dragged.
-        child: InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return ExpandItem(item: item, id: id, date: iDate);
-              },
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(5),
-                // boxShadow: [
-                //   BoxShadow(
-                //       blurRadius: 2.5, color: Colors.grey, offset: Offset(0.0, 1))
-                // ],
-                // color: flag
-                //     ? const Color.fromARGB(255, 206, 206, 206)
-                //     : const Color.fromARGB(255, 232, 232, 232),
-                ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-              child: Row(
-                children: [
-                  Container(
-                      width: 150,
-                      child: Text(
-                        item['itemName'],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      )),
-                  Container(
-                      width: 100,
-                      child: Text(
-                        "₹ ${item['cost'].toString()}",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      )),
-                  Spacer(),
-                  IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => EditxDetails(
-                                      id: id,
-                                      item: item,
-                                    )));
-                      },
-                      icon: Icon(
-                        color: primaryAppColor,
-                        Icons.edit,
-                      )),
-                  IconButton(
-                      onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) {
-                              return DeleteExpense(
-                                  id: id,
-                                  name: item['itemName'],
-                                  cost: item['cost'].toString(),
-                                  date: iDate);
-                            },
-                          ),
-                      icon: Icon(
-                        color: primaryAppColor,
-                        Icons.delete,
                       )),
                 ],
               ),
