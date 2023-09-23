@@ -5,10 +5,10 @@ import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
 class DeleteExpense extends StatefulWidget {
-  String id;
-  String name;
-  String cost;
-  String date;
+  final String id;
+  final String name;
+  final String cost;
+  final String date;
   DeleteExpense(
       {required this.id,
       required this.name,

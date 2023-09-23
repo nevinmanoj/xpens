@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +45,7 @@ class _DetailsState extends State<Details> {
 
     List list = listData.docs;
 
-    List<Map<String, dynamic>> data = list!
+    List<Map<String, dynamic>> data = list
         .map((document) => document.data() as Map<String, dynamic>)
         .toList();
     if (filter != "All") {

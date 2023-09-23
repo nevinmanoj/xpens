@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +10,11 @@ import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
 class ExpandItem extends StatefulWidget {
-  String id;
-  // String name;
-  // String cost;
-  String date;
-  // String remarks;
-  var item;
+  final String id;
+
+  final String date;
+
+  final item;
   ExpandItem({required this.id, required this.date, required this.item});
   @override
   State<ExpandItem> createState() => _MyWidgetState();
@@ -22,8 +23,6 @@ class ExpandItem extends StatefulWidget {
 class _MyWidgetState extends State<ExpandItem> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Center(
@@ -186,7 +185,7 @@ class _MyWidgetState extends State<ExpandItem> {
 }
 
 class DeleteConfirm extends StatefulWidget {
-  String id;
+  final String id;
 
   DeleteConfirm({
     required this.id,

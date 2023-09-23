@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/DetailBoxes/DetailBoxBody.dart';
 
-import '../../../../shared/constants.dart';
-
 class ThisMonth extends StatefulWidget {
   final List<Map<String, dynamic>> data;
   DateTime mY;
@@ -19,6 +17,13 @@ class ThisMonth extends StatefulWidget {
 
 class _ThisMonthState extends State<ThisMonth> {
   bool showAll = false;
+  late DateTime mY;
+  @override
+  void initState() {
+    mY = widget.mY;
+    super.initState();
+  }
+
   void toggleShowAll() {
     setState(() {
       showAll = !showAll;
@@ -30,8 +35,8 @@ class _ThisMonthState extends State<ThisMonth> {
     double sum = 0;
     Map<String, double> ranks = {};
     for (var item in widget.data) {
-      if (widget.mY.year.toString() == item['year'] &&
-          DateFormat.MMM().format(widget.mY).toString() == item['month']) {
+      if (mY.year.toString() == item['year'] &&
+          DateFormat.MMM().format(mY).toString() == item['month']) {
         sum += item['cost'];
         if (ranks[item['itemName']] == null) {
           ranks[item['itemName']] = 0;
@@ -41,21 +46,18 @@ class _ThisMonthState extends State<ThisMonth> {
     }
     List<MapEntry<String, double>> sortedList = ranks.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
-    String heading =
-        (widget.mY == DateTime(DateTime.now().year, DateTime.now().month))
-            ? "This Month"
-            : "${DateFormat.MMM().format(widget.mY)} ${widget.mY.year}";
+    String heading = (mY == DateTime(DateTime.now().year, DateTime.now().month))
+        ? "This Month"
+        : "${DateFormat.MMM().format(mY)} ${mY.year}";
     return GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.primaryVelocity! > 0) {
             setState(() {
-              widget.mY =
-                  DateTime(widget.mY.year, widget.mY.month - 1, widget.mY.day);
+              mY = DateTime(mY.year, mY.month - 1, mY.day);
             });
           } else if (details.primaryVelocity! < 0) {
             setState(() {
-              widget.mY =
-                  DateTime(widget.mY.year, widget.mY.month + 1, widget.mY.day);
+              mY = DateTime(mY.year, mY.month + 1, mY.day);
             });
           }
         },

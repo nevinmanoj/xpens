@@ -3,10 +3,10 @@ import 'package:xpens/shared/constants.dart';
 
 class ItemRemark extends StatefulWidget {
   // final Function(String) onRemarkChanged;
-  String remarks;
+  final String remarks;
   final Function(TextEditingController) onctrlchange;
 
-  ItemRemark(
+  const ItemRemark(
       {super.key,
       //  required this.onRemarkChanged,
       required this.onctrlchange,

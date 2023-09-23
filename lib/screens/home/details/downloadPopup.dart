@@ -34,7 +34,7 @@ const yearList = [
 ];
 
 class DOwnloadDetails extends StatefulWidget {
-  List<Map<String, dynamic>> data;
+  final List<Map<String, dynamic>> data;
   DOwnloadDetails({required this.data});
   @override
   State<DOwnloadDetails> createState() => _DOwnloadDetailsState();
@@ -43,7 +43,7 @@ class DOwnloadDetails extends StatefulWidget {
 class _DOwnloadDetailsState extends State<DOwnloadDetails> {
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
+    // double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return SizedBox(
       // height: 50,

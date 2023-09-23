@@ -5,7 +5,7 @@ import 'package:xpens/shared/constants.dart';
 
 class NameRadioAccordion extends StatefulWidget {
   final Function(String?) onNameChange;
-  String? selectedOption;
+  final String? selectedOption;
   NameRadioAccordion(
       {required this.onNameChange, required this.selectedOption});
   @override
@@ -58,7 +58,6 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
                           onChanged: (value) {
                             // if (value != null) {
                             setState(() {
-                              widget.selectedOption = value;
                               widget.onNameChange(value);
                             });
                             // }

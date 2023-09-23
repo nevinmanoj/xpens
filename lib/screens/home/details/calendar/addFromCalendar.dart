@@ -11,8 +11,8 @@ import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
 class AddFromCal extends StatefulWidget {
-  DateTime date;
-  AddFromCal({required this.date});
+  final DateTime date;
+  const AddFromCal({super.key, required this.date});
 
   @override
   State<AddFromCal> createState() => _AddFromCalState();

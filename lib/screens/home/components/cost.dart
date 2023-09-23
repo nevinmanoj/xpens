@@ -3,10 +3,10 @@ import 'package:xpens/shared/constants.dart';
 
 class ItemQuantity extends StatefulWidget {
   // final Function(String) onCostChanged;
-  String costs;
+  final String costs;
   final Function(TextEditingController) onctrlchange;
 
-  ItemQuantity(
+  const ItemQuantity(
       {super.key,
       // required this.onCostChanged,
       required this.costs,

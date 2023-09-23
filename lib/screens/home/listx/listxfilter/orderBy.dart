@@ -3,7 +3,7 @@ import 'package:xpens/shared/constants.dart';
 
 class OrderByRadioAccordion extends StatefulWidget {
   final Function(String?) onOrderChange;
-  String? selectedOption;
+  final String? selectedOption;
   OrderByRadioAccordion(
       {required this.onOrderChange, required this.selectedOption});
   @override
@@ -55,7 +55,6 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
                           // if (value != null) {
 
                           setState(() {
-                            widget.selectedOption = value;
                             widget.onOrderChange(value);
                           });
                           // }
@@ -70,7 +69,6 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
                         onChanged: (value) {
                           // if (value != null) {
                           setState(() {
-                            widget.selectedOption = value;
                             widget.onOrderChange(value);
                           });
                           // }

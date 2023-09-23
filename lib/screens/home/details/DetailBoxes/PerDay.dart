@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'DetailBoxBody.dart';
 
 class PerDay extends StatefulWidget {
   final String heading;
-  DateTime date;
-  List<Map<String, dynamic>> data;
+  final DateTime date;
+  final List<Map<String, dynamic>> data;
   PerDay(
       {super.key,
       required this.date,
@@ -29,7 +28,7 @@ class _PerDayState extends State<PerDay> {
 
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
+    // double wt = MediaQuery.of(context).size.width;
 
     double sum = 0;
     Map<String, double> ranks = {};

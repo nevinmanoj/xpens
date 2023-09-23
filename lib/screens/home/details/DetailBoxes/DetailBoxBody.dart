@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../../shared/constants.dart';
 
 class DetailBoxBody extends StatelessWidget {
-  bool showAll;
-  String heading;
-  List sortedList;
-  double sum;
+  final bool showAll;
+  final String heading;
+  final List sortedList;
+  final double sum;
   final Function() toggleShowAll;
   DetailBoxBody(
       {required this.heading,

@@ -5,7 +5,7 @@ import 'package:xpens/shared/constants.dart';
 
 class ItemName extends StatefulWidget {
   final Function(String) onNameChange;
-  String itemName;
+  final String itemName;
 
   ItemName({required this.onNameChange, required this.itemName});
 

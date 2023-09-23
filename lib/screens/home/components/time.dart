@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../shared/constants.dart';
 
 typedef void TimeCallback(TimeOfDay time);
 
-class clock extends StatefulWidget {
+class Clock extends StatefulWidget {
   final TimeCallback onTimeChanged;
-  TimeOfDay selectTime;
-  clock({required this.onTimeChanged, required this.selectTime});
+  final TimeOfDay selectTime;
+  Clock({required this.onTimeChanged, required this.selectTime});
   @override
-  State<clock> createState() => _clockState();
+  State<Clock> createState() => _ClockState();
 }
 
-class _clockState extends State<clock> {
+class _ClockState extends State<Clock> {
   TimeOfDay timeOfDay = TimeOfDay.now();
+  late TimeOfDay selectTime;
+  @override
+  void initState() {
+    // TODO: implement initState
+    selectTime = widget.selectTime;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +39,14 @@ class _clockState extends State<clock> {
               foregroundColor:
                   MaterialStatePropertyAll<Color>(primaryAppColor)),
           onPressed: () => displayTimePicker(context),
-          child: Text(widget.selectTime.format(context))),
+          child: Text(selectTime.format(context))),
     );
   }
 
   Future displayTimePicker(BuildContext context) async {
     var time = await showTimePicker(
         context: context,
-        initialTime: widget.selectTime,
+        initialTime: selectTime,
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
@@ -63,9 +69,9 @@ class _clockState extends State<clock> {
 
     if (time != null) {
       setState(() {
-        widget.selectTime = time;
+        selectTime = time;
       });
     }
-    widget.onTimeChanged(widget.selectTime);
+    widget.onTimeChanged(selectTime);
   }
 }

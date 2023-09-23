@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterBtns extends StatelessWidget {
   final Function() toggleFilter;
   final Function(dynamic) onFilterChange;
-  String? name;
-  String order;
-  String? location;
+  final String? name;
+  final String order;
+  final String? location;
   FilterBtns(
       {required this.order,
       required this.onFilterChange,

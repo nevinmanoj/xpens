@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/add/addMain.dart';
 import 'package:xpens/services/providers/ExpenseDataProvider.dart';
 
-import 'package:xpens/services/providers/UserInfoProvider.dart';
-
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
 import 'listx/listMain.dart';

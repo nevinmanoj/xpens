@@ -8,11 +8,11 @@ import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/shared/constants.dart';
 
 class CalendarExp extends StatefulWidget {
-  DateTime date;
-  List data;
-  List keys;
-  double cost;
-  CalendarExp(
+  final DateTime date;
+  final List data;
+  final List keys;
+  final double cost;
+  const CalendarExp(
       {super.key,
       required this.data,
       required this.date,
@@ -49,10 +49,10 @@ class _CalendarExpState extends State<CalendarExp> {
         ),
         title: Row(
           children: [
-            Spacer(),
-            Spacer(),
+            const Spacer(),
+            const Spacer(),
             Text(DateFormat.yMMMd().format(widget.date).toString()),
-            Spacer(),
+            const Spacer(),
             IconButton(
                 onPressed: () {
                   Navigator.push(
@@ -62,10 +62,10 @@ class _CalendarExpState extends State<CalendarExp> {
                                 date: widget.date,
                               )));
                 },
-                icon: Icon(Icons.add))
+                icon: const Icon(Icons.add))
           ],
         ),
-        content: Container(
+        content: SizedBox(
           // height: 300,
           width: wt * 0.8,
           child: SingleChildScrollView(

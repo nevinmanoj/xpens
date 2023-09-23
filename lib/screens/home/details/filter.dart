@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterDetails extends StatefulWidget {
-  String filter;
+  final String filter;
   final Function(String) onFilterChanged;
   FilterDetails({required this.onFilterChanged, required this.filter});
   @override

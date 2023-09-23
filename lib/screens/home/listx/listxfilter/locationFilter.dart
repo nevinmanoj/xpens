@@ -3,7 +3,7 @@ import 'package:xpens/shared/constants.dart';
 
 class LocRadioAccordion extends StatefulWidget {
   final Function(String?) onLocChange;
-  String? selectedOption;
+  final String? selectedOption;
   LocRadioAccordion({required this.onLocChange, required this.selectedOption});
   @override
   _LocRadioAccordionState createState() => _LocRadioAccordionState();
@@ -53,7 +53,6 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                         onChanged: (value) {
                           // if (value != null) {
                           setState(() {
-                            widget.selectedOption = value;
                             widget.onLocChange(value);
                           });
                           // }
@@ -69,7 +68,6 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                           // if (value != null) {
 
                           setState(() {
-                            widget.selectedOption = value;
                             widget.onLocChange(value);
                           });
                           // }

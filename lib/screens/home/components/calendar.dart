@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:xpens/screens/home/components/time.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
@@ -9,16 +7,24 @@ import 'package:intl/intl.dart';
 
 typedef void DateCallback(DateTime date);
 
-class calendar extends StatefulWidget {
+class Calendar extends StatefulWidget {
   final DateCallback onDateChanged;
-  DateTime dateToDisplay;
-  calendar({required this.onDateChanged, required this.dateToDisplay});
+  final DateTime dateToDisplay;
+  Calendar({required this.onDateChanged, required this.dateToDisplay});
 
   @override
-  State<calendar> createState() => _calendarState();
+  State<Calendar> createState() => _CalendarState();
 }
 
-class _calendarState extends State<calendar> {
+class _CalendarState extends State<Calendar> {
+  late DateTime dateToDisplay;
+  @override
+  void initState() {
+    // TODO: implement initState
+    dateToDisplay = widget.dateToDisplay;
+    super.initState();
+  }
+
   _selectDate(BuildContext context) async {
     var selectdate = await showDatePicker(
       context: context,
@@ -46,10 +52,10 @@ class _calendarState extends State<calendar> {
 
     setState(() {
       selectdate == null
-          ? widget.dateToDisplay = DateTime.now()
-          : widget.dateToDisplay = selectdate;
+          ? dateToDisplay = DateTime.now()
+          : dateToDisplay = selectdate;
     });
-    widget.onDateChanged(widget.dateToDisplay);
+    widget.onDateChanged(dateToDisplay);
   }
 
   @override

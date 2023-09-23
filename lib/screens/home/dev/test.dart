@@ -9,8 +9,8 @@ class Test extends StatefulWidget {
 class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
+    // double wt = MediaQuery.of(context).size.width;
+    // double ht = MediaQuery.of(context).size.height;
     return Column(
       children: [
         ElevatedButton(

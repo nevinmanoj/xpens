@@ -1,10 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/settings/items/deleteItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/constants.dart';
 
 class ItemList extends StatefulWidget {
   const ItemList({super.key});
@@ -20,7 +17,6 @@ class _ItemListState extends State<ItemList> {
 
     double ht = MediaQuery.of(context).size.height;
     UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
-    final user = Provider.of<User?>(context);
 
     return Container(
       // padding: EdgeInsets.fromLTRB(wt * 0.1, ht * 0.1, wt * 0.1, 0),

@@ -149,13 +149,13 @@ class _ItemInputsState extends State<ItemInputs> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                calendar(
+                Calendar(
                   dateToDisplay: date,
                   onDateChanged: (DateTime newId) {
                     updateDate(newId);
                   },
                 ),
-                clock(
+                Clock(
                   selectTime: time,
                   onTimeChanged: (TimeOfDay newId) {
                     updateTIme(newId);

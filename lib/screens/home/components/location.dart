@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:xpens/shared/constants.dart';
 
 class Location extends StatefulWidget {
-  String location;
+  final String location;
   final Function(String) onLocationChanged;
   Location({required this.location, required this.onLocationChanged});
 

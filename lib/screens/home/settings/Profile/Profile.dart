@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
+
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../../../shared/constants.dart';
 
@@ -25,7 +25,6 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     FirebaseAuth _auth = FirebaseAuth.instance;
     User? user = _auth.currentUser;

@@ -8,8 +8,8 @@ class ItemGroup extends StatefulWidget {
       required this.onGroupChange,
       required this.addToGroup});
   final Function(String) onGroupChange;
-  bool addToGroup;
-  String itemGroup;
+  final bool addToGroup;
+  final String itemGroup;
 
   @override
   State<ItemGroup> createState() => _ItemGroupState();
@@ -17,10 +17,12 @@ class ItemGroup extends StatefulWidget {
 
 class _ItemGroupState extends State<ItemGroup> {
   // bool addToGroup = false;
+  late bool addToGroup;
+
   @override
   void initState() {
-    // addToGroup = widget.itemGroup != "none";
-    print("asdawsefvaw earf");
+    addToGroup = widget.addToGroup;
+
     super.initState();
   }
 
@@ -44,14 +46,14 @@ class _ItemGroupState extends State<ItemGroup> {
               Checkbox(
                 checkColor: secondaryAppColor,
                 activeColor: primaryAppColor,
-                value: widget.addToGroup,
+                value: addToGroup,
                 onChanged: (bool? value) {
                   try {
                     if (!value!) widget.onGroupChange("none");
                   } catch (e) {}
 
                   setState(() {
-                    widget.addToGroup = value!;
+                    addToGroup = value!;
                   });
                 },
               ),
@@ -59,7 +61,7 @@ class _ItemGroupState extends State<ItemGroup> {
           ),
         ),
         const SizedBox(height: 10),
-        widget.addToGroup
+        addToGroup
             ? Container(
                 height: 50,
                 width: 300,

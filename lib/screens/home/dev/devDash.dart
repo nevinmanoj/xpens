@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/dev/injectData.dart';
 import 'package:xpens/screens/home/dev/devServices.dart';
@@ -21,8 +18,6 @@ class DevDash extends StatefulWidget {
 class _DevDashState extends State<DevDash> {
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<User?>(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryAppColor,
