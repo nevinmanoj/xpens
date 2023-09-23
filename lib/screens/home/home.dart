@@ -1,18 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
+import 'package:xpens/services/providers/ExpenseDataProvider.dart';
 
-import 'package:xpens/screens/home/listx/listMain.dart';
-import 'package:xpens/services/providers.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
+import 'listx/listMainNew.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;
@@ -43,74 +42,78 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userInfo = Provider.of<UserInfoProvider>(context);
+    final user = Provider.of<User?>(context);
 
-    return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: primaryAppColor,
-        toolbarHeight: 0,
-      ),
-      // appBar: _selectedIndex == 1
-      //     ? AppBar(
-      //         centerTitle: true,
-      //         title: Text(userInfo.userName),
-      //         // title: StreamBuilder<QuerySnapshot>(
-      //         //     stream: FirebaseFirestore.instance
-      //         //         .collection('UserInfo/${user!.uid}/list')
-      //         //         .snapshots(),
-      //         //     builder: (context, snap) {
-      //         //       if (snap.connectionState == ConnectionState.waiting) {
-      //         //         return Container();
-      //         //       }
-      //         //       return Text(
-      //         //         "Total Expenses Count: ${snap.data?.docs.length}",
-      //         //         style: TextStyle(
-      //         //             fontSize: 22,
-      //         //             fontWeight: FontWeight.w400,
-      //         //             color: Color.fromARGB(255, 168, 168, 168)),
-      //         //       );
-      //         //     }),
-      //         backgroundColor: Colors.black,
-      //       )
-      //     : AppBar(
-      //         backgroundColor: primaryAppColor,
-      //         toolbarHeight: 0,
-      //       ),
-      body: SafeArea(
-        child: Container(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: navOptions[0],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: navOptions[1],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: navOptions[2],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: navOptions[3],
-            backgroundColor: primaryAppColor,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: secondaryAppColor,
-        unselectedItemColor: Colors.white,
-        backgroundColor: Colors.black,
-        onTap: _onItemTapped,
-      ),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => ExpenseDataProvider(user: user!),
+        builder: (context, _) {
+          return Scaffold(
+            // resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: primaryAppColor,
+              toolbarHeight: 0,
+            ),
+            // appBar: _selectedIndex == 1
+            //     ? AppBar(
+            //         centerTitle: true,
+            //         title: Text(userInfo.userName),
+            //         // title: StreamBuilder<QuerySnapshot>(
+            //         //     stream: FirebaseFirestore.instance
+            //         //         .collection('UserInfo/${user!.uid}/list')
+            //         //         .snapshots(),
+            //         //     builder: (context, snap) {
+            //         //       if (snap.connectionState == ConnectionState.waiting) {
+            //         //         return Container();
+            //         //       }
+            //         //       return Text(
+            //         //         "Total Expenses Count: ${snap.data?.docs.length}",
+            //         //         style: TextStyle(
+            //         //             fontSize: 22,
+            //         //             fontWeight: FontWeight.w400,
+            //         //             color: Color.fromARGB(255, 168, 168, 168)),
+            //         //       );
+            //         //     }),
+            //         backgroundColor: Colors.black,
+            //       )
+            //     : AppBar(
+            //         backgroundColor: primaryAppColor,
+            //         toolbarHeight: 0,
+            //       ),
+            body: SafeArea(
+              child: Container(
+                child: _widgetOptions.elementAt(_selectedIndex),
+              ),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.add),
+                  label: navOptions[0],
+                  backgroundColor: primaryAppColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  label: navOptions[1],
+                  backgroundColor: primaryAppColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.analytics),
+                  label: navOptions[2],
+                  backgroundColor: primaryAppColor,
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.settings),
+                  label: navOptions[3],
+                  backgroundColor: primaryAppColor,
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: secondaryAppColor,
+              unselectedItemColor: Colors.white,
+              backgroundColor: Colors.black,
+              onTap: _onItemTapped,
+            ),
+          );
+        });
   }
 }

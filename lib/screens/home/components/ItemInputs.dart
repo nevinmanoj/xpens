@@ -6,7 +6,7 @@ import 'package:xpens/screens/home/components/itemName.dart';
 import 'package:xpens/screens/home/components/location.dart';
 import 'package:xpens/screens/home/components/remarks.dart';
 import 'package:xpens/screens/home/components/time.dart';
-import 'package:xpens/services/providers.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 

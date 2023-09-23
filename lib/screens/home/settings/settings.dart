@@ -9,7 +9,7 @@ import 'package:xpens/screens/home/dev/devDash.dart';
 import 'package:xpens/screens/home/settings/items/items.dart';
 
 import 'package:xpens/services/auth.dart';
-import 'package:xpens/services/providers.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import 'Profile/Profile.dart';
 

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ItemInputs.dart';
 
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/providers.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
