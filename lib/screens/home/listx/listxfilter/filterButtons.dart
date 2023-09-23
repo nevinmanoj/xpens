@@ -1,30 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
-class FilterBtns extends StatefulWidget {
-  final Function() clearFilters;
+class FilterBtns extends StatelessWidget {
   final Function() toggleFilter;
-  final Function(dynamic) onStreamChange;
+  final Function(dynamic) onFilterChange;
   String? name;
   String order;
   String? location;
   FilterBtns(
-      {required this.clearFilters,
-      required this.order,
-      required this.onStreamChange,
+      {required this.order,
+      required this.onFilterChange,
       required this.name,
       required this.location,
       required this.toggleFilter});
 
-  @override
-  State<FilterBtns> createState() => _FilterBtnsState();
-}
-
-class _FilterBtnsState extends State<FilterBtns> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -37,7 +27,7 @@ class _FilterBtnsState extends State<FilterBtns> {
           height: ht * 0.06,
           child: OutlinedButton(
             // style: buttonDecoration,
-            onPressed: widget.clearFilters,
+            onPressed: () => onFilterChange({'order': 'new'}),
             child: Center(
                 child: Text(
               "Clear",
@@ -51,33 +41,18 @@ class _FilterBtnsState extends State<FilterBtns> {
           child: ElevatedButton(
             style: buttonDecoration,
             onPressed: () {
-              var base;
-              if (widget.order == "Spent Date") {
-                base = FirebaseFirestore.instance
-                    .collection(
-                        '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
-                    .orderBy('date', descending: true);
-              } else {
-                base = FirebaseFirestore.instance
-                    .collection(
-                        '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
-                    .orderBy(FieldPath.documentId, descending: false);
+              var base = {};
+              base['order'] = order;
+
+              if (name != null) {
+                base['itemName'] = name;
               }
-              if (widget.name != null) {
-                if (widget.name != 'Other') {
-                  base = base.where("itemName", isEqualTo: widget.name);
-                } else {
-                  //others
-                  print(widget.name);
-                  base = base.where("isOther", isEqualTo: true);
-                }
-              }
-              if (widget.location != null) {
-                base = base.where('location', isEqualTo: widget.location);
+              if (location != null) {
+                base['location'] = location;
               }
 
-              widget.onStreamChange(base);
-              widget.toggleFilter();
+              onFilterChange(base);
+              toggleFilter();
             },
             child: Center(
                 child: Text(

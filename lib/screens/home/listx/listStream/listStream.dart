@@ -1,6 +1,5 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,6 +12,7 @@ import 'package:xpens/screens/home/listx/listStream/itemExpanded.dart';
 import 'package:xpens/shared/constants.dart';
 
 import '../search/listSearchMain.dart';
+import 'filterFunction.dart';
 
 // class StreamBodyState extends StatefulWidget {
 //   final curstream;
@@ -106,9 +106,9 @@ import '../search/listSearchMain.dart';
 //   }
 // }
 class StreamBodyState extends StatefulWidget {
-  final curstream;
-  final Function(dynamic) onStreamChange;
-  StreamBodyState({required this.curstream, required this.onStreamChange});
+  final filter;
+  final Function(dynamic) onFilterChange;
+  StreamBodyState({required this.filter, required this.onFilterChange});
 
   @override
   State<StreamBodyState> createState() => _StreamBodyStateState();
@@ -117,29 +117,21 @@ class StreamBodyState extends StatefulWidget {
 class _StreamBodyStateState extends State<StreamBodyState> {
   @override
   Widget build(BuildContext context) {
-    // print("rebuulding listxxxxxxxx");
-
-    double wt = MediaQuery.of(context).size.width;
+    print(widget.filter);
     final listData = Provider.of<ExpenseDataProvider>(context);
     List list = listData.docs;
-
-    // List list = [];
-    // if (list == null) {
-    //   return Center(
-    //     child: Text("list is empty"),
-    //   );
-    // }
 
     List<Map<String, dynamic>> data = list
         .map((document) => document.data() as Map<String, dynamic>)
         .toList();
+    data = applyFilter(data: data, filter: widget.filter);
     String curDate = "";
     return ListView.builder(
       itemCount: data.length + 2,
       itemBuilder: (context, i) {
         if (i == 0)
           return ListSearchMain(
-            onStreamChange: widget.onStreamChange,
+            onStreamChange: widget.onFilterChange,
           );
         if (i - 1 < data.length) {
           bool dispDate = false;

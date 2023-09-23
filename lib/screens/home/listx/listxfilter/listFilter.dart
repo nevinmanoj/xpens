@@ -1,16 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/listx/listxfilter/filterButtons.dart';
 import 'package:xpens/screens/home/listx/listxfilter/locationFilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/namefilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/orderBy.dart';
-import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterWindow extends StatefulWidget {
-  final Function(dynamic) onStreamChange;
-  FilterWindow({required this.onStreamChange});
+  final Function(dynamic) onFilterChange;
+  FilterWindow({required this.onFilterChange});
   @override
   State<FilterWindow> createState() => _FilterWindowState();
 }
@@ -21,18 +18,7 @@ class _FilterWindowState extends State<FilterWindow> {
   double _height = 0;
   String? name;
   String? location;
-  String order = "Spent Date";
-  void clearFilters() {
-    setState(() {
-      name = null;
-      location = null;
-      order = "Spent Date";
-      widget.onStreamChange(FirebaseFirestore.instance
-          .collection('$db/${FirebaseAuth.instance.currentUser!.uid}/list')
-          .orderBy('date', descending: true));
-    });
-    toggleFilter();
-  }
+  String order = "new";
 
   void namechange(newName) {
     setState(() {
@@ -92,7 +78,7 @@ class _FilterWindowState extends State<FilterWindow> {
               alignment: Alignment.bottomCenter,
               child: AnimatedContainer(
                 // padding: EdgeInsets.only(top: 20),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(40),
@@ -120,9 +106,8 @@ class _FilterWindowState extends State<FilterWindow> {
                           onOrderChange: orderchange,
                         ),
                         FilterBtns(
-                            clearFilters: clearFilters,
                             toggleFilter: toggleFilter,
-                            onStreamChange: widget.onStreamChange,
+                            onFilterChange: widget.onFilterChange,
                             name: name,
                             location: location,
                             order: order)

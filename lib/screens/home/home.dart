@@ -11,7 +11,7 @@ import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
-import 'listx/listMainNew.dart';
+import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;

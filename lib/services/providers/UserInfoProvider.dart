@@ -28,7 +28,6 @@ class UserInfoProvider with ChangeNotifier {
       final docRef = FirebaseFirestore.instance.collection(db).doc(user!.uid);
 
       docRef.snapshots().listen((snapshot) {
-        print("new data...");
         if (snapshot.exists) {
           _myArray = List.from(snapshot.data()!['items']);
           _userName = snapshot.data()!['Name'];

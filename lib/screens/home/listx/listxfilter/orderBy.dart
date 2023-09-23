@@ -33,7 +33,7 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
                 ExpansionPanel(
                   canTapOnHeader: true,
                   headerBuilder: (BuildContext context, bool _isExpanded) {
-                    return ListTile(
+                    return const ListTile(
                       title: Text(
                         "Order By",
                         style: TextStyle(
@@ -48,11 +48,12 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
                       RadioListTile(
                         activeColor: primaryAppColor,
                         // toggleable: true,
-                        title: Text("Spent Date"),
-                        value: "Spent Date",
+                        title: const Text("Latest to Oldest"),
+                        value: "new",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {
                           // if (value != null) {
+
                           setState(() {
                             widget.selectedOption = value;
                             widget.onOrderChange(value);
@@ -63,12 +64,11 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
                       RadioListTile(
                         activeColor: primaryAppColor,
                         // toggleable: true,
-                        title: Text("Date added"),
-                        value: "Date added",
+                        title: const Text("Oldest to Latest"),
+                        value: "old",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {
                           // if (value != null) {
-
                           setState(() {
                             widget.selectedOption = value;
                             widget.onOrderChange(value);
