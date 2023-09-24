@@ -8,10 +8,10 @@ import 'package:xpens/screens/home/details/DetailBoxes/PerDay.dart';
 import 'package:xpens/screens/home/details/downloadPopup.dart';
 import 'package:xpens/screens/home/details/calendar/calendarDisp.dart';
 import 'package:xpens/screens/home/details/filter.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import 'package:xpens/shared/constants.dart';
 
-import '../../../services/providers/ExpenseDataProvider.dart';
 import 'DetailBoxes/thisMonth.dart';
 import 'DetailBoxes/thisYear.dart';
 
@@ -41,7 +41,7 @@ class _DetailsState extends State<Details> {
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
-    final listData = Provider.of<ExpenseDataProvider>(context);
+    final listData = Provider.of<UserInfoProvider>(context);
 
     List list = listData.docs;
 

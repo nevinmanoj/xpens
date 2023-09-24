@@ -20,14 +20,14 @@ class DevService {
   Future<void> modify() async {
     print("check codebase");
     // addFieldToDb();
-    final CollectionReference collection =
-        FirebaseFirestore.instance.collection("UserInfo");
+    // final CollectionReference collection =
+    //     FirebaseFirestore.instance.collection("UserInfo");
 
-    QuerySnapshot querySnapshot = await collection.get();
+    // QuerySnapshot querySnapshot = await collection.get();
 
-    querySnapshot.docs.forEach((document) async {
-      updateDocumentsWithWordArray(document.id);
-    });
+    // querySnapshot.docs.forEach((document) async {
+    //   updateDocumentsWithWordArray(document.id);
+    // });
 
     // addFieldToACollection(collectionPath: "UserInfo/${user!.uid}/list",fieldName:"tags" ,fieldValue: );
   }
