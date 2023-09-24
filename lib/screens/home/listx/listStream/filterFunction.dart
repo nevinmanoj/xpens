@@ -26,6 +26,51 @@ List<Map<String, dynamic>> applyFilter({required data, required filter}) {
       });
     }
   }
-  // print(data[1].id);
+  if (filter['query'] != null) {
+    var data1 = filterDataLocally1(data, "tags", filter['search']);
+    if (data1.isEmpty) {
+      var data2 = filterDataLocally2(data, filter['query']);
+
+      data = data2;
+    } else {
+      data = data1;
+    }
+  }
+
   return data;
+}
+
+List<Map<String, dynamic>> filterDataLocally1(
+    List<Map<String, dynamic>> data, String fieldName, List<dynamic> values) {
+  // Filter data based on the arrayContainsAny-like logic
+  List<Map<String, dynamic>> filteredData = data.where((item) {
+    dynamic fieldValue = item[fieldName];
+    if (fieldValue is List) {
+      return values.every((value) => fieldValue.contains(value));
+    }
+    return false;
+  }).toList();
+  if (filteredData.isEmpty) {
+    filteredData = data.where((item) {
+      dynamic fieldValue = item[fieldName];
+      if (fieldValue is List) {
+        return values.any((value) => fieldValue.contains(value));
+      }
+      return false;
+    }).toList();
+  }
+
+  return filteredData;
+}
+
+List<Map<String, dynamic>> filterDataLocally2(
+    List<Map<String, dynamic>> data, String query) {
+  List<Map<String, dynamic>> filteredData = [];
+  for (int i = 0; i < data.length; i++) {
+    if (data[i]['itemName'].toLowerCase().contains(query.toLowerCase())) {
+      filteredData.add(data[i]);
+    }
+  }
+
+  return filteredData;
 }

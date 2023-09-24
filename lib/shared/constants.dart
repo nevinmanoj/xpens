@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 const primaryAppColor = Colors.black;
+// const primaryAppColor = Color.fromARGB(255, 187, 255, 0);
 const secondaryAppColor = Color.fromRGBO(255, 143, 0, 1);
 
 var authInputDecoration = BoxDecoration(

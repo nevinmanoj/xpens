@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../shared/Db.dart';
 import '../../../../shared/constants.dart';
 
 class ListSearchMain extends StatefulWidget {
-  const ListSearchMain({super.key, required this.onStreamChange});
+  const ListSearchMain({super.key, required this.onStreamChange, this.filter});
+  final filter;
   final Function(dynamic) onStreamChange;
 
   @override
@@ -14,6 +12,20 @@ class ListSearchMain extends StatefulWidget {
 }
 
 class _ListSearchMainState extends State<ListSearchMain> {
+  var filter;
+  bool showClear = false;
+  TextEditingController ctrl = TextEditingController();
+  @override
+  void initState() {
+    filter = widget.filter;
+    if (filter['query'] != null) {
+      showClear = filter['query'].length != 0;
+      ctrl.text = filter['query'];
+    }
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -45,33 +57,25 @@ class _ListSearchMainState extends State<ListSearchMain> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+              padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
               child: TextFormField(
-                // controller: costController,
-                // initialValue: widget.costs,
+                controller: ctrl,
+                // initialValue: showClear ? filter['query'] : "",
                 cursorColor: primaryAppColor,
                 cursorWidth: 1,
-                onChanged: (value) {
-                  // widget.onCostChanged(value);
-                  // widget.onctrlchange(costController!);
-                },
-                onFieldSubmitted: (value) {
-                  // print(value);
-                  final List<String> tags = value
-                      .split(' ')
-                      .map((word) => word.toLowerCase())
-                      .toList();
-                  var base = FirebaseFirestore.instance
-                      .collection(
-                          '$db/${FirebaseAuth.instance.currentUser!.uid}/list')
-                      .orderBy('date', descending: true)
-                      .where("tags", arrayContainsAny: tags);
-
-                  widget.onStreamChange(base);
-                },
-
+                onChanged: updateFilter,
+                onFieldSubmitted: updateFilter,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
+                  suffixIcon: showClear
+                      ? IconButton(
+                          icon: Icon(Icons.clear),
+                          color: Colors.black.withOpacity(0.5),
+                          onPressed: () {
+                            updateFilter("");
+                            ctrl.clear();
+                          })
+                      : null,
                   border: InputBorder.none,
                   hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
                   hintText: 'Search Expenses',
@@ -82,5 +86,21 @@ class _ListSearchMainState extends State<ListSearchMain> {
         ),
       ],
     );
+  }
+
+  void updateFilter(String value) {
+    final List<String> tags = value
+        .split(' ')
+        .where((word) => word.isNotEmpty)
+        .map((word) => word.toLowerCase())
+        .toList();
+
+    filter['search'] = tags;
+    filter['query'] = value;
+
+    setState(() {
+      showClear = filter['query'].length != 0;
+    });
+    widget.onStreamChange(filter);
   }
 }

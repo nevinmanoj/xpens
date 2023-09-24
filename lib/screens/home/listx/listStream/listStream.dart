@@ -131,6 +131,7 @@ class _StreamBodyStateState extends State<StreamBodyState> {
       itemBuilder: (context, i) {
         if (i == 0)
           return ListSearchMain(
+            filter: widget.filter,
             onStreamChange: widget.onFilterChange,
           );
         if (i - 1 < data.length) {
