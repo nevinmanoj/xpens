@@ -7,7 +7,7 @@ import 'DetailBoxBody.dart';
 class PerDay extends StatefulWidget {
   final String heading;
   final DateTime date;
-  final List<Map<String, dynamic>> data;
+  final List data;
   PerDay(
       {super.key,
       required this.date,

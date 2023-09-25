@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../shared/constants.dart';
 
 class ItemGroup extends StatefulWidget {
-  ItemGroup(
-      {required this.itemGroup,
-      required this.onGroupChange,
-      required this.addToGroup});
+  ItemGroup({
+    required this.itemGroup,
+    required this.onGroupChange,
+  });
   final Function(String) onGroupChange;
-  final bool addToGroup;
+
   final String itemGroup;
 
   @override
@@ -21,16 +21,18 @@ class _ItemGroupState extends State<ItemGroup> {
 
   @override
   void initState() {
-    addToGroup = widget.addToGroup;
+    // addToGroup = widget.addToGroup;
+    addToGroup = widget.itemGroup != "none";
 
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   print("asda");
-  //   super.didChangeDependencies();
-  // }
+  @override
+  void didUpdateWidget(covariant ItemGroup oldWidget) {
+    // TODO: implement didUpdateWidget
+    addToGroup = widget.itemGroup != "none";
+    super.didUpdateWidget(oldWidget);
+  }
 
   @override
   Widget build(BuildContext context) {

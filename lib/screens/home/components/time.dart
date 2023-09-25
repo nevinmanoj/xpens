@@ -23,14 +23,14 @@ class _ClockState extends State<Clock> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: buildUI(context),
-    );
-  }
+  // Widget build(BuildContext context) {
+  //   return Padding(
+  //     // padding: const EdgeInsets.all(8.0),
+  //     child: buildUI(context),
+  //   );
+  // }
 
-  Widget buildUI(BuildContext context) {
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
       width: 130,

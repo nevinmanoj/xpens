@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import '../../../../shared/constants.dart';
-import '../../listx/listStream/deleteExpense.dart';
-import '../../listx/listStream/editMain.dart';
-import '../../listx/listStream/itemExpanded.dart';
+import '../../../../../shared/constants.dart';
+import '../../../listx/listStream/deleteExpense.dart';
+import '../../../listx/listStream/editMain.dart';
+import '../../../listx/listStream/itemExpanded.dart';
 
 Widget item(String id, var item, BuildContext context, bool dispDate) {
   String iDate =
@@ -18,14 +18,38 @@ Widget item(String id, var item, BuildContext context, bool dispDate) {
       dispDate
           ? Container(
               width: wt,
-              // color: flag
-              //     ? const Color.fromARGB(255, 206, 206, 206)
-              //     : const Color.fromARGB(255, 232, 232, 232),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-                child: Text(
-                  iDate,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                child: Row(
+                  children: [
+                    // Container(
+                    //     width: 200,
+                    //     child: Text(
+                    //       iDate,
+                    //       style: TextStyle(
+                    //           fontWeight: FontWeight.bold, fontSize: 18),
+                    //     )),
+                    // Spacer(),
+                    // Container(
+                    //     width: 100,
+                    //     child: Text(
+                    //       "₹ 1253",
+                    //       overflow: TextOverflow.ellipsis,
+                    //       maxLines: 3,
+                    //       style: TextStyle(
+                    //           fontWeight: FontWeight.bold, fontSize: 18),
+                    //     )),
+                    Text(
+                      iDate,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    // Text(
+                    //   "₹ 1253",
+                    //   style:
+                    //       TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    // )
+                  ],
                 ),
               ),
             )
@@ -53,7 +77,7 @@ Widget item(String id, var item, BuildContext context, bool dispDate) {
               icon: Icons.delete,
               // label: 'Delete',
             ),
-            VerticalDivider(
+            const VerticalDivider(
               // color: Color.fromARGB(255, 29, 29, 29),
               color: secondaryAppColor,
               width: 1,
@@ -100,11 +124,11 @@ Widget item(String id, var item, BuildContext context, bool dispDate) {
               color: const Color.fromARGB(255, 232, 232, 232),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+              padding: const EdgeInsets.fromLTRB(10, 15, 0, 15),
               child: Row(
                 children: [
                   Container(
-                      width: 150,
+                      width: 200,
                       child: Text(
                         item['itemName'],
                         overflow: TextOverflow.ellipsis,

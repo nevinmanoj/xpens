@@ -56,7 +56,6 @@ class UserInfoProvider with ChangeNotifier {
       colRef.snapshots().listen((snapshot) {
         // print(snapshot.docs);
         _docs = snapshot.docs;
-        print(_docs.length);
         notifyListeners();
       });
     }

@@ -18,6 +18,8 @@ class DevDash extends StatefulWidget {
 class _DevDashState extends State<DevDash> {
   @override
   Widget build(BuildContext context) {
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryAppColor,

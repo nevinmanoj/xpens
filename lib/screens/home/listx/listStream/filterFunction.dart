@@ -1,4 +1,4 @@
-List<Map<String, dynamic>> applyFilter({required data, required filter}) {
+List applyFilter({required data, required filter}) {
   if (filter['itemName'] != null) {
     if (filter['itemName'] != "Other") {
       data = data.where((item) {
@@ -17,11 +17,11 @@ List<Map<String, dynamic>> applyFilter({required data, required filter}) {
   }
   if (filter['order'] != null) {
     if (filter['order'] == "new") {
-      data.sort((Map<String, dynamic> a, Map<String, dynamic> b) {
+      data.sort((a, b) {
         return int.parse(b['date'].compareTo(a['date']).toString());
       });
     } else {
-      data.sort((Map<String, dynamic> a, Map<String, dynamic> b) {
+      data.sort((a, b) {
         return int.parse(a['date'].compareTo(b['date']).toString());
       });
     }
@@ -40,10 +40,9 @@ List<Map<String, dynamic>> applyFilter({required data, required filter}) {
   return data;
 }
 
-List<Map<String, dynamic>> filterDataLocally1(
-    List<Map<String, dynamic>> data, String fieldName, List<dynamic> values) {
+List filterDataLocally1(List data, String fieldName, List<dynamic> values) {
   // Filter data based on the arrayContainsAny-like logic
-  List<Map<String, dynamic>> filteredData = data.where((item) {
+  List filteredData = data.where((item) {
     dynamic fieldValue = item[fieldName];
     if (fieldValue is List) {
       return values.every((value) => fieldValue.contains(value));
@@ -63,9 +62,8 @@ List<Map<String, dynamic>> filterDataLocally1(
   return filteredData;
 }
 
-List<Map<String, dynamic>> filterDataLocally2(
-    List<Map<String, dynamic>> data, String query) {
-  List<Map<String, dynamic>> filteredData = [];
+List filterDataLocally2(List data, String query) {
+  List filteredData = [];
   for (int i = 0; i < data.length; i++) {
     if (data[i]['itemName'].toLowerCase().contains(query.toLowerCase())) {
       filteredData.add(data[i]);

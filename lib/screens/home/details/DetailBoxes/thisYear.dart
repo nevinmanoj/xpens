@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/details/DetailBoxes/DetailBoxBody.dart';
 
 class ThisYear extends StatefulWidget {
-  final List<Map<String, dynamic>> data;
+  final List data;
 
   final int year;
 

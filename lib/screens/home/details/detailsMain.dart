@@ -45,18 +45,18 @@ class _DetailsState extends State<Details> {
 
     List list = listData.docs;
 
-    List<Map<String, dynamic>> data = list
-        .map((document) => document.data() as Map<String, dynamic>)
-        .toList();
+    // List<Map<String, dynamic>> data = list
+    //     .map((document) => document.data() as Map<String, dynamic>)
+    //     .toList();
     if (filter != "All") {
-      data = data.where((item) {
+      list = list.where((item) {
         return item['location'] == filter;
       }).toList();
     }
     Map<DateTime, double> events = {};
     Map<DateTime, Map<String, dynamic>> testMap = {};
 
-    for (var item in data) {
+    for (var item in list) {
       var date = DateTime.parse(item['date']);
       date = DateTime(date.year, date.month, date.day);
       if (events[date] == null) {
@@ -67,7 +67,7 @@ class _DetailsState extends State<Details> {
     int i = 0;
     List dayx = [];
     List keys = [];
-    for (var item in data) {
+    for (var item in list) {
       var date = DateTime.parse(item['date']);
       date = DateTime(date.year, date.month, date.day);
       if (testMap[date] == null) {
@@ -97,16 +97,16 @@ class _DetailsState extends State<Details> {
               CalendarDisp(
                 testmap: testMap,
               ),
-              PerDay(data: data, date: DateTime.now(), heading: "Today"),
+              PerDay(data: list, date: DateTime.now(), heading: "Today"),
               PerDay(
                   date: DateTime.now().subtract(const Duration(days: 1)),
-                  data: data,
+                  data: list,
                   heading: "Yesterday"),
-              ThisMonth(mY: DateTime(mY.year, mY.month), data: data),
+              ThisMonth(mY: DateTime(mY.year, mY.month), data: list),
 
               ThisYear(
                 year: mY.year,
-                data: data,
+                data: list,
               ),
               SizedBox(
                 height: 5,
@@ -115,7 +115,7 @@ class _DetailsState extends State<Details> {
               //   stream: widget.stream,
               // ),
               DOwnloadDetails(
-                data: data,
+                data: list,
               ),
             ],
           ),

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/details/DetailBoxes/DetailBoxBody.dart';
 
 class ThisMonth extends StatefulWidget {
-  final List<Map<String, dynamic>> data;
+  final List data;
   DateTime mY;
 
   ThisMonth({super.key, required this.mY, required this.data});

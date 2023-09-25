@@ -17,20 +17,19 @@ class _LocationState extends State<Location> {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.width;
     return Container(
-      // color: Colors.amber,
-      width: 300,
-      height: ht * 0.12,
-      child: Center(
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: locationList.length,
-            itemBuilder: ((context, i) {
-              return Padding(
+        // color: Colors.amber,
+        width: wt * 0.8,
+        height: ht * 0.13,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (var loc in locationList)
+              Padding(
                 padding: EdgeInsets.fromLTRB(
-                    wt * 0.05, ht * 0.01, wt * 0.005, ht * 0.01),
+                    wt * 0.01, ht * 0.01, wt * 0.01, ht * 0.01),
                 child: InkWell(
                   onTap: () {
-                    widget.onLocationChanged(locationList[i]);
+                    widget.onLocationChanged(loc);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -38,27 +37,30 @@ class _LocationState extends State<Location> {
                           color: Colors.grey.withOpacity(0.4),
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(7)),
-                        color: locationList[i] == widget.location
+                        color: loc == widget.location
                             ? primaryAppColor
                             : Colors.white),
 
-                    height: ht * 0.05,
+                    // height: ht * 0.05,
                     // width: wt * 0.185,
-                    width: 120,
-                    child: Center(
-                        child: Text(
-                      locationList[i],
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: locationList[i] == widget.location
-                              ? Colors.white
-                              : primaryAppColor),
-                    )),
+                    // width: wt * 0.25,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          wt * 0.025, ht * 0.01, wt * 0.025, ht * 0.01),
+                      child: Center(
+                          child: Text(
+                        loc,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: loc == widget.location
+                                ? Colors.white
+                                : primaryAppColor),
+                      )),
+                    ),
                   ),
                 ),
-              );
-            })),
-      ),
-    );
+              )
+          ],
+        ));
   }
 }

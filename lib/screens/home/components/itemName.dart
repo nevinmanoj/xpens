@@ -16,11 +16,13 @@ class ItemName extends StatefulWidget {
 class _ItemNameState extends State<ItemName> {
   @override
   Widget build(BuildContext context) {
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.width;
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Column(
       children: [
         Container(
-          width: 300,
+          width: wt * 0.8,
           decoration: addInputDecoration,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
@@ -50,12 +52,14 @@ class _ItemNameState extends State<ItemName> {
         SizedBox(height: 10),
         (widget.itemName == "Other" || !allItems.contains(widget.itemName))
             ? Container(
-                height: 50,
-                width: 300,
+                height: ht * 0.13,
+                width: wt * 0.8,
                 decoration: addInputDecoration,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                   child: TextFormField(
+                    cursorColor: primaryAppColor,
+                    cursorWidth: 1,
                     initialValue:
                         widget.itemName == "Other" ? "" : widget.itemName,
                     onChanged: (value) {

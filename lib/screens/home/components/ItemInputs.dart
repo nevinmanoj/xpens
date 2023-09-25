@@ -23,7 +23,7 @@ class ItemInputs extends StatefulWidget {
   final String group;
   final Function(AddItem) buttonfunc;
 
-  ItemInputs(
+  const ItemInputs(
       {required this.group,
       required this.itemName,
       required this.costS,
@@ -105,6 +105,8 @@ class _ItemInputsState extends State<ItemInputs> {
   @override
   Widget build(BuildContext context) {
     List allItems = Provider.of<UserInfoProvider>(context).items;
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
         child: Column(
@@ -115,14 +117,14 @@ class _ItemInputsState extends State<ItemInputs> {
               location: location,
               onLocationChanged: updateLocation,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ItemName(
               onNameChange: updateItemName,
               itemName: itemName,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ItemRemark(
@@ -130,7 +132,7 @@ class _ItemInputsState extends State<ItemInputs> {
               onctrlchange: updateRemarkctrl,
               remarks: remarksController.text,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             ItemQuantity(
@@ -138,37 +140,40 @@ class _ItemInputsState extends State<ItemInputs> {
               costs: costController.text,
               onctrlchange: updatecostctrl,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             // Date(),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Calendar(
-                  dateToDisplay: date,
-                  onDateChanged: (DateTime newId) {
-                    updateDate(newId);
-                  },
-                ),
-                Clock(
-                  selectTime: time,
-                  onTimeChanged: (TimeOfDay newId) {
-                    updateTIme(newId);
-                  },
-                ),
-              ],
+            SizedBox(
+              // height: ht * 0.13,
+              width: wt * 0.8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Calendar(
+                    dateToDisplay: date,
+                    onDateChanged: (DateTime newId) {
+                      updateDate(newId);
+                    },
+                  ),
+                  Clock(
+                    selectTime: time,
+                    onTimeChanged: (TimeOfDay newId) {
+                      updateTIme(newId);
+                    },
+                  ),
+                ],
+              ),
             ),
             ItemGroup(
-              addToGroup: group != "none",
               itemGroup: group,
               onGroupChange: updateGroup,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
 
@@ -203,12 +208,17 @@ class _ItemInputsState extends State<ItemInputs> {
                           FocusManager.instance.primaryFocus?.unfocus();
                           costController.clear();
                           remarksController.clear();
-                          updateItemName(allItems[0]);
-                          updateDate(DateTime.now());
-                          updateTIme(TimeOfDay.now());
-                          updateLocation(locationList[0]);
-                          updateGroup("none");
+                          // updateItemName(allItems[0]);
+                          // updateDate(DateTime.now());
+                          // updateTIme(TimeOfDay.now());
+                          // updateLocation(locationList[0]);
+                          // updateGroup("none");
                           setState(() {
+                            itemName = allItems[0];
+                            date = DateTime.now();
+                            time = TimeOfDay.now();
+                            location = locationList[0];
+                            group = "none";
                             loading = false;
                           });
                         }
@@ -216,11 +226,11 @@ class _ItemInputsState extends State<ItemInputs> {
                 style: buttonDecoration,
                 child: Center(
                     child: loading
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             color: secondaryAppColor,
                           )
                         : Text(widget.buttonLabel,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16))),

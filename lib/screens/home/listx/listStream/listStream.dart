@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/services/providers/ExpenseDataProvider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../search/listSearchMain.dart';
@@ -117,30 +116,27 @@ class _StreamBodyStateState extends State<StreamBodyState> {
     final listData = Provider.of<UserInfoProvider>(context);
     List list = listData.docs;
 
-    List<Map<String, dynamic>> data = list
-        .map((document) => document.data() as Map<String, dynamic>)
-        .toList();
-    data = applyFilter(data: data, filter: widget.filter);
+    list = applyFilter(data: list, filter: widget.filter);
     String curDate = "";
     return ListView.builder(
-      itemCount: data.length + 2,
+      itemCount: list.length + 2,
       itemBuilder: (context, i) {
         if (i == 0)
           return ListSearchMain(
             filter: widget.filter,
             onStreamChange: widget.onFilterChange,
           );
-        if (i - 1 < data.length) {
+        if (i - 1 < list.length) {
           bool dispDate = false;
           String iDate = DateFormat.yMMMd()
-              .format(DateTime.parse(data[i - 1]['date']))
+              .format(DateTime.parse(list[i - 1]['date']))
               .toString();
           if (iDate != curDate) {
             curDate = iDate;
             dispDate = true;
           }
 
-          return item(list[i - 1].id, data[i - 1], context, dispDate);
+          return item(list[i - 1].id, list[i - 1], context, dispDate);
         } else
           return Container();
         // return Container(

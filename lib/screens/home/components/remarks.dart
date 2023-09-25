@@ -28,9 +28,11 @@ class _ItemRemarkState extends State<ItemRemark> {
   @override
   Widget build(BuildContext context) {
     // widget.onctrlchange(remarksController!);
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.width;
     return Container(
-      height: 50,
-      width: 300,
+      height: ht * 0.13,
+      width: wt * 0.8,
       decoration: addInputDecoration,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),

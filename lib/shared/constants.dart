@@ -37,6 +37,6 @@ var buttonDecoration = ButtonStyle(
     )),
     backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));
 
-List locationList = ["Personel", "Home"];
+List locationList = ["Personel", "Home", "Investments"];
 
-List<String> filterList = ["All", "Personel", "Home"];
+List<String> filterList = ["All", "Personel", "Home", "Investments"];

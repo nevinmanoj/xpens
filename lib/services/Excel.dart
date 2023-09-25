@@ -6,9 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 Future<File> jsonToExcel(
-    {required List<Map<String, dynamic>> list,
-    required String year,
-    required String month}) async {
+    {required List list, required String year, required String month}) async {
   Map<String, dynamic> jsonData;
   var excel = Excel.createExcel();
   var sheet = excel[month];
@@ -52,7 +50,7 @@ Future<File> jsonToExcel(
 void shareFile({
   required String year,
   required String month,
-  required List<Map<String, dynamic>> list,
+  required List list,
 }) async {
   final directory = await getExternalStorageDirectory();
   var filePath = '${directory!.path}/$year-$month.xlsx';

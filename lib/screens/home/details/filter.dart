@@ -38,7 +38,7 @@ class _FilterDetailsState extends State<FilterDetails> {
         color: primaryAppColor,
         constraints: BoxConstraints(
           minHeight: ht * 0.05,
-          minWidth: wt * 0.28,
+          minWidth: wt * 0.23,
         ),
         isSelected: _selectedfilter,
         children: widgetList(filterList),

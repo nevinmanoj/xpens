@@ -34,7 +34,7 @@ const yearList = [
 ];
 
 class DOwnloadDetails extends StatefulWidget {
-  final List<Map<String, dynamic>> data;
+  final List data;
   DOwnloadDetails({required this.data});
   @override
   State<DOwnloadDetails> createState() => _DOwnloadDetailsState();
