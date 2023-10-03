@@ -29,22 +29,18 @@ class DatabaseService {
     }, SetOptions(merge: true));
   }
 
-  Future updateItemsArray(
-      {required bool add,
-      required String item,
-      required Function(double) progress}) async {
+  Future updateItemsArray({
+    required bool add,
+    required String item,
+  }) async {
     var snapshot = await FirebaseFirestore.instance
         .collection('$db/$uid/list')
         .where("itemName", isEqualTo: item)
         .get();
-    double count = 0;
     for (QueryDocumentSnapshot doc in snapshot.docs) {
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('$db/$uid/list').doc(doc.id);
       docRef.update({'isOther': !add});
-
-      count++;
-      progress(count / snapshot.docs.length * 100);
     }
     if (add) {
       //add item

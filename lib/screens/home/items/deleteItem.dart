@@ -60,14 +60,9 @@ class _DeleteItemState extends State<DeleteItem> {
                   child: ElevatedButton(
                       onPressed: () async {
                         await DatabaseService(uid: user!.uid).updateItemsArray(
-                            add: false,
-                            item: widget.itemName,
-                            progress: (x) {
-                              setState(() {
-                                print(x);
-                                per = x;
-                              });
-                            });
+                          add: false,
+                          item: widget.itemName,
+                        );
                         Navigator.pop(context);
                       },
                       child: Text(

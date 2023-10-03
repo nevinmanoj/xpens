@@ -28,6 +28,8 @@ class _ListSearchMainState extends State<ListSearchMain> {
 
   @override
   Widget build(BuildContext context) {
+    double wt = MediaQuery.of(context).size.width;
+    double ht = MediaQuery.of(context).size.height;
     return Stack(
       children: [
         Column(
@@ -41,9 +43,12 @@ class _ListSearchMainState extends State<ListSearchMain> {
         ),
         Center(
           child: Container(
-            margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-            height: 50,
-            width: 350,
+            // margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+            // height: 50,
+            // width: 350,
+            margin: EdgeInsets.fromLTRB(0, ht * 0.02, 0, 0),
+            height: ht * 0.065,
+            width: wt * 0.9,
             decoration: BoxDecoration(
               border:
                   Border.all(color: const Color.fromARGB(255, 167, 167, 167)),

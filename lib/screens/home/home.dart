@@ -6,7 +6,7 @@ import 'package:xpens/screens/home/add/addMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
-import 'items/items.dart';
+import 'items/itemList.dart';
 import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AddX(),
     listx(),
     Details(),
-    Items(),
+    ItemList(),
     SettingsScreen(),
   ];
 

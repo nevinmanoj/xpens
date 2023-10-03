@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/items/deleteItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
+import 'addItem.dart';
+
 class ItemList extends StatefulWidget {
   const ItemList({super.key});
 
@@ -21,11 +23,14 @@ class _ItemListState extends State<ItemList> {
     return Container(
       // padding: EdgeInsets.fromLTRB(wt * 0.1, ht * 0.1, wt * 0.1, 0),
       // margin: EdgeInsets.fromLTRB(wt * 0.1, 0, wt * 0.1, 0),
-      padding: EdgeInsets.fromLTRB(0, ht * 0.1, 0, 0),
+      // padding: EdgeInsets.fromLTRB(0, ht * 0.1, 0, 0),
       child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: userInfo.items.length,
+          itemCount: userInfo.items.length + 1,
           itemBuilder: (BuildContext context, int i) {
+            if (i == 0) {
+              return NewItemsAddwidget();
+            }
             return Padding(
               padding: EdgeInsets.fromLTRB(wt * 0.05, ht * 0.01, wt * 0.05, 0),
               child: Container(
@@ -45,11 +50,11 @@ class _ItemListState extends State<ItemList> {
                   child: Row(
                     children: [
                       Text(
-                        userInfo.items[i],
+                        userInfo.items[i - 1],
                         style: TextStyle(fontSize: 16),
                       ),
                       Spacer(),
-                      userInfo.items[i] == "Other"
+                      userInfo.items[i - 1] == "Other"
                           ? Container()
                           : IconButton(
 
@@ -59,7 +64,7 @@ class _ItemListState extends State<ItemList> {
                                     context: context,
                                     builder: (_) {
                                       return DeleteItem(
-                                        itemName: userInfo.items[i],
+                                        itemName: userInfo.items[i - 1],
                                       );
                                     });
                                 FocusManager.instance.primaryFocus!.unfocus();

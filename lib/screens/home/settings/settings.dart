@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/dev/devDash.dart';
-import 'package:xpens/screens/home/items/items.dart';
 
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
@@ -66,30 +64,6 @@ class SettingsScreen extends StatelessWidget {
                   child: Padding(
                       padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
                       child: const Icon(Icons.lock_reset))),
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, CupertinoPageRoute(builder: (context) => Items()));
-            },
-            child: Container(
-              // decoration: ,
-              color: Colors.grey[300],
-              width: wt,
-              height: ht * 0.06,
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-                    child: Text(
-                      "Items",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )),
             ),
           ),
         ),
