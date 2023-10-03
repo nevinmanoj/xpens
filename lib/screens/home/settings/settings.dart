@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 import 'package:xpens/screens/home/dev/devDash.dart';
-import 'package:xpens/screens/home/settings/items/items.dart';
+import 'package:xpens/screens/home/items/items.dart';
 
 import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
@@ -64,12 +64,8 @@ class SettingsScreen extends StatelessWidget {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-                    child: Text(
-                      "Send reset password link ",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )),
+                      padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
+                      child: const Icon(Icons.lock_reset))),
             ),
           ),
         ),
@@ -109,12 +105,8 @@ class SettingsScreen extends StatelessWidget {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-                    child: Text(
-                      "Log Out",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )),
+                      padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
+                      child: const Icon(Icons.logout))),
             ),
           ),
         ),
@@ -131,12 +123,8 @@ class SettingsScreen extends StatelessWidget {
               child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-                    child: Text(
-                      "Dev Center",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  )),
+                      padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
+                      child: const Icon(Icons.logo_dev_sharp))),
             ),
           ),
         ),

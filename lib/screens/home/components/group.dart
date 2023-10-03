@@ -8,7 +8,6 @@ class ItemGroup extends StatefulWidget {
     required this.onGroupChange,
   });
   final Function(String) onGroupChange;
-
   final String itemGroup;
 
   @override
@@ -51,7 +50,11 @@ class _ItemGroupState extends State<ItemGroup> {
                 value: addToGroup,
                 onChanged: (bool? value) {
                   try {
-                    if (!value!) widget.onGroupChange("none");
+                    if (!value!) {
+                      widget.onGroupChange("none");
+                    } else {
+                      widget.onGroupChange("");
+                    }
                   } catch (e) {}
 
                   setState(() {
@@ -74,6 +77,7 @@ class _ItemGroupState extends State<ItemGroup> {
                     initialValue:
                         widget.itemGroup == "none" ? "" : widget.itemGroup,
                     onChanged: (value) {
+                      print("hcnaging grp val");
                       widget.onGroupChange(value);
                     },
                     validator: (value) => value!.isEmpty

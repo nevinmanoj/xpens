@@ -6,11 +6,12 @@ import 'package:xpens/screens/home/add/addMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
+import 'items/items.dart';
 import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;
-List<String> navOptions = ["Add", "List", "Analyze", "Settings"];
+List<String> navOptions = ["Add", "List", "Analyze", "Items", "Settings"];
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AddX(),
     listx(),
     Details(),
+    Items(),
     SettingsScreen(),
   ];
 
@@ -80,10 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        iconSize: 26,
+        showSelectedLabels: false,
+        // showUnselectedLabels: true,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: navOptions[0],
+            // label: "",
             backgroundColor: primaryAppColor,
           ),
           BottomNavigationBarItem(
@@ -94,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.analytics),
             label: navOptions[2],
+            backgroundColor: primaryAppColor,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: navOptions[3],
             backgroundColor: primaryAppColor,
           ),
           BottomNavigationBarItem(

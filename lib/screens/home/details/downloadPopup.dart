@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:xpens/services/Excel.dart';
 import 'package:xpens/services/toast.dart';
@@ -5,10 +7,8 @@ import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
-String selectYear = DateTime.now().year.toString();
-String selectMonth = DateFormat.MMM().format(DateTime.now()).toString();
-
 const monthList = [
+  "All",
   "Jan",
   "Feb",
   "Mar",
@@ -22,29 +22,35 @@ const monthList = [
   "Nov",
   "Dec"
 ];
-const yearList = [
-  '2023',
-  '2024',
-  '2025',
-  '2026',
-  '2027',
-  '2028',
-  '2029',
-  '2030'
-];
 
 class DOwnloadDetails extends StatefulWidget {
   final List data;
+
   DOwnloadDetails({required this.data});
   @override
   State<DOwnloadDetails> createState() => _DOwnloadDetailsState();
 }
 
 class _DOwnloadDetailsState extends State<DOwnloadDetails> {
+  String selectYear = DateTime.now().year.toString();
+  String selectMonth = DateFormat.MMM().format(DateTime.now()).toString();
+  void setSelectYear(String year) {
+    setState(() {
+      selectYear = year;
+    });
+  }
+
+  void setselectMonth(String month) {
+    setState(() {
+      selectMonth = month;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
+    final formKey = GlobalKey<FormState>();
     return SizedBox(
       // height: 50,
       child: ElevatedButton(
@@ -56,68 +62,87 @@ class _DOwnloadDetailsState extends State<DOwnloadDetails> {
                   return Center(
                       child: SizedBox(
                           height: ht * 0.5,
-                          child: AlertDialog(
-                              insetPadding: EdgeInsets.fromLTRB(
-                                0,
-                                0,
-                                0,
-                                ht * 0.1,
-                              ),
-                              title: Center(
-                                  child: Text(
-                                "Download month Statement",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              )),
-                              content: Column(
-                                children: [
-                                  years(),
-                                  months(),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                          child: SingleChildScrollView(
+                            clipBehavior: Clip.none,
+                            child: AlertDialog(
+                                insetPadding: EdgeInsets.fromLTRB(
+                                  0,
+                                  0,
+                                  0,
+                                  ht * 0.1,
+                                ),
+                                title: Center(
+                                    child: Text(
+                                  "Download Statement",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                )),
+                                content: Form(
+                                  key: formKey,
+                                  child: Column(
                                     children: [
-                                      ElevatedButton(
-                                          style: buttonDecoration,
-                                          onPressed: () async {
-                                            await jsonToExcel(
-                                                list: widget.data,
-                                                year: selectYear,
-                                                month: selectMonth);
-
-                                            Navigator.pop(context);
-
-                                            showToast(
-                                                context: context,
-                                                msg:
-                                                    "Excel sheet for $selectMonth $selectYear Saved to storage");
-                                          },
-                                          child: Text('Download details')),
-                                      ElevatedButton(
-                                          style: buttonDecoration,
-                                          onPressed: () {
-                                            shareFile(
-                                                list: widget.data,
-                                                month: selectMonth,
-                                                year: selectYear);
-                                          },
-                                          child: Text("Share"))
+                                      Year(
+                                        year: selectYear,
+                                        setVal: setSelectYear,
+                                      ),
+                                      Month(
+                                        month: selectMonth,
+                                        setVal: setselectMonth,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ElevatedButton(
+                                              style: buttonDecoration,
+                                              onPressed: () async {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  await jsonToExcel(
+                                                      list: widget.data,
+                                                      year: selectYear,
+                                                      month: selectMonth);
+                                                  Navigator.pop(context);
+                                                  showToast(
+                                                      context: context,
+                                                      msg:
+                                                          "Excel sheet for $selectMonth $selectYear Saved to storage");
+                                                }
+                                              },
+                                              child: Text('Download details')),
+                                          ElevatedButton(
+                                              style: buttonDecoration,
+                                              onPressed: () {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  shareFile(
+                                                      list: widget.data,
+                                                      month: selectMonth,
+                                                      year: selectYear);
+                                                }
+                                              },
+                                              child: const Text("Share"))
+                                        ],
+                                      )
                                     ],
-                                  )
-                                ],
-                              ))));
+                                  ),
+                                )),
+                          )));
                 });
           },
-          child: Text('Select month-year to download details or share ')),
+          child: const Icon(Icons.description)),
     );
   }
 }
 
-class years extends StatefulWidget {
+class Year extends StatefulWidget {
+  final Function(String) setVal;
+  final String year;
+  Year({required this.setVal, required this.year});
   @override
-  State<years> createState() => _yearsState();
+  State<Year> createState() => _YearState();
 }
 
-class _yearsState extends State<years> {
+class _YearState extends State<Year> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -135,22 +160,32 @@ class _yearsState extends State<years> {
           ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            child: DropdownButtonFormField<String>(
-              value: selectYear,
-              validator: (value) =>
-                  value!.isEmpty ? ' Must select a year' : null,
-              decoration: InputDecoration(border: InputBorder.none),
-              onChanged: (Value) {
-                setState(() {
-                  selectYear = Value!;
-                });
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              // validator: (value) => value.contains(other) ? ' Must enter year' : null,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Year is required';
+                }
+
+                int? year = int.tryParse(value);
+
+                if (year == null) {
+                  return 'Invalid year';
+                }
+
+                if (year < 1200) {
+                  return 'Year must be above 1200';
+                }
+
+                // Validation passed
+                return null;
               },
-              items: yearList.map<DropdownMenuItem<String>>((value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+              decoration:
+                  InputDecoration(hintText: "Year", border: InputBorder.none),
+              onChanged: (val) {
+                widget.setVal(val);
+              },
             ),
           ),
         ),
@@ -160,12 +195,15 @@ class _yearsState extends State<years> {
   }
 }
 
-class months extends StatefulWidget {
+class Month extends StatefulWidget {
+  final Function(String) setVal;
+  final String month;
+  Month({required this.setVal, required this.month});
   @override
-  State<months> createState() => _monthsState();
+  State<Month> createState() => _MonthState();
 }
 
-class _monthsState extends State<months> {
+class _MonthState extends State<Month> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -184,14 +222,12 @@ class _monthsState extends State<months> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
-              value: selectMonth,
+              value: widget.month,
               validator: (value) =>
                   value!.isEmpty ? ' Must select a month' : null,
               decoration: InputDecoration(border: InputBorder.none),
-              onChanged: (Value) {
-                setState(() {
-                  selectMonth = Value!;
-                });
+              onChanged: (val) {
+                widget.setVal(val!);
               },
               items: monthList.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(

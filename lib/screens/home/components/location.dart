@@ -26,7 +26,9 @@ class _LocationState extends State<Location> {
             for (var loc in locationList)
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    wt * 0.01, ht * 0.01, wt * 0.01, ht * 0.01),
+                    wt * 0.05, ht * 0.01, wt * 0.05, ht * 0.01),
+                // padding: EdgeInsets.fromLTRB(
+                //     wt * 0.01, ht * 0.01, wt * 0.01, ht * 0.01),
                 child: InkWell(
                   onTap: () {
                     widget.onLocationChanged(loc);
@@ -43,7 +45,7 @@ class _LocationState extends State<Location> {
 
                     // height: ht * 0.05,
                     // width: wt * 0.185,
-                    // width: wt * 0.25,
+                    width: wt * 0.3,
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(
                           wt * 0.025, ht * 0.01, wt * 0.025, ht * 0.01),

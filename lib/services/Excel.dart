@@ -7,7 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 Future<File> jsonToExcel(
     {required List list, required String year, required String month}) async {
-  Map<String, dynamic> jsonData;
+  var jsonData;
   var excel = Excel.createExcel();
   var sheet = excel[month];
 
@@ -38,10 +38,7 @@ Future<File> jsonToExcel(
 
   if (await file.exists()) {
     await file.open();
-    print(directory!.path);
-  } else {
-    print('file created');
-  }
+  } else {}
   file.writeAsBytesSync(excel.encode() as List<int>);
 
   return file;
@@ -57,7 +54,6 @@ void shareFile({
 
   var file = File(filePath);
   if (!await file.exists()) {
-    print("creating file");
     await jsonToExcel(list: list, year: year, month: month);
   }
   try {

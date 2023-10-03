@@ -106,7 +106,7 @@ class _ItemInputsState extends State<ItemInputs> {
   Widget build(BuildContext context) {
     List allItems = Provider.of<UserInfoProvider>(context).items;
     double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.width;
+    // double ht = MediaQuery.of(context).size.width;
     return Form(
         key: _formKey,
         child: Column(

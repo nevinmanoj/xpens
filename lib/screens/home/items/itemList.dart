@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/settings/items/deleteItem.dart';
+import 'package:xpens/screens/home/items/deleteItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 class ItemList extends StatefulWidget {
@@ -23,7 +23,7 @@ class _ItemListState extends State<ItemList> {
       // margin: EdgeInsets.fromLTRB(wt * 0.1, 0, wt * 0.1, 0),
       padding: EdgeInsets.fromLTRB(0, ht * 0.1, 0, 0),
       child: ListView.builder(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: userInfo.items.length,
           itemBuilder: (BuildContext context, int i) {
             return Padding(
@@ -32,7 +32,7 @@ class _ItemListState extends State<ItemList> {
                   padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           blurRadius: 1,
                           color: Colors.grey,
