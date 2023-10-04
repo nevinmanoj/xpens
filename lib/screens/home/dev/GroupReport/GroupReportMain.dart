@@ -46,7 +46,6 @@ class _GroupReportMainState extends State<GroupReportMain> {
             ),
             ExpenseAccordion(
               list: list,
-              group: group,
             ),
           ],
         ),

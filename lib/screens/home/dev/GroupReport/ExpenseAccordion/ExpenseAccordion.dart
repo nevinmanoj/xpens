@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'ExpenseItem.dart';
+
+import '../../../listx/listStream/ListItem.dart';
 
 class ExpenseAccordion extends StatefulWidget {
-  final String group;
   final List list;
-  const ExpenseAccordion({required this.group, required this.list});
+  const ExpenseAccordion({required this.list});
   @override
   State<ExpenseAccordion> createState() => _ExpenseAccordionState();
 }
@@ -15,11 +15,28 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
   bool isExpanded = false;
 
   @override
+  @override
   Widget build(BuildContext context) {
+    // print(groupedList);
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
+    Map groupedList = {};
+    for (var item in widget.list) {
+      if (groupedList[DateFormat.yMMMd()
+              .format(DateTime.parse(item['date']))
+              .toString()] ==
+          null) {
+        groupedList[DateFormat.yMMMd()
+            .format(DateTime.parse(item['date']))
+            .toString()] = [item];
+      } else {
+        groupedList[DateFormat.yMMMd()
+                .format(DateTime.parse(item['date']))
+                .toString()]
+            .add(item);
+      }
+    }
 
-    String curDate = "";
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
@@ -58,19 +75,33 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
                   body: SizedBox(
                     height: ht * 0.5,
                     child: ListView.builder(
-                      itemCount: widget.list.length,
+                      itemCount: groupedList.keys.length,
                       itemBuilder: (context, i) {
-                        bool dispDate = false;
+                        // print(i);
+                        // return null;
                         String iDate = DateFormat.yMMMd()
                             .format(DateTime.parse(widget.list[i]['date']))
                             .toString();
-                        if (iDate != curDate) {
-                          curDate = iDate;
-                          dispDate = true;
-                        }
-
-                        return item(widget.list[i].id, widget.list[i], context,
-                            dispDate);
+                        return Column(
+                          children: [
+                            Container(
+                              width: wt,
+                              color: const Color.fromARGB(255, 232, 232, 232),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+                                child: Text(
+                                  iDate,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ),
+                            for (var item in groupedList[iDate])
+                              itemWidget(
+                                  context: context, iDate: iDate, item: item)
+                          ],
+                        );
                       },
                     ),
                   ),

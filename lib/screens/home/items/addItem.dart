@@ -37,7 +37,7 @@ class _NewItemsAddwidgetState extends State<NewItemsAddwidget> {
         Column(
           children: [
             Container(
-              height: ht * 0.05,
+              height: ht * 0.055,
               color: primaryAppColor,
             ),
             Container(),
@@ -104,7 +104,7 @@ class _NewItemsAddwidgetState extends State<NewItemsAddwidget> {
                           : null,
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                      hintText: 'Item Name',
+                      hintText: 'Enter item name to add',
                     ),
                   ),
                 ),

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/listx/listStream/listStream.dart';
 import 'package:xpens/screens/home/listx/listxfilter/listFilter.dart';
 
+import 'search/listSearchMain.dart';
+
 class listx extends StatefulWidget {
   const listx({super.key});
 
@@ -27,7 +29,10 @@ class _listxState extends State<listx> {
       children: [
         StreamBodyState(
           filter: filter,
-          onFilterChange: onFilterChange,
+        ),
+        ListSearchMain(
+          filter: filter,
+          onStreamChange: onFilterChange,
         ),
         FilterWindow(
           onFilterChange: onFilterChange,

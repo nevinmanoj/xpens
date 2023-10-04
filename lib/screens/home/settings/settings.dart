@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(
+                CupertinoPageRoute(
                     builder: (context) => Profile(
                           name: userInfo.userName,
                           phoneNumber: userInfo.phone,
