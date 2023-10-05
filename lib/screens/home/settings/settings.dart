@@ -57,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
         "onTap": () => AuthSerivice().signOut(),
       },
     ];
-    if (userInfo.userName == "Dev") {
+    if (userInfo.isDev) {
       items.add({
         "icon": Icons.logo_dev,
         "title": "Dev Dash",
@@ -74,7 +74,7 @@ class SettingsScreen extends StatelessWidget {
               color: primaryAppColor,
               width: wt,
               height: ht * 0.15,
-              child: SettingsHeader(),
+              child: const SettingsHeader(),
             ),
             GridView(
               physics: NeverScrollableScrollPhysics(),

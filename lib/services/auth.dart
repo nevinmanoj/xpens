@@ -54,6 +54,7 @@ class AuthSerivice {
 
       DatabaseService(uid: user!.uid).updateUserInfo("Name", name);
       DatabaseService(uid: user.uid).updateUserInfo("Email", email);
+      DatabaseService(uid: user.uid).updateUserInfo("isDev", false);
       DatabaseService(uid: user.uid).updateUserInfo("PhoneNumber", "");
 
       DatabaseService(uid: user.uid).createItemsArray();

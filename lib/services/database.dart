@@ -9,7 +9,7 @@ import '../shared/datamodals.dart';
 class DatabaseService {
   final String uid;
   DatabaseService({required this.uid});
-  Future updateUserInfo(String label, String data) async {
+  Future updateUserInfo(String label, var data) async {
     return await FirebaseFirestore.instance.collection(db).doc(uid).set({
       label: data,
     }, SetOptions(merge: true));

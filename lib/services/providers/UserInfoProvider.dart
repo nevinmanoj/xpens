@@ -12,7 +12,9 @@ class UserInfoProvider with ChangeNotifier {
   String _userName = "";
   String _phno = "";
   List _docs = [];
+  bool _dev = false;
 
+  bool get isDev => _dev;
   List get docs => _docs;
   List get items => _myArray;
   String get userName => _userName;
@@ -37,6 +39,7 @@ class UserInfoProvider with ChangeNotifier {
           _myArray = List.from(snapshot.data()!['items']);
           _userName = snapshot.data()!['Name'];
           _phno = snapshot.data()!['PhoneNumber'];
+          _dev = snapshot.data()!['isDev'];
         } else {
           _userName = "";
           _myArray = ["Other"];
