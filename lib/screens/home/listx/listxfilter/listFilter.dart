@@ -137,8 +137,8 @@ class _FilterWindowState extends State<FilterWindow> {
       child: InkWell(
         onTap: toggleFilter,
         child: Container(
-          height: 60,
-          width: 60,
+          height: 56,
+          width: 56,
           decoration:
               BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
           child: Icon(

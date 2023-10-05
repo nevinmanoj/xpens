@@ -48,6 +48,7 @@ dependencies:
   skeletons: ^0.0.3
   flutter_slidable: ^3.0.0
   share_plus: ^7.0.2
+  icons_plus: ^4.0.0
 
 
   

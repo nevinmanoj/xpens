@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/components/calendar.dart';
-import 'package:xpens/screens/home/components/cost.dart';
-import 'package:xpens/screens/home/components/itemName.dart';
-import 'package:xpens/screens/home/components/location.dart';
-import 'package:xpens/screens/home/components/remarks.dart';
-import 'package:xpens/screens/home/components/time.dart';
+import 'package:xpens/screens/home/components/ItemInput/calendar.dart';
+import 'package:xpens/screens/home/components/ItemInput/cost.dart';
+import 'package:xpens/screens/home/components/ItemInput/itemName.dart';
+import 'package:xpens/screens/home/components/ItemInput/location.dart';
+import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
+import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';

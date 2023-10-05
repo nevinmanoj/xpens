@@ -108,7 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: primaryAppColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            // icon: Icon(Icons.settings),
+            icon: Icon(Icons.person_4),
             label: navOptions[3],
             backgroundColor: primaryAppColor,
           ),
