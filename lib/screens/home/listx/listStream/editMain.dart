@@ -24,6 +24,7 @@ class _EditxDetailsState extends State<EditxDetails> {
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
+    // double ht
     void editItem(I) async {
       bool res =
           await DatabaseService(uid: user!.uid).editItem(I: I, id: widget.id);
@@ -34,7 +35,7 @@ class _EditxDetailsState extends State<EditxDetails> {
 
     return Center(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         appBar: AppBar(
             centerTitle: true,
             title: Text(
@@ -42,7 +43,7 @@ class _EditxDetailsState extends State<EditxDetails> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             backgroundColor: primaryAppColor),
-        body: Center(
+        body: SingleChildScrollView(
           child: ItemInputs(
               group: widget.item['group'],
               itemName: widget.item['itemName'],

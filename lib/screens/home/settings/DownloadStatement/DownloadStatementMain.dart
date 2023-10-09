@@ -83,7 +83,7 @@ class _DownloadStatementMainState extends State<DownloadStatementMain> {
                     },
                     child: const Text("Share"))
               ],
-            )
+            ),
           ],
         ),
       )),

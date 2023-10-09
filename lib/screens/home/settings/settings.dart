@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
-import '../dev/devDash.dart';
+import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
 import 'settingsHeader.dart';

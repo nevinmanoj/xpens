@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../shared/constants.dart';
+import '../../../../../shared/constants.dart';
+import 'groupAuto.dart';
 
 class ItemGroup extends StatefulWidget {
   ItemGroup({
@@ -67,32 +68,38 @@ class _ItemGroupState extends State<ItemGroup> {
         ),
         const SizedBox(height: 10),
         addToGroup
-            ? Container(
-                height: 50,
-                width: 300,
-                decoration: addInputDecoration,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  child: TextFormField(
-                    initialValue:
-                        widget.itemGroup == "none" ? "" : widget.itemGroup,
-                    onChanged: (value) {
-                      print("hcnaging grp val");
-                      widget.onGroupChange(value);
-                    },
-                    validator: (value) => value!.isEmpty
-                        ? ' Group Tag Name cannot be empty'
-                        : null,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                      hintText: 'Group Tag Name',
-                    ),
-                  ),
-                ),
+            ? GroupAuto(
+                onGroupChange: widget.onGroupChange,
+                itemGroup: widget.itemGroup,
               )
             : Container(),
+        // addToGroup
+        //     ? Container(
+        //         height: 50,
+        //         width: 300,
+        //         decoration: addInputDecoration,
+        //         child: Padding(
+        //           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+        //           child: TextFormField(
+        //             initialValue:
+        //                 widget.itemGroup == "none" ? "" : widget.itemGroup,
+        //             onChanged: (value) {
+        //               print("hcnaging grp val");
+        //               widget.onGroupChange(value);
+        //             },
+        //             validator: (value) => value!.isEmpty
+        //                 ? ' Group Tag Name cannot be empty'
+        //                 : null,
+        //             keyboardType: TextInputType.name,
+        //             decoration: InputDecoration(
+        //               border: InputBorder.none,
+        //               hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
+        //               hintText: 'Group Tag Name',
+        //             ),
+        //           ),
+        //         ),
+        //       )
+        //     : Container(),
       ],
     );
   }

@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:xpens/screens/home/dev/injectData.dart';
-import 'package:xpens/screens/home/dev/devServices.dart';
+import 'package:xpens/screens/home/settings/dev/injectData.dart';
+import 'package:xpens/screens/home/settings/dev/devServices.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'test.dart';

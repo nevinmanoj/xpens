@@ -10,7 +10,7 @@ import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
-import 'group.dart';
+import 'groupName/group.dart';
 
 class ItemInputs extends StatefulWidget {
   final String itemName;
@@ -69,6 +69,7 @@ class _ItemInputsState extends State<ItemInputs> {
     setState(() {
       group = newgrp;
     });
+    print("changed group to: $newgrp");
   }
 
   void updateItemName(String newName) {
