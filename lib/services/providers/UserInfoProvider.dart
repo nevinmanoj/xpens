@@ -20,17 +20,17 @@ class UserInfoProvider with ChangeNotifier {
   String get userName => _userName;
   String get phone => _phno;
   void setUser(User? usr) {
-    print("switching user to ${usr!.email} from ${user!.email}");
+    // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
     _init();
   }
 
   void _init() {
-    fetchUserInfo();
-    fetchExpenses();
+    _fetchUserInfo();
+    _fetchExpenses();
   }
 
-  Future<void> fetchUserInfo() async {
+  Future<void> _fetchUserInfo() async {
     if (user != null) {
       final docRef = FirebaseFirestore.instance.collection(db).doc(user!.uid);
 
@@ -50,7 +50,7 @@ class UserInfoProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchExpenses() async {
+  Future<void> _fetchExpenses() async {
     if (user != null) {
       final colRef = FirebaseFirestore.instance
           .collection("$db/${user!.uid}/list")

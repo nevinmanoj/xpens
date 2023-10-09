@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
-import '../../../../../shared/constants.dart';
 
 class GroupInput extends StatefulWidget {
   final Function(String) setGroup;

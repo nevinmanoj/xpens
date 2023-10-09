@@ -29,12 +29,6 @@ class _DevDashState extends State<DevDash> {
       body: Center(
           child: Column(children: [
         InjectTestData(),
-        ElevatedButton(
-            style: buttonDecoration,
-            onPressed: () async {
-              await DevService().switchAc();
-            },
-            child: Text("Switch to dev")),
         Test(),
         ElevatedButton(
             style: buttonDecoration,

@@ -6,17 +6,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:xpens/services/auth.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import '../../../../shared/datamodals.dart';
 
 class DevService {
-  Future switchAc() async {
-    await AuthSerivice().loginWithEmail("dev@gmail.com", "password");
-  }
-
   Future<void> modify() async {
     print("check codebase");
     // addFieldToDb();

@@ -21,12 +21,11 @@ class AddFromCal extends StatefulWidget {
 class _AddFromCalState extends State<AddFromCal> {
   @override
   Widget build(BuildContext context) {
-    print(widget.date);
     final user = Provider.of<User?>(context);
     dynamic addItem(AddItem item) async {
       bool res = await DatabaseService(uid: user!.uid).addItem(item);
       String msg = res ? "successfully" : "failed";
-
+      Navigator.pop(context);
       showToast(context: context, msg: "Expense added $msg");
     }
 
