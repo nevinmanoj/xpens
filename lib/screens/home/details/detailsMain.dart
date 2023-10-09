@@ -52,36 +52,26 @@ class _DetailsState extends State<Details> {
         return item['location'] == filter;
       }).toList();
     }
-    Map<DateTime, double> events = {};
-    Map<DateTime, Map<String, dynamic>> testMap = {};
+    // Map<DateTime, double> events = {};
+    Map<DateTime, double> testMap = {};
 
-    for (var item in list) {
-      var date = DateTime.parse(item['date']);
-      date = DateTime(date.year, date.month, date.day);
-      if (events[date] == null) {
-        events[date] = 0;
-      }
-      events[date] = events[date]! + item['cost'];
-    }
-    int i = 0;
-    List dayx = [];
-    List keys = [];
+    // for (var item in list) {
+    //   var date = DateTime.parse(item['date']);
+    //   date = DateTime(date.year, date.month, date.day);
+    //   if (events[date] == null) {
+    //     events[date] = 0;
+    //   }
+    //   events[date] = events[date]! + item['cost'];
+    // }
+
     for (var item in list) {
       var date = DateTime.parse(item['date']);
       date = DateTime(date.year, date.month, date.day);
       if (testMap[date] == null) {
-        testMap[date] = {'cost': 0, 'listData': [], 'listKeys': []};
+        testMap[date] = 0;
       }
 
-      testMap[date]!['cost'] = testMap[date]!['cost']! + item['cost'];
-      dayx = testMap[date]!['listData'];
-      dayx.add(item);
-      testMap[date]!['listData'] = dayx;
-      keys = testMap[date]!['listKeys'];
-      keys.add(list[i].id);
-      testMap[date]!['listKeys'] = keys;
-
-      i++;
+      testMap[date] = testMap[date]! + item['cost'];
     }
 
     return Stack(

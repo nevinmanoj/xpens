@@ -1,7 +1,8 @@
+// ignore: file_names
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/details/calendar/addFromCalendar.dart';
 import 'package:xpens/screens/home/listx/listStream/deleteExpense.dart';
@@ -12,15 +13,8 @@ import '../../../../services/providers/UserInfoProvider.dart';
 
 class CalendarExp extends StatefulWidget {
   final DateTime date;
-  // final List data;
-  // final List keys;
-  final double cost;
-  const CalendarExp(
-      {super.key,
-      // required this.data,
-      required this.date,
-      // required this.keys,
-      required this.cost});
+
+  const CalendarExp({super.key, required this.date});
   @override
   State<CalendarExp> createState() => _CalendarExpState();
 }
@@ -44,6 +38,11 @@ class _CalendarExpState extends State<CalendarExp> {
           return widget.date ==
               DateTime(itemDate.year, itemDate.month, itemDate.day);
         }).toList();
+        double cost = 0;
+        for (var item in list) {
+          cost += item['cost'];
+        }
+
         List<Widget> items = [];
 
         for (int i = 0; i < list.length; i++) {
@@ -52,7 +51,7 @@ class _CalendarExpState extends State<CalendarExp> {
           );
         }
         if (items.isNotEmpty) {
-          items.add(buildLastRow(widget.cost));
+          items.add(buildLastRow(cost));
         }
         return AlertDialog(
           // actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
