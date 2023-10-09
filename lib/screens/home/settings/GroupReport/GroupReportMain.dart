@@ -4,7 +4,7 @@ import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 
 import 'ExpenseAccordion/ExpenseAccordion.dart';
-import 'GroupInput.dart';
+import 'GroupInput/GroupInput.dart';
 import 'GroupSummary.dart';
 
 class GroupReportMain extends StatefulWidget {
