@@ -10,7 +10,7 @@ import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
-import 'groupName/group.dart';
+import 'group.dart';
 
 class ItemInputs extends StatefulWidget {
   final String itemName;
@@ -108,136 +108,143 @@ class _ItemInputsState extends State<ItemInputs> {
     List allItems = Provider.of<UserInfoProvider>(context).items;
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
-    return Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Location(
-              location: location,
-              onLocationChanged: updateLocation,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ItemName(
-              onNameChange: updateItemName,
-              itemName: itemName,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ItemRemark(
-              // onRemarkChanged: updateRemarks,
-              onctrlchange: updateRemarkctrl,
-              remarks: remarksController.text,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            ItemQuantity(
-              // onCostChanged: updateCost,
-              costs: costController.text,
-              onctrlchange: updatecostctrl,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            // Date(),
-            const SizedBox(
-              height: 15,
-            ),
-
-            SizedBox(
-              // height: ht * 0.13,
-              width: wt * 0.8,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Calendar(
-                    dateToDisplay: date,
-                    onDateChanged: (DateTime newId) {
-                      updateDate(newId);
-                    },
-                  ),
-                  Clock(
-                    selectTime: time,
-                    onTimeChanged: (TimeOfDay newId) {
-                      updateTIme(newId);
-                    },
-                  ),
-                ],
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      enableFeedback: false,
+      onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+      child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Location(
+                location: location,
+                onLocationChanged: updateLocation,
               ),
-            ),
-            ItemGroup(
-              itemGroup: group,
-              onGroupChange: updateGroup,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
+              const SizedBox(
+                height: 15,
+              ),
+              ItemName(
+                onNameChange: updateItemName,
+                itemName: itemName,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ItemRemark(
+                // onRemarkChanged: updateRemarks,
+                onctrlchange: updateRemarkctrl,
+                remarks: remarksController.text,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              ItemQuantity(
+                // onCostChanged: updateCost,
+                costs: costController.text,
+                onctrlchange: updatecostctrl,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              // Date(),
+              const SizedBox(
+                height: 15,
+              ),
 
-            SizedBox(
-              width: 150,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: loading
-                    ? null
-                    : () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            loading = true;
-                          });
-
-                          // cost = double.parse(costS);
-                          double cost = double.parse(costController.text);
-
-                          if (itemName == "Other") {}
-                          AddItem I = AddItem(
-                              group: group,
-                              isOther: (!allItems.contains(itemName.trim())) ||
-                                  itemName == "Other",
-                              location: location,
-                              remarks: remarksController.text.trim(),
-                              cost: cost,
-                              date: date,
-                              itemName: itemName.trim(),
-                              time: time);
-
-                          widget.buttonfunc(I);
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          costController.clear();
-                          remarksController.clear();
-                          // updateItemName(allItems[0]);
-                          // updateDate(DateTime.now());
-                          // updateTIme(TimeOfDay.now());
-                          // updateLocation(locationList[0]);
-                          // updateGroup("none");
-                          setState(() {
-                            itemName = allItems[0];
-                            date = DateTime.now();
-                            time = TimeOfDay.now();
-                            location = locationList[0];
-                            group = "none";
-                            loading = false;
-                          });
-                        }
+              SizedBox(
+                // height: ht * 0.13,
+                width: wt * 0.8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Calendar(
+                      dateToDisplay: date,
+                      onDateChanged: (DateTime newId) {
+                        updateDate(newId);
                       },
-                style: buttonDecoration,
-                child: Center(
-                    child: loading
-                        ? const CircularProgressIndicator(
-                            color: secondaryAppColor,
-                          )
-                        : Text(widget.buttonLabel,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16))),
+                    ),
+                    Clock(
+                      selectTime: time,
+                      onTimeChanged: (TimeOfDay newId) {
+                        updateTIme(newId);
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ));
+              ItemGroup(
+                itemGroup: group,
+                onGroupChange: updateGroup,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+
+              SizedBox(
+                width: 150,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: loading
+                      ? null
+                      : () async {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              loading = true;
+                            });
+
+                            // cost = double.parse(costS);
+                            double cost = double.parse(costController.text);
+
+                            if (itemName == "Other") {}
+                            AddItem I = AddItem(
+                                group: group,
+                                isOther:
+                                    (!allItems.contains(itemName.trim())) ||
+                                        itemName == "Other",
+                                location: location,
+                                remarks: remarksController.text.trim(),
+                                cost: cost,
+                                date: date,
+                                itemName: itemName.trim(),
+                                time: time);
+
+                            widget.buttonfunc(I);
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            costController.clear();
+                            remarksController.clear();
+                            // updateItemName(allItems[0]);
+                            // updateDate(DateTime.now());
+                            // updateTIme(TimeOfDay.now());
+                            // updateLocation(locationList[0]);
+                            // updateGroup("none");
+                            setState(() {
+                              itemName = allItems[0];
+                              date = DateTime.now();
+                              time = TimeOfDay.now();
+                              location = locationList[0];
+                              group = "none";
+                              loading = false;
+                            });
+                          }
+                        },
+                  style: buttonDecoration,
+                  child: Center(
+                      child: loading
+                          ? const CircularProgressIndicator(
+                              color: secondaryAppColor,
+                            )
+                          : Text(widget.buttonLabel,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16))),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }

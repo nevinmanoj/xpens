@@ -31,19 +31,21 @@ class _AddFromCalState extends State<AddFromCal> {
 
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(backgroundColor: primaryAppColor),
       body: Center(
-        child: ItemInputs(
-            group: "none",
-            itemName: allItems[0],
-            costS: "",
-            date: widget.date,
-            location: locationList[0],
-            remarks: "",
-            time: TimeOfDay.now(),
-            buttonLabel: "Add",
-            buttonfunc: addItem),
+        child: SingleChildScrollView(
+          child: ItemInputs(
+              group: "none",
+              itemName: allItems[0],
+              costS: "",
+              date: widget.date,
+              location: locationList[0],
+              remarks: "",
+              time: TimeOfDay.now(),
+              buttonLabel: "Add",
+              buttonfunc: addItem),
+        ),
       ),
     );
   }
