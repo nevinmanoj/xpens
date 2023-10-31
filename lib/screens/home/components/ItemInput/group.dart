@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../shared/constants.dart';
-import 'groupAuto.dart';
+import '../../../../shared/constants.dart';
+import 'inputAutofill.dart';
 
 class ItemGroup extends StatefulWidget {
   ItemGroup({
@@ -68,9 +68,10 @@ class _ItemGroupState extends State<ItemGroup> {
         ),
         const SizedBox(height: 10),
         addToGroup
-            ? GroupAuto(
-                onGroupChange: widget.onGroupChange,
-                itemGroup: widget.itemGroup,
+            ? InputAutoFill(
+                onValueChange: widget.onGroupChange,
+                value: widget.itemGroup,
+                tag: "group",
               )
             : Container(),
         // addToGroup

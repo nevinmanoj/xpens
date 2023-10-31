@@ -43,19 +43,21 @@ class _EditxDetailsState extends State<EditxDetails> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             backgroundColor: primaryAppColor),
-        body: SingleChildScrollView(
-          child: ItemInputs(
-              group: widget.item['group'],
-              itemName: widget.item['itemName'],
-              costS: widget.item['cost'].toString(),
-              date: DateTime.parse(widget.item['date']),
-              location: widget.item['location'],
-              remarks: widget.item['remarks'],
-              time: TimeOfDay(
-                  hour: int.parse(widget.item['time'].split(":")[0]),
-                  minute: int.parse(widget.item['time'].split(":")[1])),
-              buttonLabel: "Update",
-              buttonfunc: editItem),
+        body: Center(
+          child: SingleChildScrollView(
+            child: ItemInputs(
+                group: widget.item['group'],
+                itemName: widget.item['itemName'],
+                costS: widget.item['cost'].toString(),
+                date: DateTime.parse(widget.item['date']),
+                location: widget.item['location'],
+                remarks: widget.item['remarks'],
+                time: TimeOfDay(
+                    hour: int.parse(widget.item['time'].split(":")[0]),
+                    minute: int.parse(widget.item['time'].split(":")[1])),
+                buttonLabel: "Update",
+                buttonfunc: editItem),
+          ),
         ),
       ),
     );

@@ -3,23 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../services/providers/UserInfoProvider.dart';
-import '../../../../../shared/constants.dart';
+import '../../../../services/providers/UserInfoProvider.dart';
+import '../../../../shared/constants.dart';
 
-class GroupAuto extends StatefulWidget {
-  const GroupAuto({
-    super.key,
-    required this.itemGroup,
-    required this.onGroupChange,
-  });
-  final Function(String) onGroupChange;
-  final String itemGroup;
+class InputAutoFill extends StatefulWidget {
+  const InputAutoFill(
+      {super.key,
+      required this.value,
+      required this.onValueChange,
+      required this.tag});
+  final Function(String) onValueChange;
+  final String value;
+  final String tag;
 
   @override
-  State<GroupAuto> createState() => _GroupAutoState();
+  State<InputAutoFill> createState() => _InputAutoFillState();
 }
 
-class _GroupAutoState extends State<GroupAuto> {
+class _InputAutoFillState extends State<InputAutoFill> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -27,12 +28,11 @@ class _GroupAutoState extends State<GroupAuto> {
     final listData = Provider.of<UserInfoProvider>(context);
     List list = listData.docs;
 
-    Set<String> uniqueGroupNames =
-        {}; // Using a Set to automatically handle duplicates
+    Set<String> uniqueGroupNames = {};
 
     for (var item in list) {
-      if (item['group'] != "none") {
-        uniqueGroupNames.add(item['group']);
+      if (item[widget.tag] != "none") {
+        uniqueGroupNames.add(item[widget.tag]);
       }
     }
     List<String> kOptions = uniqueGroupNames.toList();
@@ -41,9 +41,9 @@ class _GroupAutoState extends State<GroupAuto> {
       padding: const EdgeInsets.all(20),
       child: Autocomplete<String>(
         initialValue: TextEditingValue(
-            text: widget.itemGroup,
+            text: widget.value,
             selection: TextSelection.fromPosition(
-              TextPosition(offset: widget.itemGroup.length),
+              TextPosition(offset: widget.value.length),
             )),
         optionsBuilder: (TextEditingValue textEditingValue) {
           return kOptions
@@ -63,14 +63,14 @@ class _GroupAutoState extends State<GroupAuto> {
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: TextFormField(
               validator: (value) =>
-                  value!.isEmpty ? ' Group Tag Name cannot be empty' : null,
+                  value!.isEmpty ? ' ${widget.tag} cannot be empty' : null,
               onChanged: (value) {
-                widget.onGroupChange(value);
+                widget.onValueChange(value);
               },
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                hintText: 'Group tag',
+                hintText: widget.tag,
               ),
               controller: fieldTextEditingController,
               focusNode: fieldFocusNode,
@@ -109,7 +109,7 @@ class _GroupAutoState extends State<GroupAuto> {
                     return InkWell(
                       onTap: () {
                         onSelected(option);
-                        widget.onGroupChange(option);
+                        widget.onValueChange(option);
                       },
                       child: Container(
                         padding: const EdgeInsets.only(left: 10),
