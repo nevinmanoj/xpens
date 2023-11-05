@@ -3,7 +3,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Dart
+name: release
 
 on:
   push:
@@ -11,26 +11,44 @@ on:
   pull_request:
     branches: [ "prod" ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      # Set up Flutter.
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+      - run: flutter doctor -v
 
-      - name: Install dependencies
-        run: dart pub get
+      # Checkout the repository code and get packages.
+      - name: Checkout flutter_app code
+        uses: actions/checkout@v3
+      - run: flutter pub get
 
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
+      - name: Build APK
+        run: flutter build apk --split-per-abi --release
 
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
-      - name: Analyze project source
-        run: dart analyze
+      - name: Build APP BUNDLE
+        run: flutter build appbundle
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.10.0
+        with:
+          artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: release-apk
+          path: build/app/outputs/apk/

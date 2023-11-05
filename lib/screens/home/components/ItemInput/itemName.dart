@@ -19,7 +19,7 @@ class _ItemNameState extends State<ItemName> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.width;
+    // double ht = MediaQuery.of(context).size.width;
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Column(
       children: [
