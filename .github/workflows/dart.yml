@@ -59,7 +59,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Get version from pubspec.yaml
-        run: echo "VERSION=$(grep -oP 'version: \K(\d+\.\d+\.\d+)' pubspec.yaml)" >> $GITHUB_ENV
+        run: echo "VERSION=1.2.3"
 
       - name: Build APK
         run: flutter build apk --split-per-abi --release
