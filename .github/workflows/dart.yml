@@ -59,7 +59,8 @@ jobs:
       - run: flutter doctor -v
 
       - name: Get version from pubspec.yaml
-        run: echo "VERSION=1.2.3"
+        id: version
+        run: echo "::set-output name=VERSION::$(cat pubspec.yaml | jq -r .version)"
 
       - name: Build APK
         run: flutter build apk --split-per-abi --release
@@ -73,10 +74,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.VERSION }}  # Use the version extracted from pubspec.yaml
-          release_name: Release ${{ env.VERSION }}
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          release_name: Release ${{ steps.version.outputs.VERSION }}
           body: |
-            Release version ${{ env.VERSION }}
+            Release version ${{ steps.version.outputs.VERSION }}
           draft: false
           prerelease: false
 
@@ -94,4 +95,3 @@ jobs:
         with:
           name: release-aab
           path: build/app/outputs/bundle/release/app-release.aab
-
