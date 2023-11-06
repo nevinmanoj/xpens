@@ -23,32 +23,24 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v3
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.10.5' # Set your desired Flutter version
 
-      # Set up Flutter.
-      - uses: subosito/flutter-action@v1
-        with:
-          channel: "stable"
-      - run: flutter doctor -v
+    - name: Check out code
+      uses: actions/checkout@v2
 
-      # Checkout the repository code and get packages.
-      - name: Checkout flutter_app code
-        uses: actions/checkout@v3
-      - run: flutter pub get
+    - name: Get packages
+      run: flutter pub get
 
-      - name: Build APK
-        run: flutter build apk --split-per-abi --release
+    - name: Build APK
+      run: flutter build apk --release
 
-      - name: Build APP BUNDLE
-        run: flutter build appbundle
+    - name: Publish to GitHub Packages
+      run: |
+        echo "//registry.npmjs.org/:_authToken=${{secrets.GITHUB_TOKEN}}" >> .npmrc
+        flutter packages pub publish -f
 
-      - name: Create Release
-        uses: ncipollo/release-action@v1.10.0
-        with:
-          artifacts: "build/app/outputs/apk/release/*.apk, build/app/outputs/bundle/release/*.aab"
-
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
-        with:
-          name: release-apk
-          path: build/app/outputs/apk/
+    - name: Clean up
+      run: flutter clean
