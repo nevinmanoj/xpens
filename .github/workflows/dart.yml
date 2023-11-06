@@ -38,9 +38,10 @@ jobs:
       run: flutter build apk --release
 
     - name: Publish to GitHub Packages
-      run: |
-        echo "//registry.npmjs.org/:_authToken=${{secrets.GITHUB_TOKEN}}" >> .npmrc
-        flutter packages pub publish -f
+      uses: actions/upload-artifact@v1
+      with:
+        name: release-apk
+        path: build/app/outputs/apk/release/app-release.apk
 
     - name: Clean up
       run: flutter clean
