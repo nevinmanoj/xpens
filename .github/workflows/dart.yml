@@ -60,13 +60,10 @@ jobs:
 
       - name: Get version from pubspec.yaml
         id: version
-        run: echo "::set-output name=VERSION::$(cat pubspec.yaml | jq -r .version)"
+        run: echo "::set-output name=VERSION::$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)"
 
       - name: Build APK
-        run: flutter build apk --split-per-abi --release
-
-      - name: Build APP BUNDLE
-        run: flutter build appbundle
+        run: flutter build apk --release
 
       - name: Create Release
         id: create_release
@@ -75,9 +72,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: 1.0.0
-          release_name: Release 1.0.0
+          release_name: Release steps.version.outputs.VERSION 
           body: |
-            Release version 1.0.0
+            Release version steps.version.outputs.VERSION
           draft: false
           prerelease: false
 
@@ -86,12 +83,7 @@ jobs:
         with:
           name: release-apk
           path: |
-            build/app/outputs/apk/release/app-arm64-v8a-release.apk
-            build/app/outputs/apk/release/app-armeabi-v7a-release.apk
-            build/app/outputs/apk/release/app-x86_64-release.apk
+            build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk
+            build/app/outputs/flutter-apk/app-arm64-v8a-release.apk
+            build/app/outputs/flutter-apk/app-x86_64-release.apk
 
-      - name: Upload AAB Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: release-aab
-          path: build/app/outputs/bundle/release/app-release.aab
