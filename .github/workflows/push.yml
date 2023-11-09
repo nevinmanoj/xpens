@@ -1,0 +1,55 @@
+
+name: release
+
+on:
+  push:
+    branches: [ "release" ]
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          channel: "stable"
+          
+      - name: Read version information
+        id: read_version
+        run: |
+          echo "VERSION=$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)" >> $GITHUB_ENV
+
+        shell: bash
+
+      - run: flutter doctor -v
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: release ${{ env.VERSION }}
+          body: release version ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Upload APK to Release
+        id: upload_apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/apk/release/app-release.apk
+          asset_name: xpens${{ env.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
