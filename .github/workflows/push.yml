@@ -3,7 +3,7 @@ name: release
 
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "release" ]
 
 
 jobs:
