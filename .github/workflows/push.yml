@@ -3,7 +3,7 @@ name: release
 
 on:
   push:
-    branches: [ "release" ]
+    branches: [ "test" ]
 
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk
 
       - name: Create Release
         id: create_release
