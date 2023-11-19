@@ -1,34 +1,34 @@
 
-name: release
+# name: release
 
-on:
+# on:
 
-  pull_request:
-    branches: [ "release" ]
+#   pull_request:
+#     branches: [ "release" ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v2
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
-        with:
-          channel: "stable"
+#       - name: Set up Flutter
+#         uses: subosito/flutter-action@v1
+#         with:
+#           channel: "stable"
           
-      - name: Read version information
-        id: read_version
-        run: |
-          echo "VERSION=$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)" >> $GITHUB_ENV
+#       - name: Read version information
+#         id: read_version
+#         run: |
+#           echo "VERSION=$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)" >> $GITHUB_ENV
 
-        shell: bash
+#         shell: bash
 
-      - run: flutter doctor -v
+#       - run: flutter doctor -v
 
-      - name: Build APK
-        run: flutter build apk --release
+#       - name: Build APK
+#         run: flutter build apk --release
 
 
