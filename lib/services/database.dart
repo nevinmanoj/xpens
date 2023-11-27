@@ -15,7 +15,10 @@ class DatabaseService {
     }, SetOptions(merge: true));
   }
 
-  Future createItemsArray() async {
+  Future createRequiredArrays() async {
+    await FirebaseFirestore.instance.collection(db).doc(uid).set({
+      'cards': ["Other"],
+    }, SetOptions(merge: true));
     return await FirebaseFirestore.instance.collection(db).doc(uid).set({
       'items': [
         "Breakfast",
@@ -122,6 +125,41 @@ class DatabaseService {
         "time": formattedTime,
         "itemName": I.itemName,
         "location": I.location
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<bool> addPointSpent(AddPoint I) async {
+    String year = I.date.year.toString();
+    String day = I.date.day.toString();
+    String key = DateTime.now().toString();
+    String month = DateFormat.MMM().format(I.date).toString();
+    I.date = DateTime(
+        I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
+    String formattedTime = DateFormat('HH:mm')
+        .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
+    final List<String> tags =
+        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
+    try {
+      await FirebaseFirestore.instance
+          .collection('$db/$uid/points')
+          .doc(key)
+          .set({
+        "cardName": I.card,
+        "tags": tags,
+        "month": month,
+        "year": year,
+        "day": day,
+        "points": I.point,
+        "date": I.date.toString(),
+        "time": formattedTime,
+        "itemName":
+            I.itemName.substring(0, 1).toUpperCase() + I.itemName.substring(1)
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());

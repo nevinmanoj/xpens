@@ -10,11 +10,13 @@ class InputAutoFill extends StatefulWidget {
   const InputAutoFill(
       {super.key,
       required this.value,
+      required this.docs,
       required this.onValueChange,
       required this.tag});
   final Function(String) onValueChange;
   final String value;
   final String tag;
+  final List docs;
 
   @override
   State<InputAutoFill> createState() => _InputAutoFillState();
@@ -24,9 +26,8 @@ class _InputAutoFillState extends State<InputAutoFill> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
-    // double ht = MediaQuery.of(context).size.height;
-    final listData = Provider.of<UserInfoProvider>(context);
-    List list = listData.docs;
+
+    List list = widget.docs;
 
     Set<String> uniqueGroupNames = {};
 

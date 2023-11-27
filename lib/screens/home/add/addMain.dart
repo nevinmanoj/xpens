@@ -11,6 +11,8 @@ import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
+import '../components/PointInput/PointInputMain.dart';
+
 class AddX extends StatefulWidget {
   @override
   State<AddX> createState() => _AddXState();
@@ -19,11 +21,21 @@ class AddX extends StatefulWidget {
 class _AddXState extends State<AddX> {
   @override
   Widget build(BuildContext context) {
-    List allItems = Provider.of<UserInfoProvider>(context).items;
+    var userInfo = Provider.of<UserInfoProvider>(context);
+    List allItems = userInfo.items;
+    List cards = userInfo.cards;
+    String option = userInfo.option;
     double ht = MediaQuery.of(context).size.height;
     final user = Provider.of<User?>(context);
     void addItem(AddItem I) async {
       bool res = await DatabaseService(uid: user!.uid).addItem(I);
+      String msg = res ? "successfully" : "failed";
+
+      showToast(context: context, msg: "Expense added $msg");
+    }
+
+    void addPointSpent(AddPoint I) async {
+      bool res = await DatabaseService(uid: user!.uid).addPointSpent(I);
       String msg = res ? "successfully" : "failed";
 
       showToast(context: context, msg: "Expense added $msg");
@@ -37,16 +49,27 @@ class _AddXState extends State<AddX> {
             height: ht * 0.075,
           ),
           // AddxInputs()
-          ItemInputs(
-              itemName: allItems[0],
-              costS: "",
-              group: "none",
-              date: DateTime.now(),
-              location: locationList[0],
-              remarks: "",
-              time: TimeOfDay.now(),
-              buttonLabel: "Add",
-              buttonfunc: addItem)
+          option == "Expenses"
+              ? ItemInputs(
+                  itemName: allItems[0],
+                  costS: "",
+                  group: "none",
+                  date: DateTime.now(),
+                  location: locationList[0],
+                  remarks: "",
+                  time: TimeOfDay.now(),
+                  buttonLabel: "Add",
+                  buttonfunc: addItem)
+              : PointInputMain(
+                  cardName: cards[0],
+                  costS: "",
+                  group: "none",
+                  date: DateTime.now(),
+                  location: locationList[0],
+                  itemName: "",
+                  time: TimeOfDay.now(),
+                  buttonLabel: "Add",
+                  buttonfunc: addPointSpent)
         ],
       ),
     );

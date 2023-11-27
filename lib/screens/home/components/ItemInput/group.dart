@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
 import 'inputAutofill.dart';
 
@@ -36,6 +38,7 @@ class _ItemGroupState extends State<ItemGroup> {
 
   @override
   Widget build(BuildContext context) {
+    var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -72,6 +75,7 @@ class _ItemGroupState extends State<ItemGroup> {
                 onValueChange: widget.onGroupChange,
                 value: widget.itemGroup,
                 tag: "group",
+                docs: userInfo.docs,
               )
             : Container(),
         // addToGroup

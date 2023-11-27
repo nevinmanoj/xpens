@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/points/PointsMain.dart';
 
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
@@ -55,6 +56,12 @@ class SettingsScreen extends StatelessWidget {
         "icon": Icons.logout,
         "title": "Logout",
         "onTap": () => AuthSerivice().signOut(),
+      },
+      {
+        "icon": Icons.star_rate,
+        "title": "Credit Points Usage",
+        "onTap": () => Navigator.push(
+            context, CupertinoPageRoute(builder: (context) => PointsMain())),
       },
     ];
     if (userInfo.isDev) {
