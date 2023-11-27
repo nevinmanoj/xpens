@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/screens/home/settings/points/ListPoints/ListPointItem.dart';
 import '../../../../../services/providers/UserInfoProvider.dart';
-import '../../../listx/listStream/ListItem.dart';
 
 class ListPointsBody extends StatefulWidget {
   final String card;

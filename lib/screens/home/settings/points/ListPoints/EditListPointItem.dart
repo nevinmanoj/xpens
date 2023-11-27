@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../../services/database.dart';
-import '../../../../../services/providers/UserInfoProvider.dart';
 import '../../../../../services/toast.dart';
 import '../../../../../shared/constants.dart';
 import '../../../components/PointInput/PointInputMain.dart';
@@ -22,9 +20,7 @@ class _EditPointItemState extends State<EditPointItem> {
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    var userInfo = Provider.of<UserInfoProvider>(context);
 
-    List cards = userInfo.cards;
     // double ht
     void editPointSpent(I) async {
       bool res = await DatabaseService(uid: user!.uid)
