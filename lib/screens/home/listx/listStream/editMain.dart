@@ -20,7 +20,6 @@ class EditxDetails extends StatefulWidget {
 
 class _EditxDetailsState extends State<EditxDetails> {
   @override
-  @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;

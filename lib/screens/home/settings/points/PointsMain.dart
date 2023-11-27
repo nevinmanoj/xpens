@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
+import 'ListPoints/ListPointsMain.dart';
+import 'cards/cardsMain.dart';
+
 class PointsMain extends StatefulWidget {
   const PointsMain({super.key});
 
@@ -77,11 +80,12 @@ class _PointsMainState extends State<PointsMain> {
               ],
             ),
           ),
-          body: TabBarView(
+          body: const TabBarView(
             physics: BouncingScrollPhysics(),
             children: [
-              Text("data"),
-              Text("sdf"), Text("sdf")
+              ListPointsMain(),
+              CardsMain(),
+              Text("sdf")
               // MembersPageMain(
               //   id: widget.id,
               // ),

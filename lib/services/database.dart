@@ -168,4 +168,43 @@ class DatabaseService {
 
     return true;
   }
+
+  Future deletePointSpent(String id) async {
+    FirebaseFirestore.instance.collection('$db/$uid/points').doc(id).delete();
+  }
+
+  Future<bool> editPointsSpent(
+      {required AddPoint I, required String id}) async {
+    String year = I.date.year.toString();
+
+    String month = DateFormat.MMM().format(I.date).toString();
+    String day = I.date.day.toString();
+    String formattedTime = DateFormat('HH:mm')
+        .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
+    I.date = DateTime(
+        I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
+    final List<String> tags =
+        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
+    try {
+      await FirebaseFirestore.instance
+          .collection('$db/$uid/points')
+          .doc(id)
+          .set({
+        "tags": tags,
+        "month": month,
+        "year": year,
+        "points": I.point,
+        "day": day,
+        "date": I.date.toString(),
+        "time": formattedTime,
+        "itemName": I.itemName,
+        "cardName": I.card
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+
+    return true;
+  }
 }
