@@ -58,7 +58,7 @@ class _WelcomeState extends State<Welcome> {
                     bottomLeft: Radius.circular(40),
                     topLeft: Radius.circular(40)),
               ),
-              width: wt * 0.4,
+              width: wt * 0.42,
               child: ListTile(
                 leading: Icon(geticon(userInfo.option)),
                 title: Text(userInfo.option),

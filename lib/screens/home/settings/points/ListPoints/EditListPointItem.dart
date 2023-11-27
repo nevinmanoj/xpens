@@ -52,7 +52,7 @@ class _EditPointItemState extends State<EditPointItem> {
                 time: TimeOfDay(
                     hour: int.parse(widget.item['time'].split(":")[0]),
                     minute: int.parse(widget.item['time'].split(":")[1])),
-                buttonLabel: "Add",
+                buttonLabel: "Update",
                 buttonfunc: editPointSpent),
           ),
         ),
