@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/constants.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});

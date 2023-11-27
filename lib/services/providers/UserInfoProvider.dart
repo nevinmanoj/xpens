@@ -53,6 +53,10 @@ class UserInfoProvider with ChangeNotifier {
           _phno = snapshot.data()!['PhoneNumber'];
           _dev = snapshot.data()!['isDev'];
           _cards = List.from(snapshot.data()!['cards']);
+          _cards.remove("Other");
+          _cards.add("Other");
+          _myArray.remove("Other");
+          _myArray.add("Other");
         } else {
           _userName = "";
           _myArray = ["Other"];

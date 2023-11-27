@@ -1,9 +1,4 @@
-import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../../../../shared/constants.dart';
 
 class AddItemWidget extends StatefulWidget {
@@ -44,7 +39,6 @@ class _AddItemWidgetState extends State<AddItemWidget> {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
 
-    User? user = Provider.of<User?>(context);
     if (showFilter) {
       return SizedBox(
         height: ht,

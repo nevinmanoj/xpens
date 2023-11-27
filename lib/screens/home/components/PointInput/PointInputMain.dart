@@ -83,12 +83,6 @@ class _PointInputMainState extends State<PointInputMain> {
     });
   }
 
-  void updateRemarkctrl(newcontroller) {
-    setState(() {
-      remarksController = newcontroller;
-    });
-  }
-
   void updateTIme(TimeOfDay newTime) {
     setState(() {
       time = newTime;
@@ -98,6 +92,7 @@ class _PointInputMainState extends State<PointInputMain> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
+    print(itemName);
     var userInfo = Provider.of<UserInfoProvider>(context);
     List cards = userInfo.cards;
     double wt = MediaQuery.of(context).size.width;
@@ -119,7 +114,6 @@ class _PointInputMainState extends State<PointInputMain> {
                 onNameChange: updateCardName,
                 itemName: cardName,
               ),
-
               InputAutoFill(
                 onValueChange: updateItemName,
                 docs: userInfo.pointDocs,
@@ -185,18 +179,16 @@ class _PointInputMainState extends State<PointInputMain> {
                                 date: date,
                                 point: cost,
                                 itemName: itemName));
-                            // widget.buttonfunc(I);
+
                             FocusManager.instance.primaryFocus?.unfocus();
                             costController.clear();
-                            remarksController.clear();
+
                             setState(() {
                               cardName = cards[0];
                               date = DateTime.now();
                               time = TimeOfDay.now();
-                              group = "none";
                               loading = false;
                               date = widget.date;
-                              itemName = "";
                             });
                           }
                         },

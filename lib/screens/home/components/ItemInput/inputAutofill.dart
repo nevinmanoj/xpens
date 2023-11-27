@@ -1,9 +1,6 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
 
 class InputAutoFill extends StatefulWidget {
@@ -130,13 +127,3 @@ class _InputAutoFillState extends State<InputAutoFill> {
     );
   }
 }
- // String newText = itemGroup == "none" ? "" : itemGroup;
-          // fieldTextEditingController = TextEditingController(text: newText);
-
-          // fieldTextEditingController.selection = TextSelection.fromPosition(
-          //     TextPosition(offset: fieldTextEditingController.text.length));
-          // fieldTextEditingController.value.copyWith(
-          //     text: newText,
-          //     selection: TextSelection.fromPosition(
-          //       TextPosition(offset: newText.length),
-          //     ));
