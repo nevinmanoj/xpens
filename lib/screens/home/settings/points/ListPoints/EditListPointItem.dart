@@ -1,34 +1,32 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:xpens/screens/home/components/ItemInput/ItemInputsMain.dart';
 
-import 'package:xpens/services/database.dart';
-import 'package:xpens/services/toast.dart';
-import 'package:xpens/shared/constants.dart';
+import '../../../../../services/database.dart';
+import '../../../../../services/toast.dart';
+import '../../../../../shared/constants.dart';
+import '../../../components/PointInput/PointInputMain.dart';
 
-class EditxDetails extends StatefulWidget {
+class EditPointItem extends StatefulWidget {
+  const EditPointItem({super.key, required this.id, this.item});
   final String id;
   final dynamic item;
 
-  EditxDetails({
-    required this.id,
-    required this.item,
-  });
   @override
-  State<EditxDetails> createState() => _EditxDetailsState();
+  State<EditPointItem> createState() => _EditPointItemState();
 }
 
-class _EditxDetailsState extends State<EditxDetails> {
+class _EditPointItemState extends State<EditPointItem> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
+
     // double ht
-    void editItem(I) async {
-      bool res =
-          await DatabaseService(uid: user!.uid).editItem(I: I, id: widget.id);
+    void editPointSpent(I) async {
+      bool res = await DatabaseService(uid: user!.uid)
+          .editPointsSpent(I: I, id: widget.id);
       String msg = res ? "successfully" : "failed";
-      showToast(context: context, msg: "Expense updated " + msg);
+      showToast(context: context, msg: "Point record updated " + msg);
       Navigator.pop(context);
     }
 
@@ -44,18 +42,18 @@ class _EditxDetailsState extends State<EditxDetails> {
             backgroundColor: primaryAppColor),
         body: Center(
           child: SingleChildScrollView(
-            child: ItemInputs(
-                group: widget.item['group'],
-                itemName: widget.item['itemName'],
-                costS: widget.item['cost'].toString(),
+            child: PointInputMain(
+                cardName: widget.item['cardName'],
+                costS: widget.item['points'].toString(),
+                group: "none",
                 date: DateTime.parse(widget.item['date']),
-                location: widget.item['location'],
-                remarks: widget.item['remarks'],
+                location: locationList[0],
+                itemName: widget.item['itemName'],
                 time: TimeOfDay(
                     hour: int.parse(widget.item['time'].split(":")[0]),
                     minute: int.parse(widget.item['time'].split(":")[1])),
-                buttonLabel: "Update",
-                buttonfunc: editItem),
+                buttonLabel: "Add",
+                buttonfunc: editPointSpent),
           ),
         ),
       ),

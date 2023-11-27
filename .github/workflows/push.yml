@@ -29,7 +29,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk
 
       - name: Create Release
         id: create_release
@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ env.VERSION }}
-          release_name: release ${{ env.VERSION }}
+          release_name: Xpens ${{ env.VERSION }}
           body: release version ${{ env.VERSION }}
           draft: false
           prerelease: false

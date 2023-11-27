@@ -2,74 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ItemInput/calendar.dart';
 import 'package:xpens/screens/home/components/ItemInput/cost.dart';
-import 'package:xpens/screens/home/components/ItemInput/itemName.dart';
-import 'package:xpens/screens/home/components/ItemInput/location.dart';
-import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
+import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
+
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/datamodals.dart';
 
-import 'group.dart';
+import 'cardName.dart';
 
-class ItemInputs extends StatefulWidget {
-  final String itemName;
+class PointInputMain extends StatefulWidget {
+  final String cardName;
   final DateTime date;
   final TimeOfDay time;
   final String costS;
-  final String remarks;
+  final String itemName;
   final String location;
   final String buttonLabel;
   final String group;
-  final Function(AddItem) buttonfunc;
+  final Function(AddPoint) buttonfunc;
 
-  const ItemInputs(
+  const PointInputMain(
       {required this.group,
-      required this.itemName,
+      required this.cardName,
       required this.costS,
       required this.date,
       required this.location,
-      required this.remarks,
+      required this.itemName,
       required this.time,
       required this.buttonLabel,
       required this.buttonfunc});
   @override
-  State<ItemInputs> createState() => _ItemInputsState();
+  State<PointInputMain> createState() => _PointInputMainState();
 }
 
-class _ItemInputsState extends State<ItemInputs> {
-  String itemName = "";
+class _PointInputMainState extends State<PointInputMain> {
+  String cardName = "";
   DateTime date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
   String group = "";
+  String itemName = "";
   final _formKey = GlobalKey<FormState>();
   TextEditingController costController = TextEditingController();
   TextEditingController remarksController = TextEditingController();
   @override
   void initState() {
     date = widget.date;
+
     time = widget.time;
-    itemName = widget.itemName;
+    cardName = widget.cardName;
     location = widget.location;
     group = widget.group;
     costController = TextEditingController(text: widget.costS);
-
-    remarksController = TextEditingController(text: widget.remarks);
+    itemName = widget.itemName;
     super.initState();
   }
 
-  void updateLocation(String newlocation) {
+  void updateCardName(String newName) {
     setState(() {
-      location = newlocation;
+      cardName = newName;
     });
-  }
-
-  void updateGroup(String newgrp) {
-    setState(() {
-      group = newgrp;
-    });
-    print("changed group to: $newgrp");
   }
 
   void updateItemName(String newName) {
@@ -90,12 +83,6 @@ class _ItemInputsState extends State<ItemInputs> {
     });
   }
 
-  void updateRemarkctrl(newcontroller) {
-    setState(() {
-      remarksController = newcontroller;
-    });
-  }
-
   void updateTIme(TimeOfDay newTime) {
     setState(() {
       time = newTime;
@@ -105,7 +92,9 @@ class _ItemInputsState extends State<ItemInputs> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    List allItems = Provider.of<UserInfoProvider>(context).items;
+    print(itemName);
+    var userInfo = Provider.of<UserInfoProvider>(context);
+    List cards = userInfo.cards;
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
     return InkWell(
@@ -121,27 +110,15 @@ class _ItemInputsState extends State<ItemInputs> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Location(
-                location: location,
-                onLocationChanged: updateLocation,
+              CardName(
+                onNameChange: updateCardName,
+                itemName: cardName,
               ),
-              const SizedBox(
-                height: 15,
-              ),
-              ItemName(
-                onNameChange: updateItemName,
-                itemName: itemName,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              ItemRemark(
-                // onRemarkChanged: updateRemarks,
-                onctrlchange: updateRemarkctrl,
-                remarks: remarksController.text,
-              ),
-              const SizedBox(
-                height: 15,
+              InputAutoFill(
+                onValueChange: updateItemName,
+                docs: userInfo.pointDocs,
+                tag: 'itemName',
+                value: itemName,
               ),
               ItemQuantity(
                 // onCostChanged: updateCost,
@@ -177,10 +154,7 @@ class _ItemInputsState extends State<ItemInputs> {
                   ],
                 ),
               ),
-              ItemGroup(
-                itemGroup: group,
-                onGroupChange: updateGroup,
-              ),
+
               const SizedBox(
                 height: 15,
               ),
@@ -199,36 +173,22 @@ class _ItemInputsState extends State<ItemInputs> {
 
                             // cost = double.parse(costS);
                             double cost = double.parse(costController.text);
-
-                            if (itemName == "Other") {}
-                            AddItem I = AddItem(
-                                group: group,
-                                isOther:
-                                    (!allItems.contains(itemName.trim())) ||
-                                        itemName == "Other",
-                                location: location,
-                                remarks: remarksController.text.trim(),
-                                cost: cost,
+                            widget.buttonfunc(AddPoint(
+                                card: cardName,
+                                time: time,
                                 date: date,
-                                itemName: itemName.trim(),
-                                time: time);
+                                point: cost,
+                                itemName: itemName));
 
-                            widget.buttonfunc(I);
                             FocusManager.instance.primaryFocus?.unfocus();
                             costController.clear();
-                            remarksController.clear();
-                            // updateItemName(allItems[0]);
-                            // updateDate(DateTime.now());
-                            // updateTIme(TimeOfDay.now());
-                            // updateLocation(locationList[0]);
-                            // updateGroup("none");
+
                             setState(() {
-                              itemName = allItems[0];
+                              cardName = cards[0];
                               date = DateTime.now();
                               time = TimeOfDay.now();
-                              location = locationList[0];
-                              group = "none";
                               loading = false;
+                              date = widget.date;
                             });
                           }
                         },

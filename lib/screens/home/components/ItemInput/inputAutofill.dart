@@ -1,20 +1,19 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
 
 class InputAutoFill extends StatefulWidget {
   const InputAutoFill(
       {super.key,
       required this.value,
+      required this.docs,
       required this.onValueChange,
       required this.tag});
   final Function(String) onValueChange;
   final String value;
   final String tag;
+  final List docs;
 
   @override
   State<InputAutoFill> createState() => _InputAutoFillState();
@@ -24,9 +23,8 @@ class _InputAutoFillState extends State<InputAutoFill> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
-    // double ht = MediaQuery.of(context).size.height;
-    final listData = Provider.of<UserInfoProvider>(context);
-    List list = listData.docs;
+
+    List list = widget.docs;
 
     Set<String> uniqueGroupNames = {};
 
@@ -129,13 +127,3 @@ class _InputAutoFillState extends State<InputAutoFill> {
     );
   }
 }
- // String newText = itemGroup == "none" ? "" : itemGroup;
-          // fieldTextEditingController = TextEditingController(text: newText);
-
-          // fieldTextEditingController.selection = TextSelection.fromPosition(
-          //     TextPosition(offset: fieldTextEditingController.text.length));
-          // fieldTextEditingController.value.copyWith(
-          //     text: newText,
-          //     selection: TextSelection.fromPosition(
-          //       TextPosition(offset: newText.length),
-          //     ));

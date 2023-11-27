@@ -8,14 +8,20 @@ class UserInfoProvider with ChangeNotifier {
   UserInfoProvider({required this.user}) {
     if (user != null) _init();
   }
+  String option = "Expenses";
+
+  List _cards = ["Other"];
   List _myArray = ["Other"];
   String _userName = "";
   String _phno = "";
+  List _pointDocs = [];
   List _docs = [];
   bool _dev = false;
 
+  List get cards => _cards;
   bool get isDev => _dev;
   List get docs => _docs;
+  List get pointDocs => _pointDocs;
   List get items => _myArray;
   String get userName => _userName;
   String get phone => _phno;
@@ -25,9 +31,15 @@ class UserInfoProvider with ChangeNotifier {
     _init();
   }
 
+  void setOption(v) {
+    option = v;
+    notifyListeners();
+  }
+
   void _init() {
     _fetchUserInfo();
     _fetchExpenses();
+    _fetchPoints();
   }
 
   Future<void> _fetchUserInfo() async {
@@ -40,11 +52,18 @@ class UserInfoProvider with ChangeNotifier {
           _userName = snapshot.data()!['Name'];
           _phno = snapshot.data()!['PhoneNumber'];
           _dev = snapshot.data()!['isDev'];
+          _cards = List.from(snapshot.data()!['cards']);
+          _cards.remove("Other");
+          _cards.add("Other");
+          _myArray.remove("Other");
+          _myArray.add("Other");
         } else {
           _userName = "";
           _myArray = ["Other"];
           _phno = "";
+          _cards = ["Other"];
         }
+
         notifyListeners();
       });
     }
@@ -57,8 +76,20 @@ class UserInfoProvider with ChangeNotifier {
           .orderBy("date", descending: true);
 
       colRef.snapshots().listen((snapshot) {
-        // print(snapshot.docs);
         _docs = snapshot.docs;
+        notifyListeners();
+      });
+    }
+  }
+
+  Future<void> _fetchPoints() async {
+    if (user != null) {
+      final colRef = FirebaseFirestore.instance
+          .collection("$db/${user!.uid}/points")
+          .orderBy("date", descending: true);
+
+      colRef.snapshots().listen((snapshot) {
+        _pointDocs = snapshot.docs;
         notifyListeners();
       });
     }

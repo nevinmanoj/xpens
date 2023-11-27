@@ -3,25 +3,25 @@ import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 
-import 'inputAutofill.dart';
+import '../ItemInput/inputAutofill.dart';
 
-class ItemName extends StatefulWidget {
+class CardName extends StatefulWidget {
   final Function(String) onNameChange;
   final String itemName;
 
-  ItemName({required this.onNameChange, required this.itemName});
+  CardName({required this.onNameChange, required this.itemName});
 
   @override
-  State<ItemName> createState() => _ItemNameState();
+  State<CardName> createState() => _CardNameState();
 }
 
-class _ItemNameState extends State<ItemName> {
+class _CardNameState extends State<CardName> {
   @override
   Widget build(BuildContext context) {
+    var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
-    var userInfo = Provider.of<UserInfoProvider>(context);
-    List allItems = userInfo.items;
+    List allItems = userInfo.cards;
     return Column(
       children: [
         Container(
@@ -55,10 +55,10 @@ class _ItemNameState extends State<ItemName> {
         SizedBox(height: 10),
         (widget.itemName == "Other" || !allItems.contains(widget.itemName))
             ? InputAutoFill(
-                docs: userInfo.docs,
+                docs: userInfo.pointDocs,
                 value: widget.itemName == "Other" ? "" : widget.itemName,
                 onValueChange: widget.onNameChange,
-                tag: "itemName",
+                tag: "cardName",
               )
             // ? Container(
             //     height: ht * 0.13,

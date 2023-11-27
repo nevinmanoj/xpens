@@ -11,10 +11,12 @@ import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
 // var x = Icons.calendar_month;
-List<String> navOptions = ["Add", "List", "Analyze", "Items", "Settings"];
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({
+    Key? key,
+    o,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -22,6 +24,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  // List<String> navOptions = ["Add", "List", "Analyze", "Items", "Settings"];
+
+  List navItems = [];
 
   static List<Widget> _widgetOptions = <Widget>[
     AddX(),
@@ -39,43 +44,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<User?>(context);
-
-    // return ChangeNotifierProvider(
-    //     create: (context) => ExpenseDataProvider(user: user!),
-    //     builder: (context, _) {
+    navItems = [
+      {
+        "icon": Icon(Icons.add),
+        "label": "Add",
+      },
+      {
+        "icon": Icon(Icons.list),
+        "label": "List",
+      },
+      {
+        "icon": Icon(Icons.analytics),
+        "label": "Analyze",
+      },
+      {
+        "icon": Icon(Icons.category),
+        "label": "Items",
+      },
+      {
+        "icon": Icon(Icons.person_4),
+        "label": "Settings",
+      }
+    ];
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: primaryAppColor,
         toolbarHeight: 0,
       ),
-      // appBar: _selectedIndex == 1
-      //     ? AppBar(
-      //         centerTitle: true,
-      //         title: Text(userInfo.userName),
-      //         // title: StreamBuilder<QuerySnapshot>(
-      //         //     stream: FirebaseFirestore.instance
-      //         //         .collection('UserInfo/${user!.uid}/list')
-      //         //         .snapshots(),
-      //         //     builder: (context, snap) {
-      //         //       if (snap.connectionState == ConnectionState.waiting) {
-      //         //         return Container();
-      //         //       }
-      //         //       return Text(
-      //         //         "Total Expenses Count: ${snap.data?.docs.length}",
-      //         //         style: TextStyle(
-      //         //             fontSize: 22,
-      //         //             fontWeight: FontWeight.w400,
-      //         //             color: Color.fromARGB(255, 168, 168, 168)),
-      //         //       );
-      //         //     }),
-      //         backgroundColor: Colors.black,
-      //       )
-      //     : AppBar(
-      //         backgroundColor: primaryAppColor,
-      //         toolbarHeight: 0,
-      //       ),
       body: SafeArea(
         child: Container(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -86,33 +81,12 @@ class _HomeScreenState extends State<HomeScreen> {
         showSelectedLabels: false,
         // showUnselectedLabels: true,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: navOptions[0],
-            // label: "",
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: navOptions[1],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: navOptions[2],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: navOptions[3],
-            backgroundColor: primaryAppColor,
-          ),
-          BottomNavigationBarItem(
-            // icon: Icon(Icons.settings),
-            icon: Icon(Icons.person_4),
-            label: navOptions[3],
-            backgroundColor: primaryAppColor,
-          ),
+          for (var x in navItems)
+            BottomNavigationBarItem(
+              icon: x['icon'],
+              label: x['label'],
+              backgroundColor: primaryAppColor,
+            ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: secondaryAppColor,

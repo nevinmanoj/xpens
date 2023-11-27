@@ -1,29 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/components/items/addItem.dart';
-import 'package:xpens/screens/home/components/items/deleteItem.dart';
-import 'package:xpens/services/providers/UserInfoProvider.dart';
+import 'package:xpens/services/database.dart';
 
-import '../../../services/database.dart';
+import '../../../../../services/providers/UserInfoProvider.dart';
 
-import 'searchItems.dart';
+import '../../../components/items/addItem.dart';
+import '../../../components/items/deleteItem.dart';
 
-class ItemList extends StatefulWidget {
-  const ItemList({super.key});
+class CardsMain extends StatefulWidget {
+  const CardsMain({super.key});
 
   @override
-  State<ItemList> createState() => _ItemListState();
+  State<CardsMain> createState() => _CardsMainState();
 }
 
-class _ItemListState extends State<ItemList> {
-  String searchKey = "";
-  void setSearchKey(val) {
-    setState(() {
-      searchKey = val;
-    });
-  }
-
+class _CardsMainState extends State<CardsMain> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -31,25 +23,12 @@ class _ItemListState extends State<ItemList> {
     double ht = MediaQuery.of(context).size.height;
     UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
     User? user = Provider.of<User?>(context);
-    List list = userInfo.items;
-    if (searchKey != "") {
-      list = list
-          .where((name) => name.toLowerCase().contains(searchKey.toLowerCase()))
-          .toList();
-    }
-    print(searchKey);
     return Stack(
       children: [
         ListView.builder(
             physics: const BouncingScrollPhysics(),
-            itemCount: list.length + 1,
+            itemCount: userInfo.cards.length,
             itemBuilder: (BuildContext context, int i) {
-              if (i == 0) {
-                return ItemsSearchWidget(
-                  changeSearchKey: setSearchKey,
-                  searchKey: searchKey,
-                );
-              }
               return Padding(
                 padding:
                     EdgeInsets.fromLTRB(wt * 0.05, ht * 0.01, wt * 0.05, 0),
@@ -70,11 +49,11 @@ class _ItemListState extends State<ItemList> {
                     child: Row(
                       children: [
                         Text(
-                          list[i - 1],
+                          userInfo.cards[i],
                           style: TextStyle(fontSize: 16),
                         ),
                         Spacer(),
-                        list[i - 1] == "Other"
+                        userInfo.cards[i] == "Other"
                             ? Container()
                             : IconButton(
 
@@ -84,17 +63,17 @@ class _ItemListState extends State<ItemList> {
                                       context: context,
                                       builder: (_) {
                                         return DeleteItem(
-                                          tag: "Item",
+                                          tag: "Card",
                                           deleteFunc: () async {
                                             await DatabaseService(
                                                     uid: user!.uid)
-                                                .updateItemsArray(
+                                                .updateCardsArray(
                                               add: false,
-                                              item: list[i - 1],
+                                              card: userInfo.cards[i],
                                             );
                                             Navigator.pop(context);
                                           },
-                                          itemName: list[i - 1],
+                                          itemName: userInfo.cards[i],
                                         );
                                       });
                                   FocusManager.instance.primaryFocus!.unfocus();
@@ -105,14 +84,12 @@ class _ItemListState extends State<ItemList> {
               );
             }),
         AddItemWidget(
-            tag: 'itemName',
-            addFunc: (name) async {
-              name = name.substring(0, 1).toUpperCase() + name.substring(1);
-              await DatabaseService(uid: user!.uid).updateItemsArray(
-                add: true,
-                item: name,
-              );
-            })
+          addFunc: (val) async {
+            await DatabaseService(uid: user!.uid)
+                .updateCardsArray(add: true, card: val);
+          },
+          tag: 'card',
+        )
       ],
     );
   }
