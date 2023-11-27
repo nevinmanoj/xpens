@@ -207,4 +207,21 @@ class DatabaseService {
 
     return true;
   }
+
+  Future updateCardsArray({
+    required bool add,
+    required String card,
+  }) async {
+    if (add) {
+      //add item
+      return await FirebaseFirestore.instance.collection(db).doc(uid).update({
+        "cards": FieldValue.arrayUnion([card]),
+      });
+    } else {
+      //delete item
+      return await FirebaseFirestore.instance.collection(db).doc(uid).update({
+        "cards": FieldValue.arrayRemove([card])
+      });
+    }
+  }
 }

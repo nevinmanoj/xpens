@@ -6,7 +6,10 @@ import 'package:xpens/shared/constants.dart';
 
 class DeleteItem extends StatefulWidget {
   final String itemName;
-  DeleteItem({required this.itemName});
+  final String tag;
+  final Function() deleteFunc;
+  DeleteItem(
+      {required this.itemName, required this.tag, required this.deleteFunc});
 
   @override
   State<DeleteItem> createState() => _DeleteItemState();
@@ -58,13 +61,7 @@ class _DeleteItemState extends State<DeleteItem> {
                   height: ht * 0.06,
                   width: wt * 0.4,
                   child: ElevatedButton(
-                      onPressed: () async {
-                        await DatabaseService(uid: user!.uid).updateItemsArray(
-                          add: false,
-                          item: widget.itemName,
-                        );
-                        Navigator.pop(context);
-                      },
+                      onPressed: widget.deleteFunc,
                       child: Text(
                         'Confirm',
                         style: TextStyle(fontSize: 16),

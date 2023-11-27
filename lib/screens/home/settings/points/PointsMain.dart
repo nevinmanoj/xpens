@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
+import '../../components/ExpandableFab/expFab.dart';
 import 'ListPoints/ListPointsMain.dart';
 import 'cards/cardsMain.dart';
 
@@ -16,7 +17,7 @@ class _PointsMainState extends State<PointsMain> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     return DefaultTabController(
-        length: 3,
+        length: 2,
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -61,22 +62,22 @@ class _PointsMainState extends State<PointsMain> {
                     ],
                   ),
                 ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Cards",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                      SizedBox(
-                        width: wt * 0.02,
-                      ),
-                      Icon(Icons.credit_card)
-                    ],
-                  ),
-                ),
+                // Tab(
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         "Cards",
+                //         style: TextStyle(
+                //             fontSize: 14, fontWeight: FontWeight.w800),
+                //       ),
+                //       SizedBox(
+                //         width: wt * 0.02,
+                //       ),
+                //       Icon(Icons.credit_card)
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -85,13 +86,6 @@ class _PointsMainState extends State<PointsMain> {
             children: [
               ListPointsMain(),
               CardsMain(),
-              Text("sdf")
-              // MembersPageMain(
-              //   id: widget.id,
-              // ),
-              // MapPageMain(
-              //   id: widget.id,
-              // )
             ],
           ),
         ));
