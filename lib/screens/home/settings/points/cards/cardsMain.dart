@@ -64,7 +64,15 @@ class _CardsMainState extends State<CardsMain> {
                                       builder: (_) {
                                         return DeleteItem(
                                           tag: "Card",
-                                          deleteFunc: () {},
+                                          deleteFunc: () async {
+                                            await DatabaseService(
+                                                    uid: user!.uid)
+                                                .updateCardsArray(
+                                              add: false,
+                                              card: userInfo.cards[i],
+                                            );
+                                            Navigator.pop(context);
+                                          },
                                           itemName: userInfo.cards[i],
                                         );
                                       });

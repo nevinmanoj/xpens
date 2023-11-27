@@ -19,12 +19,20 @@ class _ListPointsBodyState extends State<ListPointsBody> {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     List list = listData.pointDocs;
-
-    if (widget.card != "All") {
-      list = list.where((item) {
-        return item['cardName'] == widget.card;
-      }).toList();
+    switch (widget.card) {
+      case "All":
+        break;
+      case "Other":
+        list = list
+            .where((item) => !listData.cards.contains(item['cardName']))
+            .toList();
+        break;
+      default:
+        list = list.where((item) {
+          return item['cardName'] == widget.card;
+        }).toList();
     }
+
     Map groupedList = {};
     for (var item in list) {
       if (groupedList[DateFormat.yMMMd()
