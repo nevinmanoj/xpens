@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/shared/constants.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
 
@@ -17,24 +18,34 @@ class _ListPointsHeaderState extends State<ListPointsHeader> {
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfoProvider>(context);
     List allItems = userInfo.cards;
-    return DropdownButtonFormField<String>(
-      value: widget.card,
-      validator: (value) =>
-          value!.isEmpty ? ' Must select a category for item' : null,
-      decoration: InputDecoration(border: InputBorder.none),
-      hint: Text(
-        "Category of Item",
-        style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+    return Container(
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.4),
+        ),
+        borderRadius: BorderRadius.circular(10),
       ),
-      onChanged: (value) {
-        widget.onValChange(value!);
-      },
-      items: ["All", ...allItems].map<DropdownMenuItem<String>>((value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      child: DropdownButtonFormField<String>(
+        value: widget.card,
+        validator: (value) =>
+            value!.isEmpty ? ' Must select a category for item' : null,
+        decoration: InputDecoration(border: InputBorder.none),
+        hint: Text(
+          "Category of Item",
+          style: TextStyle(color: Colors.grey.withOpacity(0.8)),
+        ),
+        onChanged: (value) {
+          widget.onValChange(value!);
+        },
+        items: ["All", ...allItems].map<DropdownMenuItem<String>>((value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
     );
   }
 }
