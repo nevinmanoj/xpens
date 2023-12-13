@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/items/addItem.dart';
-import 'package:xpens/screens/home/components/items/deleteItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../../services/database.dart';
 
+import '../components/deleteConfirm.dart';
 import 'searchItems.dart';
 
 class ItemList extends StatefulWidget {
@@ -50,59 +50,64 @@ class _ItemListState extends State<ItemList> {
                   searchKey: searchKey,
                 );
               }
-              return Padding(
-                padding:
-                    EdgeInsets.fromLTRB(wt * 0.05, ht * 0.01, wt * 0.05, 0),
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: const [
-                        BoxShadow(
-                            blurRadius: 1,
-                            color: Colors.grey,
-                            offset: Offset(0.0, 2))
-                      ],
-                      color: Colors.white,
-                    ),
-                    width: wt,
-                    height: ht * 0.075,
-                    child: Row(
-                      children: [
-                        Text(
-                          list[i - 1],
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Spacer(),
-                        list[i - 1] == "Other"
-                            ? Container()
-                            : IconButton(
+              return list[i - 1] == "Other"
+                  ? Container()
+                  : Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          wt * 0.05, ht * 0.01, wt * 0.05, 0),
+                      child: Container(
+                          padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 1,
+                                  color: Colors.grey,
+                                  offset: Offset(0.0, 2))
+                            ],
+                            color: Colors.white,
+                          ),
+                          width: wt,
+                          height: ht * 0.075,
+                          child: Row(
+                            children: [
+                              Text(
+                                list[i - 1],
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              Spacer(),
+                              IconButton(
 
-                                // onPressed:null,
-                                onPressed: () async {
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return DeleteItem(
-                                          tag: "Item",
-                                          deleteFunc: () async {
-                                            await DatabaseService(
-                                                    uid: user!.uid)
-                                                .updateItemsArray(
-                                              add: false,
-                                              item: list[i - 1],
-                                            );
-                                            Navigator.pop(context);
-                                          },
-                                          itemName: list[i - 1],
-                                        );
-                                      });
-                                  FocusManager.instance.primaryFocus!.unfocus();
-                                },
-                                icon: const Icon(Icons.delete))
-                      ],
-                    )),
-              );
+                                  // onPressed:null,
+                                  onPressed: () async {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return DeleteConfirm(
+                                            cancel: () {
+                                              Navigator.pop(context);
+                                            },
+                                            delete: () async {
+                                              await DatabaseService(
+                                                      uid: user!.uid)
+                                                  .updateItemsArray(
+                                                add: false,
+                                                item: list[i - 1],
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            title: "Delete Item",
+                                            msg:
+                                                "Press Confirm to delete ${list[i - 1]}  from the List.",
+                                          );
+                                        });
+                                    FocusManager.instance.primaryFocus!
+                                        .unfocus();
+                                  },
+                                  icon: const Icon(Icons.delete))
+                            ],
+                          )),
+                    );
             }),
         AddItemWidget(
             tag: 'itemName',

@@ -8,6 +8,8 @@ import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
+import '../../../components/deleteConfirm.dart';
+import '../../dev/injectData.dart';
 import 'EditListPointItem.dart';
 
 class ExpandPointItem extends StatefulWidget {
@@ -129,102 +131,29 @@ class _MyWidgetState extends State<ExpandPointItem> {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return DeleteConfirm(id: widget.id);
+                          // return DeleteConfirm(id: widget.id);
+                          return DeleteConfirm(
+                            cancel: () {
+                              Navigator.pop(context);
+                            },
+                            delete: () async {
+                              await DatabaseService(uid: user!.uid)
+                                  .deletePointSpent(widget.id);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+
+                              showToast(
+                                  context: context, msg: "Record deleted");
+                            },
+                            title: "Delete Item",
+                            msg: "Press Confirm to delete this item.",
+                          );
                         },
                       );
                     },
                     icon: Icon(Icons.delete))
               ],
             )
-          ])),
-    ));
-  }
-}
-
-class DeleteConfirm extends StatefulWidget {
-  final String id;
-
-  DeleteConfirm({
-    required this.id,
-  });
-  @override
-  State<DeleteConfirm> createState() => _DeleteConfirmState();
-}
-
-class _DeleteConfirmState extends State<DeleteConfirm> {
-  @override
-  Widget build(BuildContext context) {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
-    return Center(
-        child: SizedBox(
-      height: ht * 0.4,
-      width: wt * 0.9,
-      child: AlertDialog(
-          insetPadding: EdgeInsets.fromLTRB(
-            0,
-            0,
-            0,
-            ht * 0.1,
-          ),
-          title: Center(
-              child: Text(
-            "Delete Item",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )),
-          content: Column(children: [
-            Text("Press Confirm to delete this item."),
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: ht * 0.04,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.3,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        DatabaseService(uid: user!.uid)
-                            .deletePointSpent(widget.id);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-
-                        showToast(context: context, msg: "Record deleted");
-                      },
-                      child: Text(
-                        'Confirm',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              primaryAppColor))),
-                ),
-                SizedBox(
-                  width: wt * 0.025,
-                ),
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.3,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(color: primaryAppColor, fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(236, 255, 255, 255)))),
-                ),
-              ],
-            ),
           ])),
     ));
   }

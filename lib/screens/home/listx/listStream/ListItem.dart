@@ -97,17 +97,20 @@ Widget itemWidget(
             const Spacer(),
             item['group'] != "none"
                 ? Container(
+                    width: wt * 0.2,
                     padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         border: Border.all(
                             color: const Color.fromARGB(255, 201, 201, 201))),
                     // width: 100,
-                    child: Text(
-                      item['group'].toString(),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: const TextStyle(fontSize: 18),
+                    child: Center(
+                      child: Text(
+                        item['group'].toString(),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(fontSize: 18),
+                      ),
                     ))
                 : Container(),
             const Spacer(),

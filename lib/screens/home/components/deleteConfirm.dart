@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:xpens/shared/constants.dart';
+import '../../../shared/constants.dart';
 
-class DeleteItem extends StatefulWidget {
-  final String itemName;
-  final String tag;
-  final Function() deleteFunc;
-  DeleteItem(
-      {required this.itemName, required this.tag, required this.deleteFunc});
+class DeleteConfirm extends StatefulWidget {
+  final String title;
+  final String msg;
+  final Function() cancel;
+  final Function() delete;
 
+  const DeleteConfirm({
+    required this.title,
+    required this.cancel,
+    required this.delete,
+    required this.msg,
+  });
   @override
-  State<DeleteItem> createState() => _DeleteItemState();
+  State<DeleteConfirm> createState() => _DeleteConfirmState();
 }
 
-class _DeleteItemState extends State<DeleteItem> {
+class _DeleteConfirmState extends State<DeleteConfirm> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -20,6 +25,7 @@ class _DeleteItemState extends State<DeleteItem> {
     return Center(
         child: SizedBox(
       height: ht * 0.4,
+      width: wt * 0.9,
       child: AlertDialog(
           insetPadding: EdgeInsets.fromLTRB(
             0,
@@ -29,22 +35,15 @@ class _DeleteItemState extends State<DeleteItem> {
           ),
           title: Center(
               child: Text(
-            "Delete ${widget.tag}",
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            widget.title,
+            style: TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
-            Row(
-              children: [
-                const Text("Press Confirm to delete "),
-                Text(
-                  widget.itemName,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 17),
-                ),
-                const Text(" from the List."),
-              ],
+            Text(
+              widget.msg,
+              textAlign: TextAlign.center,
             ),
-            const SizedBox(
+            SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -55,9 +54,11 @@ class _DeleteItemState extends State<DeleteItem> {
               children: [
                 SizedBox(
                   height: ht * 0.06,
-                  width: wt * 0.4,
+                  width: wt * 0.3,
                   child: ElevatedButton(
-                      onPressed: widget.deleteFunc,
+                      onPressed: () async {
+                        widget.delete();
+                      },
                       child: Text(
                         'Confirm',
                         style: TextStyle(fontSize: 16),
@@ -71,10 +72,10 @@ class _DeleteItemState extends State<DeleteItem> {
                 ),
                 SizedBox(
                   height: ht * 0.06,
-                  width: wt * 0.4,
+                  width: wt * 0.3,
                   child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        widget.cancel();
                       },
                       child: Text(
                         'Cancel',
