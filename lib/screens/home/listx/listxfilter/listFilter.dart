@@ -19,6 +19,14 @@ class _FilterWindowState extends State<FilterWindow> {
   String? name;
   String? location;
   String order = "new";
+  void clearFilter() {
+    setState(() {
+      name = null;
+      location = null;
+      order = "new";
+    });
+    widget.onFilterChange({'order': 'new'});
+  }
 
   void namechange(newName) {
     setState(() {
@@ -106,11 +114,12 @@ class _FilterWindowState extends State<FilterWindow> {
                           onOrderChange: orderchange,
                         ),
                         FilterBtns(
+                            clearFilter: clearFilter,
                             toggleFilter: toggleFilter,
                             onFilterChange: widget.onFilterChange,
                             name: name,
                             location: location,
-                            order: order)
+                            order: order),
                       ]),
                     ),
                     Padding(

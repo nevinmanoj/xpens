@@ -1,12 +1,10 @@
 // ignore_for_file: file_names
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
-import 'package:xpens/shared/constants.dart';
 
 import '../../../components/deleteConfirm.dart';
 import '../../dev/injectData.dart';

@@ -4,6 +4,7 @@ import 'package:xpens/shared/constants.dart';
 class FilterBtns extends StatelessWidget {
   final Function() toggleFilter;
   final Function(dynamic) onFilterChange;
+  final Function() clearFilter;
   final String? name;
   final String order;
   final String? location;
@@ -12,7 +13,8 @@ class FilterBtns extends StatelessWidget {
       required this.onFilterChange,
       required this.name,
       required this.location,
-      required this.toggleFilter});
+      required this.toggleFilter,
+      required this.clearFilter});
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class FilterBtns extends StatelessWidget {
           height: ht * 0.06,
           child: OutlinedButton(
             // style: buttonDecoration,
-            onPressed: () => onFilterChange({'order': 'new'}),
-            child: Center(
+            onPressed: () => clearFilter(),
+            child: const Center(
                 child: Text(
               "Clear",
               style: TextStyle(color: Colors.black, fontSize: 17),
