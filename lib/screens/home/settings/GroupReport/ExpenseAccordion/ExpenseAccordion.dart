@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 
-import '../../../listx/listStream/ListItem.dart';
+import 'GroupExpenseItem.dart';
 
 class ExpenseAccordion extends StatefulWidget {
   final List list;
@@ -15,9 +15,7 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
   bool isExpanded = false;
 
   @override
-  @override
   Widget build(BuildContext context) {
-    // print(groupedList);
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     Map groupedList = {};
@@ -36,7 +34,6 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
             .add(item);
       }
     }
-
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
@@ -76,15 +73,17 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                height: ht * 0.5,
+                height: ht * 0.35,
                 child: ListView.builder(
                   itemCount: groupedList.keys.length,
                   itemBuilder: (context, i) {
                     // print(i);
                     // return null;
-                    String iDate = DateFormat.yMMMd()
-                        .format(DateTime.parse(widget.list[i]['date']))
-                        .toString();
+                    String iDate =
+                        // DateFormat.yMMMd()
+                        //     .format(DateTime.parse(widget.list[i]['date']))
+                        //     .toString();
+                        groupedList.keys.toList()[i];
                     return Column(
                       children: [
                         Container(
@@ -100,7 +99,8 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
                           ),
                         ),
                         for (var item in groupedList[iDate])
-                          itemWidget(context: context, iDate: iDate, item: item)
+                          groupitemWidget(
+                              context: context, iDate: iDate, item: item)
                       ],
                     );
                   },

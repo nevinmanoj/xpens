@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import '../../../../shared/constants.dart';
-import 'deleteExpense.dart';
-import 'editMain.dart';
-import 'itemExpanded.dart';
 
-Widget itemWidget(
+import '../../../../../shared/constants.dart';
+import '../../../listx/listStream/deleteExpense.dart';
+import '../../../listx/listStream/editMain.dart';
+import '../../../listx/listStream/itemExpanded.dart';
+
+Widget groupitemWidget(
     {required item, required iDate, required BuildContext context}) {
   double wt = MediaQuery.of(context).size.width;
   return Slidable(
@@ -95,24 +96,6 @@ Widget itemWidget(
                   ],
                 )),
             const Spacer(),
-            item['group'] != "none"
-                ? Container(
-                    width: wt * 0.17,
-                    padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 201, 201, 201))),
-                    // width: 100,
-                    child: Center(
-                      child: Text(
-                        item['group'].toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ))
-                : Container(),
             const Spacer(),
             SizedBox(
                 width: 100,

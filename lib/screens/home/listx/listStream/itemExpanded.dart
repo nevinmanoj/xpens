@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/cloudsearch/v1.dart';
 import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 
 import 'package:xpens/services/database.dart';
@@ -48,112 +49,21 @@ class _MyWidgetState extends State<ExpandItem> {
             SizedBox(
               height: 10,
             ),
-            Container(
-              width: wt * 0.7,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: wt * 0.3, child: Text("Item Name")),
-
-                  Text(": "),
-                  Spacer(),
-                  //
-                  Text(
-                    widget.item['itemName'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: wt * 0.7,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: wt * 0.3, child: Text("Item Cost")),
-                  Text(": "),
-                  Spacer(),
-                  Text(
-                    "${widget.item['cost']} ₹",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: wt * 0.7,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: wt * 0.3, child: Text("Item Date")),
-                  Text(": "),
-                  Spacer(),
-                  Text(
-                    widget.date,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              width: wt * 0.7,
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(width: wt * 0.3, child: Text("Item Tag")),
-                  Text(": "),
-                  Spacer(),
-                  Text(
-                    widget.item['location'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-            ),
+            buildDetail(
+                key: "Item Name", value: widget.item['itemName'], wt: wt),
+            buildDetail(
+                key: "Item Cost", value: "${widget.item['cost']} ₹", wt: wt),
+            buildDetail(key: "Item Date", value: widget.date, wt: wt),
+            buildDetail(
+                key: "Item Tag", value: widget.item['location'], wt: wt),
             widget.item['remarks'] != ""
-                ? Container(
-                    width: wt * 0.7,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: wt * 0.3, child: Text("Remarks")),
-                        Text(": "),
-                        Spacer(),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          // color: Colors.amber,
-                          width: wt * 0.35,
-                          child: Text(
-                            widget.item['remarks'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
+                ? buildDetail(
+                    key: "Remarks", value: widget.item['remarks'], wt: wt)
                 : Container(),
             (widget.item['group'] == "none" || widget.item['group'] == "")
                 ? Container()
-                : Container(
-                    width: wt * 0.7,
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(width: wt * 0.3, child: Text("Group")),
-                        Text(": "),
-                        Spacer(),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          // color: Colors.amber,
-                          width: wt * 0.35,
-                          child: Text(
-                            widget.item['group'],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                : buildDetail(
+                    key: "Group", value: widget.item['group'], wt: wt),
             Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -200,4 +110,28 @@ class _MyWidgetState extends State<ExpandItem> {
           ])),
     ));
   }
+}
+
+Widget buildDetail({required key, required value, required wt}) {
+  return Container(
+    width: wt * 0.7,
+    child: Row(
+      // mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(child: Container(width: wt * 0.3, child: Text(key))),
+        Text(": "),
+        Spacer(),
+        Container(
+          alignment: Alignment.centerRight,
+          width: wt * 0.35,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 3,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    ),
+  );
 }
