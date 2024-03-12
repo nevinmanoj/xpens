@@ -13,7 +13,12 @@ import '../../../../shared/datamodals.dart';
 
 class DevService {
   Future<void> modify() async {
-    print("check codebase");
+    // print("check codebase");
+    // getData();
+    copyCollection(
+      destinationCollection: "UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
+      sourceCollection: "UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
+    );
     // addFieldToDb();
     // final CollectionReference collection =
     //     FirebaseFirestore.instance.collection("UserInfo");
@@ -165,5 +170,24 @@ class DevService {
           itemName: itemName,
           time: formattedTime));
     }
+  }
+
+  void getData() async {
+    var collectionPath = "UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list";
+    final CollectionReference collection =
+        FirebaseFirestore.instance.collection(collectionPath);
+
+    QuerySnapshot querySnapshot = await collection.get();
+    var data = querySnapshot.docs;
+    // data = data.where((item) {
+    //   return item['itemName'] == "Dinner";
+    // }).toList();
+    // data = data.where((item) {
+    //   return item['remarks'] != "";
+    // }).toList();
+    print(data.length);
+    // for (var item in data) {
+    //   print(item["cost"]);
+    // }
   }
 }

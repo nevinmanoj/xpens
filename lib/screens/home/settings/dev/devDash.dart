@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:xpens/screens/home/settings/dev/injectData.dart';
-import 'package:xpens/screens/home/settings/dev/devServices.dart';
 import 'package:xpens/shared/constants.dart';
 
+import '../../../../services/devServices.dart';
+import 'injectData.dart';
 import 'test.dart';
 
 class DevDash extends StatefulWidget {
