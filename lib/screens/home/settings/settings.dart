@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/settings/points/PointsMain.dart';
-
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
+import 'Trash/TrashMain.dart';
 import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
@@ -62,6 +62,14 @@ class SettingsScreen extends StatelessWidget {
         "title": "Credit Points Usage",
         "onTap": () => Navigator.push(
             context, CupertinoPageRoute(builder: (context) => PointsMain())),
+      },
+      {
+        "icon": Icons.auto_delete,
+        "title": "Trash",
+        "onTap": () {
+          Navigator.push(
+              context, CupertinoPageRoute(builder: (context) => TrashMain()));
+        }
       },
     ];
     if (userInfo.isDev) {

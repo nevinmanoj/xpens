@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
 import '../shared/datamodals.dart';
@@ -75,6 +72,7 @@ class DatabaseService {
           .doc(key)
           .set({
         "tags": tags,
+        "isTrash": false,
         "group": I.group,
         "month": month,
         "year": year,
@@ -96,9 +94,9 @@ class DatabaseService {
     return true;
   }
 
-  Future deleteItem(String id) async {
-    FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).delete();
-  }
+  // Future deleteItem(String id) async {
+  //   FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).delete();
+  // }
 
   Future<bool> editItem({required AddItem I, required String id}) async {
     String year = I.date.year.toString();
@@ -151,6 +149,7 @@ class DatabaseService {
           .doc(key)
           .set({
         "cardName": I.card,
+        "isTrash": false,
         "tags": tags,
         "month": month,
         "year": year,
@@ -222,6 +221,69 @@ class DatabaseService {
       return await FirebaseFirestore.instance.collection(db).doc(uid).update({
         "cards": FieldValue.arrayRemove([card])
       });
+    }
+  }
+
+  Future moveToTrash({required String id, required String type}) async {
+    String collection = "";
+    if (type == "expense") {
+      collection = "list";
+    } else if (type == "points") {
+      collection = "points";
+    }
+    String date = DateTime.now().toString();
+    if (collection != "") {
+      try {
+        await FirebaseFirestore.instance
+            .collection('$db/$uid/$collection')
+            .doc(id)
+            .set(
+                {"isTrash": true, "deleteDate": date}, SetOptions(merge: true));
+      } catch (e) {
+        print(e.toString());
+        return false;
+      }
+    }
+  }
+
+  Future permaDelete({required id, required type}) async {
+    String collection = "";
+    type = type.toLowerCase();
+    if (type == "expense") {
+      collection = "list";
+    } else if (type == "points") {
+      collection = "points";
+    }
+    if (collection != "") {
+      try {
+        FirebaseFirestore.instance
+            .collection('$db/$uid/$collection')
+            .doc(id)
+            .delete();
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future restore({required String id, required String type}) async {
+    type = type.toLowerCase();
+    String collection = "";
+    if (type == "expense") {
+      collection = "list";
+    } else if (type == "points") {
+      collection = "points";
+    }
+    if (collection != "") {
+      try {
+        await FirebaseFirestore.instance
+            .collection('$db/$uid/$collection')
+            .doc(id)
+            .set({"isTrash": false}, SetOptions(merge: true));
+      } catch (e) {
+        print(e.toString());
+        return false;
+      }
     }
   }
 }

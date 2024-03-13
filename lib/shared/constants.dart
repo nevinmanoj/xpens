@@ -44,6 +44,7 @@ List locationList = [
   "Home",
 ];
 
+List inputTypes = ["Expense", "Points"];
 List<String> filterList = [
   "All",
   "Personel",

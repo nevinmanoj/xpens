@@ -135,8 +135,10 @@ class _MyWidgetState extends State<ExpandPointItem> {
                               Navigator.pop(context);
                             },
                             delete: () async {
-                              await DatabaseService(uid: user!.uid)
-                                  .deletePointSpent(widget.id);
+                              await DatabaseService(uid: user!.uid).moveToTrash(
+                                id: widget.id,
+                                type: 'points',
+                              );
                               Navigator.pop(context);
                               Navigator.pop(context);
 

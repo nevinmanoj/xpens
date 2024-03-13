@@ -86,7 +86,10 @@ class _MyWidgetState extends State<DeleteExpense> {
                   width: wt * 0.4,
                   child: ElevatedButton(
                       onPressed: () async {
-                        DatabaseService(uid: user!.uid).deleteItem(widget.id);
+                        DatabaseService(uid: user!.uid).moveToTrash(
+                          id: widget.id,
+                          type: 'expense',
+                        );
                         Navigator.pop(context);
                         showToast(context: context, msg: "Record deleted");
                       },

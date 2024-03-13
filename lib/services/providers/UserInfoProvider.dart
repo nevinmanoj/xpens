@@ -16,8 +16,12 @@ class UserInfoProvider with ChangeNotifier {
   String _phno = "";
   List _pointDocs = [];
   List _docs = [];
+  List _eTrash = [];
+  List _pTrash = [];
   bool _dev = false;
 
+  List get eTrash => _eTrash;
+  List get pTrash => _pTrash;
   List get cards => _cards;
   bool get isDev => _dev;
   List get docs => _docs;
@@ -76,7 +80,12 @@ class UserInfoProvider with ChangeNotifier {
           .orderBy("date", descending: true);
 
       colRef.snapshots().listen((snapshot) {
-        _docs = snapshot.docs;
+        _docs = snapshot.docs.where((item) {
+          return item['isTrash'] == false;
+        }).toList();
+        _eTrash = snapshot.docs.where((item) {
+          return item['isTrash'] == true;
+        }).toList();
         notifyListeners();
       });
     }
@@ -89,7 +98,13 @@ class UserInfoProvider with ChangeNotifier {
           .orderBy("date", descending: true);
 
       colRef.snapshots().listen((snapshot) {
-        _pointDocs = snapshot.docs;
+        
+         _pointDocs = snapshot.docs.where((item) {
+          return item['isTrash'] == false;
+        }).toList();
+        _pTrash = snapshot.docs.where((item) {
+          return item['isTrash'] == true;
+        }).toList();
         notifyListeners();
       });
     }

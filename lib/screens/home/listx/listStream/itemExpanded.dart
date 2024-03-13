@@ -89,8 +89,10 @@ class _MyWidgetState extends State<ExpandItem> {
                               Navigator.pop(context);
                             },
                             delete: () async {
-                              await DatabaseService(uid: user!.uid)
-                                  .deleteItem(widget.id);
+                              await DatabaseService(uid: user!.uid).moveToTrash(
+                                id: widget.id,
+                                type: 'expense',
+                              );
                               Navigator.pop(context);
                               Navigator.pop(context);
 

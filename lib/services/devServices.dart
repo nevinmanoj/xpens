@@ -15,10 +15,10 @@ class DevService {
   Future<void> modify() async {
     // print("check codebase");
     // getData();
-    copyCollection(
-      destinationCollection: "UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
-      sourceCollection: "UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
-    );
+    // copyCollection(
+    //   destinationCollection: "UserInfoProd/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
+    //   sourceCollection: "UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list",
+    // );
     // addFieldToDb();
     // final CollectionReference collection =
     //     FirebaseFirestore.instance.collection("UserInfo");
@@ -29,21 +29,12 @@ class DevService {
     //   updateDocumentsWithWordArray(document.id);
     // });
 
-    // addFieldToACollection(collectionPath: "UserInfo/${user!.uid}/list",fieldName:"tags" ,fieldValue: );
-  }
-
-  Future<void> addFieldToDb() async {
-    final CollectionReference collection =
-        FirebaseFirestore.instance.collection(db);
-
-    QuerySnapshot querySnapshot = await collection.get();
-
-    querySnapshot.docs.forEach((document) async {
-      addFieldToACollection(
-          collectionPath: "$db/${document.id}/list",
-          fieldName: "group",
-          fieldValue: "none");
-    });
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    addFieldToACollection(
+        collectionPath: "UserInfo/${user!.uid}/points",
+        fieldName: "isTrash",
+        fieldValue: false);
   }
 
   Future<void> updateDocumentsWithWordArray(uid) async {
