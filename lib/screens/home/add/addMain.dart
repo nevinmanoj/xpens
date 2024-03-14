@@ -14,6 +14,8 @@ import 'package:xpens/shared/datamodals.dart';
 import '../components/PointInput/PointInputMain.dart';
 
 class AddX extends StatefulWidget {
+  const AddX({super.key});
+
   @override
   State<AddX> createState() => _AddXState();
 }

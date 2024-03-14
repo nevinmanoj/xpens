@@ -8,8 +8,8 @@ class FilterBtns extends StatelessWidget {
   final String? name;
   final String order;
   final String? location;
-  FilterBtns(
-      {required this.order,
+  const FilterBtns(
+      {super.key, required this.order,
       required this.onFilterChange,
       required this.name,
       required this.location,
@@ -55,7 +55,7 @@ class FilterBtns extends StatelessWidget {
               onFilterChange(base);
               toggleFilter();
             },
-            child: Center(
+            child: const Center(
                 child: Text(
               "Apply",
               style: TextStyle(color: Colors.white, fontSize: 17),

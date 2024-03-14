@@ -26,7 +26,7 @@ class _EditPointItemState extends State<EditPointItem> {
       bool res = await DatabaseService(uid: user!.uid)
           .editPointsSpent(I: I, id: widget.id);
       String msg = res ? "successfully" : "failed";
-      showToast(context: context, msg: "Point record updated " + msg);
+      showToast(context: context, msg: "Point record updated $msg");
       Navigator.pop(context);
     }
 
@@ -35,7 +35,7 @@ class _EditPointItemState extends State<EditPointItem> {
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
             centerTitle: true,
-            title: Text(
+            title: const Text(
               "Update Details",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),

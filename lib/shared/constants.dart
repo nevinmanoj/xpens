@@ -9,10 +9,10 @@ var authInputDecoration = BoxDecoration(
   color: Colors.grey[200]?.withOpacity(0.6),
   boxShadow: [
     BoxShadow(
-      color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+      color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
       spreadRadius: 4, //spread radius
       blurRadius: 4, // blur radius
-      offset: Offset(6, 4), // changes position of shadow
+      offset: const Offset(6, 4), // changes position of shadow
       //first paramerter of offset is left-right
       //second parameter is top to down
     ),
@@ -25,7 +25,7 @@ var addInputDecoration = BoxDecoration(
   color: Colors.grey[200]?.withOpacity(0.6),
   boxShadow: [
     BoxShadow(
-      color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+      color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
     ),
   ],
 );
@@ -33,9 +33,15 @@ var addInputDecoration = BoxDecoration(
 var buttonDecoration = ButtonStyle(
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(1),
+      borderRadius: BorderRadius.circular(10),
     )),
     backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));
+var secBtnDecoration = ButtonStyle(
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    )),
+    backgroundColor: MaterialStateProperty.all<Color>(Colors.white));
 
 // List locationList = ["Personel", "Home", "Investments"];
 // List<String> filterList = ["All", "Personel", "Home", "Investments"];

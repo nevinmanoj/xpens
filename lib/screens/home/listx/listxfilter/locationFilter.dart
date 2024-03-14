@@ -4,7 +4,7 @@ import 'package:xpens/shared/constants.dart';
 class LocRadioAccordion extends StatefulWidget {
   final Function(String?) onLocChange;
   final String? selectedOption;
-  LocRadioAccordion({required this.onLocChange, required this.selectedOption});
+  const LocRadioAccordion({super.key, required this.onLocChange, required this.selectedOption});
   @override
   _LocRadioAccordionState createState() => _LocRadioAccordionState();
 }
@@ -15,24 +15,24 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             ExpansionPanelList(
               elevation: 0,
-              expandedHeaderPadding: EdgeInsets.all(0),
-              expansionCallback: (int index, bool _isExpanded) {
+              expandedHeaderPadding: const EdgeInsets.all(0),
+              expansionCallback: (int index, bool isExpanded) {
                 setState(() {
                   // Update the selected option when an accordion is expanded
-                  isExpanded = !_isExpanded;
+                  isExpanded = !isExpanded;
                 });
               },
               children: [
                 ExpansionPanel(
                   canTapOnHeader: true,
-                  headerBuilder: (BuildContext context, bool _isExpanded) {
-                    return ListTile(
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return const ListTile(
                       title: Text(
                         "Location",
                         style: TextStyle(
@@ -47,7 +47,7 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                       RadioListTile(
                         activeColor: primaryAppColor,
                         toggleable: true,
-                        title: Text("Personel"),
+                        title: const Text("Personel"),
                         value: "Personel",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {
@@ -61,7 +61,7 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
                       RadioListTile(
                         activeColor: primaryAppColor,
                         toggleable: true,
-                        title: Text("Home"),
+                        title: const Text("Home"),
                         value: "Home",
                         groupValue: widget.selectedOption,
                         onChanged: (value) {

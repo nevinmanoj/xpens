@@ -5,7 +5,7 @@ import '../../../../shared/constants.dart';
 class Month extends StatefulWidget {
   final Function(String) setVal;
   final String month;
-  Month({required this.setVal, required this.month});
+  const Month({super.key, required this.setVal, required this.month});
   @override
   State<Month> createState() => _MonthState();
 }
@@ -22,7 +22,7 @@ class _MonthState extends State<Month> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -32,7 +32,7 @@ class _MonthState extends State<Month> {
               value: widget.month,
               validator: (value) =>
                   value!.isEmpty ? ' Must select a month' : null,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(border: InputBorder.none),
               onChanged: (val) {
                 widget.setVal(val!);
               },
@@ -45,7 +45,7 @@ class _MonthState extends State<Month> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

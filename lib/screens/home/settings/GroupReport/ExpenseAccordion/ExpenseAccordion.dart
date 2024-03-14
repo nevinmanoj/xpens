@@ -6,7 +6,7 @@ import 'GroupExpenseItem.dart';
 
 class ExpenseAccordion extends StatefulWidget {
   final List list;
-  const ExpenseAccordion({required this.list});
+  const ExpenseAccordion({super.key, required this.list});
   @override
   State<ExpenseAccordion> createState() => _ExpenseAccordionState();
 }
@@ -35,7 +35,7 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
       }
     }
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -48,17 +48,17 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
       child: SingleChildScrollView(
         child: ExpansionPanelList(
           elevation: 0,
-          expandedHeaderPadding: EdgeInsets.all(0),
-          expansionCallback: (int index, bool _isExpanded) {
+          expandedHeaderPadding: const EdgeInsets.all(0),
+          expansionCallback: (int index, bool isExpanded) {
             setState(() {
               // Update the selected option when an accordion is expanded
-              isExpanded = !_isExpanded;
+              isExpanded = !isExpanded;
             });
           },
           children: [
             ExpansionPanel(
               canTapOnHeader: true,
-              headerBuilder: (BuildContext context, bool _isExpanded) {
+              headerBuilder: (BuildContext context, bool isExpanded) {
                 return const ListTile(
                   title: Text(
                     'Expenses',
@@ -93,7 +93,7 @@ class _ExpenseAccordionState extends State<ExpenseAccordion> {
                             padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
                             child: Text(
                               iDate,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                           ),

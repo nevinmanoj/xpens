@@ -7,7 +7,7 @@ class GroupSummary extends StatefulWidget {
 
   final String group;
 
-  GroupSummary({super.key, required this.group, required this.data});
+  const GroupSummary({super.key, required this.group, required this.data});
 
   @override
   State<GroupSummary> createState() => _GroupSummaryState();

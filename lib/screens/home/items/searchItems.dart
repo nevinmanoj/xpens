@@ -44,7 +44,7 @@ class _ItemsSearchWidgetState extends State<ItemsSearchWidget> {
                   boxShadow: [
                     BoxShadow(
                       color:
-                          Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                          const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
                     ),
                   ],
                 ),

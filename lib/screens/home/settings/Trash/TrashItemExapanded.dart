@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/settings/Trash/ActionConfirm.dart';
+import 'package:xpens/screens/home/components/ActionConfirm.dart';
 
 import 'package:intl/intl.dart';
 import '../../../../services/database.dart';
@@ -32,10 +31,10 @@ class TrashItemExpanded extends StatelessWidget {
           title: Center(
               child: Text(
             type,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             buildDetail(key: "Item Name", value: item['itemName'], wt: wt),
@@ -61,7 +60,7 @@ class TrashItemExpanded extends StatelessWidget {
                     ? buildDetail(key: "Group", value: item['group'], wt: wt)
                     : Container())
                 : Container(),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -91,7 +90,7 @@ class TrashItemExpanded extends StatelessWidget {
                         },
                       );
                     },
-                    icon: Icon(Icons.replay)),
+                    icon: const Icon(Icons.replay)),
                 IconButton(
                     onPressed: () {
                       showDialog(
@@ -119,24 +118,23 @@ class TrashItemExpanded extends StatelessWidget {
                         },
                       );
                     },
-                    icon: Icon(Icons.delete))
+                    icon: const Icon(Icons.delete))
               ],
             )
           ])),
     ));
-    ;
   }
 }
 
 Widget buildDetail({required key, required value, required wt}) {
-  return Container(
+  return SizedBox(
     width: wt * 0.7,
     child: Row(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(child: Container(width: wt * 0.3, child: Text(key))),
-        Text(": "),
-        Spacer(),
+        SizedBox(child: SizedBox(width: wt * 0.3, child: Text(key))),
+        const Text(": "),
+        const Spacer(),
         Container(
           alignment: Alignment.centerRight,
           width: wt * 0.35,
@@ -144,7 +142,7 @@ Widget buildDetail({required key, required value, required wt}) {
             value,
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )
       ],

@@ -11,7 +11,7 @@ import '../../../../shared/constants.dart';
 class Profile extends StatefulWidget {
   String name;
   String phoneNumber;
-  Profile({required this.name, required this.phoneNumber});
+  Profile({super.key, required this.name, required this.phoneNumber});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -26,8 +26,8 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
 
     String? email123 = user?.email;
 
@@ -39,12 +39,12 @@ class _ProfileState extends State<Profile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text('NAME',
                 style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -76,7 +76,7 @@ class _ProfileState extends State<Profile> {
                       onTap: () {
                         setState(() => updateName = true);
                       },
-                      child: Text('EDIT',
+                      child: const Text('EDIT',
                           style: TextStyle(
                               color: secondaryAppColor,
                               fontSize: 15,
@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
               Container(
                   child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -104,14 +104,14 @@ class _ProfileState extends State<Profile> {
                                 setState(() => updateName = false);
                               }
                             },
-                            child: Text(
-                              'UPDATE',
-                              // style: TextStyle(color: secondaryAppColor),
-                            ),
                             style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        primaryAppColor))),
+                                        primaryAppColor)),
+                            child: const Text(
+                              'UPDATE',
+                              // style: TextStyle(color: secondaryAppColor),
+                            )),
                       ),
                       SizedBox(
                         height: 45,
@@ -120,31 +120,31 @@ class _ProfileState extends State<Profile> {
                             onPressed: () {
                               setState(() => updateName = false);
                             },
-                            child: Text(
-                              'CANCEL',
-                              style: TextStyle(color: secondaryAppColor),
-                            ),
                             style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(236, 255, 255, 255)))),
+                                        const Color.fromARGB(236, 255, 255, 255))),
+                            child: const Text(
+                              'CANCEL',
+                              style: TextStyle(color: secondaryAppColor),
+                            )),
                       ),
                     ],
                   ),
                 ],
               )),
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Divider(
               color: Colors.grey[400],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text('PHONE NUMBER',
                 style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
@@ -177,7 +177,7 @@ class _ProfileState extends State<Profile> {
                       onTap: () {
                         setState(() => updatePhone = true);
                       },
-                      child: Text('EDIT',
+                      child: const Text('EDIT',
                           style: TextStyle(
                               color: secondaryAppColor,
                               fontSize: 15,
@@ -188,7 +188,7 @@ class _ProfileState extends State<Profile> {
               Container(
                   child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Row(
@@ -206,13 +206,13 @@ class _ProfileState extends State<Profile> {
                                 setState(() => updatePhone = false);
                               }
                             },
-                            child: Text(
-                              'UPDATE',
-                            ),
                             style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        primaryAppColor))),
+                                        primaryAppColor)),
+                            child: const Text(
+                              'UPDATE',
+                            )),
                       ),
                       SizedBox(
                         height: 45,
@@ -221,37 +221,37 @@ class _ProfileState extends State<Profile> {
                             onPressed: () {
                               setState(() => updatePhone = false);
                             },
-                            child: Text(
-                              'CANCEL',
-                              style: TextStyle(color: secondaryAppColor),
-                            ),
                             style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(236, 255, 255, 255)))),
+                                        const Color.fromARGB(236, 255, 255, 255))),
+                            child: const Text(
+                              'CANCEL',
+                              style: TextStyle(color: secondaryAppColor),
+                            )),
                       ),
                     ],
                   ),
                 ],
               )),
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Divider(
               color: Colors.grey[400],
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Text('EMAIL',
                 style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(email123!,
                 style: TextStyle(
                     color: Colors.grey[600], fontWeight: FontWeight.w400)),
-            SizedBox(
+            const SizedBox(
               height: 3,
             ),
             Divider(

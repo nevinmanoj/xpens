@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -70,7 +69,7 @@ class _DownloadStatementMainState extends State<DownloadStatementMain> {
                                 "Excel sheet for $selectMonth $selectYear Saved to storage");
                       }
                     },
-                    child: Text('Download details')),
+                    child: const Text('Download details')),
                 ElevatedButton(
                     style: buttonDecoration,
                     onPressed: () {

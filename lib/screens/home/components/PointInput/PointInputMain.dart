@@ -23,7 +23,7 @@ class PointInputMain extends StatefulWidget {
   final Function(AddPoint) buttonfunc;
 
   const PointInputMain(
-      {required this.group,
+      {super.key, required this.group,
       required this.cardName,
       required this.costS,
       required this.date,

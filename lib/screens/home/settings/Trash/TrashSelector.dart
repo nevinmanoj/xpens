@@ -28,7 +28,7 @@ class _TrashSelectorState extends State<TrashSelector> {
         value: widget.value,
         validator: (value) =>
             value!.isEmpty ? ' Must select a Type for item' : null,
-        decoration: InputDecoration(border: InputBorder.none),
+        decoration: const InputDecoration(border: InputBorder.none),
         hint: Text(
           "Type of Item",
           style: TextStyle(color: Colors.grey.withOpacity(0.8)),

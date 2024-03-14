@@ -11,7 +11,7 @@ import 'filterFunction.dart';
 
 class StreamBodyState extends StatefulWidget {
   final filter;
-  StreamBodyState({required this.filter});
+  const StreamBodyState({super.key, required this.filter});
 
   @override
   State<StreamBodyState> createState() => _StreamBodyStateState();

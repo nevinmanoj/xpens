@@ -6,8 +6,8 @@ import 'package:xpens/shared/constants.dart';
 class NameRadioAccordion extends StatefulWidget {
   final Function(String?) onNameChange;
   final String? selectedOption;
-  NameRadioAccordion(
-      {required this.onNameChange, required this.selectedOption});
+  const NameRadioAccordion(
+      {super.key, required this.onNameChange, required this.selectedOption});
   @override
   _NameRadioAccordionState createState() => _NameRadioAccordionState();
 }
@@ -19,24 +19,24 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
   Widget build(BuildContext context) {
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             ExpansionPanelList(
               elevation: 0,
-              expandedHeaderPadding: EdgeInsets.all(0),
-              expansionCallback: (int index, bool _isExpanded) {
+              expandedHeaderPadding: const EdgeInsets.all(0),
+              expansionCallback: (int index, bool isExpanded) {
                 setState(() {
                   // Update the selected option when an accordion is expanded
-                  isExpanded = !_isExpanded;
+                  isExpanded = !isExpanded;
                 });
               },
               children: [
                 ExpansionPanel(
                   canTapOnHeader: true,
-                  headerBuilder: (BuildContext context, bool _isExpanded) {
-                    return ListTile(
+                  headerBuilder: (BuildContext context, bool isExpanded) {
+                    return const ListTile(
                       title: Text(
                         'Name',
                         style: TextStyle(

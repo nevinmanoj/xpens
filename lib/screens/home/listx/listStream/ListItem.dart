@@ -14,7 +14,7 @@ Widget itemWidget(
 
     startActionPane: ActionPane(
       dragDismissible: true,
-      motion: ScrollMotion(),
+      motion: const ScrollMotion(),
       children: [
         SlidableAction(
           onPressed: (BuildContext context) => showDialog(
@@ -82,7 +82,7 @@ Widget itemWidget(
                       item['itemName'],
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Text(
                       item['remarks'],
@@ -120,7 +120,7 @@ Widget itemWidget(
                   "₹ ${item['cost'].toString()}",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 )),
           ],
         ),

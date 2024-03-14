@@ -13,7 +13,7 @@ import 'settings/settings.dart';
 // var x = Icons.calendar_month;
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({
+  const HomeScreen({
     Key? key,
     o,
   }) : super(key: key);

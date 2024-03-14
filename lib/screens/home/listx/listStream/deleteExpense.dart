@@ -9,8 +9,9 @@ class DeleteExpense extends StatefulWidget {
   final String name;
   final String cost;
   final String date;
-  DeleteExpense(
-      {required this.id,
+  const DeleteExpense(
+      {super.key,
+      required this.id,
       required this.name,
       required this.cost,
       required this.date});
@@ -21,8 +22,8 @@ class DeleteExpense extends StatefulWidget {
 class _MyWidgetState extends State<DeleteExpense> {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Center(
@@ -35,43 +36,43 @@ class _MyWidgetState extends State<DeleteExpense> {
             0,
             ht * 0.1,
           ),
-          title: Center(
+          title: const Center(
               child: Text(
             "Delete Expense",
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
-            Text("Press Confirm to delete this item."),
-            SizedBox(
+            const Text("Press Confirm to delete this item."),
+            const SizedBox(
               height: 10,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Item Name: "),
+                const Text("Item Name: "),
                 Text(
                   widget.name,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Item Cost: "),
+                const Text("Item Cost: "),
                 Text(
                   "${widget.cost} ₹",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Item Date: "),
+                const Text("Item Date: "),
                 Text(
                   widget.date,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 )
               ],
             ),
@@ -93,13 +94,11 @@ class _MyWidgetState extends State<DeleteExpense> {
                         Navigator.pop(context);
                         showToast(context: context, msg: "Record deleted");
                       },
-                      child: Text(
+                      style: buttonDecoration,
+                      child: const Text(
                         'Confirm',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              primaryAppColor))),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      )),
                 ),
                 SizedBox(
                   width: wt * 0.025,
@@ -111,13 +110,11 @@ class _MyWidgetState extends State<DeleteExpense> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
+                      style: secBtnDecoration,
+                      child: const Text(
                         'Cancel',
                         style: TextStyle(color: primaryAppColor, fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(236, 255, 255, 255)))),
+                      )),
                 ),
               ],
             ),

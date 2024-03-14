@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
-import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import '../../../../shared/datamodals.dart';
 
@@ -29,8 +28,8 @@ class DevService {
     //   updateDocumentsWithWordArray(document.id);
     // });
 
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     addFieldToACollection(
         collectionPath: "UserInfo/${user!.uid}/points",
         fieldName: "isTrash",
@@ -133,8 +132,8 @@ class DevService {
       {required String year,
       required String month,
       required double count}) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final User? user = _auth.currentUser;
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
     List<String> mainItems = [
       "Breakfast",
       "Lunch",

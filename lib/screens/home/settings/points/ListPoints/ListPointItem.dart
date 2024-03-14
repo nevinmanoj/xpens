@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -10,7 +9,7 @@ Widget pointItemWidget(
   return Slidable(
     groupTag: 'same',
 
-    startActionPane: ActionPane(
+    startActionPane: const ActionPane(
       dragDismissible: true,
       motion: ScrollMotion(),
       children: [
@@ -30,7 +29,7 @@ Widget pointItemWidget(
         //   icon: Icons.delete,
         //   // label: 'Delete',
         // ),
-        const VerticalDivider(
+        VerticalDivider(
           // color: Color.fromARGB(255, 29, 29, 29),
           color: secondaryAppColor,
           width: 1,
@@ -68,7 +67,7 @@ Widget pointItemWidget(
         );
       },
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             // borderRadius: BorderRadius.circular(5),
             // boxShadow: [
             //   BoxShadow(
@@ -80,7 +79,7 @@ Widget pointItemWidget(
           padding: const EdgeInsets.fromLTRB(15, 20, 0, 20),
           child: Row(
             children: [
-              Container(
+              SizedBox(
                   // color: Colors.amber,
                   width: 150,
                   child: Column(
@@ -90,26 +89,26 @@ Widget pointItemWidget(
                         item['itemName'],
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         item['cardName'],
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 143, 134, 134)),
                       ),
                     ],
                   )),
-              Spacer(),
-              Container(
+              const Spacer(),
+              SizedBox(
                   width: 100,
                   child: Text(
-                    "${item['points'].toString()}",
+                    item['points'].toString(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 3,
-                    style: TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 18),
                   )),
             ],
           ),

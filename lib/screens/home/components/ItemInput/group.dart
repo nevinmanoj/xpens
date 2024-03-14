@@ -6,7 +6,7 @@ import '../../../../shared/constants.dart';
 import 'inputAutofill.dart';
 
 class ItemGroup extends StatefulWidget {
-  ItemGroup({
+  const ItemGroup({super.key, 
     required this.itemGroup,
     required this.onGroupChange,
   });
@@ -47,7 +47,7 @@ class _ItemGroupState extends State<ItemGroup> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text("Add Group Tag"),
+              const Text("Add Group Tag"),
               Checkbox(
                 checkColor: secondaryAppColor,
                 activeColor: primaryAppColor,

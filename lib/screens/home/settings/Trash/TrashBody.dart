@@ -48,10 +48,11 @@ class _TrashBodyState extends State<TrashBody> {
       // itemCount: list.length + 2,
       itemCount: groupedList.keys.length + 1,
       itemBuilder: (context, i) {
-        if (i == 0)
+        if (i == 0) {
           return Container(
             height: ht * 0.095,
           );
+        }
         String iDate = groupedList.keys.toList()[i - 1];
         return Column(
           children: [
@@ -66,9 +67,9 @@ class _TrashBodyState extends State<TrashBody> {
                     Text(
                       iDate,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    Icon(Icons.delete_outline)
+                    const Icon(Icons.delete_outline)
                   ],
                 ),
               ),
@@ -85,6 +86,5 @@ class _TrashBodyState extends State<TrashBody> {
         );
       },
     );
-    ;
   }
 }

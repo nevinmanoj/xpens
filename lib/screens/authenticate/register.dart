@@ -15,7 +15,7 @@ final _formKey = GlobalKey<FormState>();
 class signUp extends StatefulWidget {
   final Function toggleView;
 
-  signUp({required this.toggleView});
+  const signUp({super.key, required this.toggleView});
 
   @override
   State<signUp> createState() => _signUpState();

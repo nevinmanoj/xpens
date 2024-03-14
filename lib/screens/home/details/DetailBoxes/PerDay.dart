@@ -8,7 +8,7 @@ class PerDay extends StatefulWidget {
   final String heading;
   final DateTime date;
   final List data;
-  PerDay(
+  const PerDay(
       {super.key,
       required this.date,
       required this.heading,

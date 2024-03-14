@@ -3,7 +3,7 @@ import 'package:xpens/shared/constants.dart';
 
 class Password extends StatefulWidget {
   final Function(String) passChange;
-  Password({required this.passChange});
+  const Password({super.key, required this.passChange});
 
   @override
   State<Password> createState() => _passState();

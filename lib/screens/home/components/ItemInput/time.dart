@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import '../../../../shared/constants.dart';
 
-typedef void TimeCallback(TimeOfDay time);
+typedef TimeCallback = void Function(TimeOfDay time);
 
 class Clock extends StatefulWidget {
   final TimeCallback onTimeChanged;
   final TimeOfDay selectTime;
-  Clock({required this.onTimeChanged, required this.selectTime});
+  const Clock(
+      {super.key, required this.onTimeChanged, required this.selectTime});
   @override
   State<Clock> createState() => _ClockState();
 }
@@ -36,8 +37,12 @@ class _ClockState extends State<Clock> {
       width: 130,
       child: OutlinedButton(
           style: ButtonStyle(
-              foregroundColor:
-                  MaterialStatePropertyAll<Color>(primaryAppColor)),
+            foregroundColor: MaterialStatePropertyAll<Color>(primaryAppColor),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            )),
+          ),
           onPressed: () => displayTimePicker(context),
           child: Text(selectTime.format(context))),
     );
@@ -50,7 +55,7 @@ class _ClockState extends State<Clock> {
         builder: (context, child) {
           return Theme(
             data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
+              colorScheme: const ColorScheme.light(
                 primary: primaryAppColor, // <-- SEE HERE
                 onPrimary: secondaryAppColor, // <-- SEE HERE
                 onSurface: primaryAppColor,

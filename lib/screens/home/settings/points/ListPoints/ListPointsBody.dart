@@ -53,10 +53,11 @@ class _ListPointsBodyState extends State<ListPointsBody> {
       // itemCount: list.length + 2,
       itemCount: groupedList.keys.length + 1,
       itemBuilder: (context, i) {
-        if (i == 0)
+        if (i == 0) {
           return Container(
             height: ht * 0.095,
           );
+        }
         String iDate = groupedList.keys.toList()[i - 1];
         return Column(
           children: [
@@ -67,7 +68,7 @@ class _ListPointsBodyState extends State<ListPointsBody> {
                 padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
                 child: Text(
                   iDate,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
             ),

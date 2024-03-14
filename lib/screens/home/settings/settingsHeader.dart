@@ -42,23 +42,23 @@ class SettingsHeader extends StatelessWidget {
               // ),
               Text(
                 userInfo.userName,
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: const TextStyle(color: Colors.white, fontSize: 18),
               ),
               SizedBox(
                 height: ht * 0.015,
               ),
               Text(
                 userInfo.phone,
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
               ),
               Text(
                 user!.email ?? "",
-                style: TextStyle(color: Colors.white, fontSize: 15),
+                style: const TextStyle(color: Colors.white, fontSize: 15),
               )
             ],
           ),
         ),
-        Spacer(),
+        const Spacer(),
         Container(
           padding: EdgeInsets.fromLTRB(0, ht * 0.005, wt * 0.02, 0),
           alignment: Alignment.topCenter,

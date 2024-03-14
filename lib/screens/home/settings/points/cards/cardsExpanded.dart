@@ -74,7 +74,7 @@ class _MyWidgetState extends State<ExpandCard> {
           title: Center(
               child: Text(
             widget.card,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
             Row(
@@ -84,11 +84,11 @@ class _MyWidgetState extends State<ExpandCard> {
                 Text(widget.sum.toInt().toString())
               ],
             ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton(
               style: buttonDecoration,
               onPressed: () => _selectDateRange(context),
-              child: Text('Change Date Range'),
+              child: const Text('Change Date Range'),
             ),
             const Text(
               'Points Spent from',

@@ -9,7 +9,7 @@ class SettingsItem extends StatelessWidget {
   final String title;
   final Function() onTap;
   const SettingsItem(
-      {required this.icon, required this.title, required this.onTap});
+      {super.key, required this.icon, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class SettingsItem extends StatelessWidget {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Container(
-      margin: EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           // color: flag ? secondaryAppColor : primaryAppColor,
           borderRadius: BorderRadius.circular(20)),
@@ -50,7 +50,7 @@ class SettingsItem extends StatelessWidget {
                 textAlign: TextAlign.center,
                 title,
 
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17,
                   // color: !flag ? secondaryAppColor : primaryAppColor,
                 ),

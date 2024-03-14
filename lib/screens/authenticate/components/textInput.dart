@@ -4,7 +4,7 @@ import 'package:xpens/shared/constants.dart';
 class TextInput extends StatefulWidget {
   final Function(String) onValueChange;
   final String label;
-  TextInput({required this.onValueChange, required this.label});
+  const TextInput({super.key, required this.onValueChange, required this.label});
 
   @override
   State<TextInput> createState() => _TextInputState();

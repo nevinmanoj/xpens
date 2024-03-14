@@ -22,18 +22,18 @@ class _PointsMainState extends State<PointsMain> {
             centerTitle: true,
             backgroundColor: primaryAppColor,
             bottom: TabBar(
-              padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorWeight: 3,
               indicatorColor: secondaryAppColor,
               labelColor: secondaryAppColor,
-              unselectedLabelColor: Color(0xff778585),
+              unselectedLabelColor: const Color(0xff778585),
               tabs: [
                 Tab(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "List",
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w800),
@@ -41,7 +41,7 @@ class _PointsMainState extends State<PointsMain> {
                       SizedBox(
                         width: wt * 0.02,
                       ),
-                      Icon(Icons.list)
+                      const Icon(Icons.list)
                     ],
                   ),
                 ),
@@ -49,7 +49,7 @@ class _PointsMainState extends State<PointsMain> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Cards",
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w800),
@@ -57,7 +57,7 @@ class _PointsMainState extends State<PointsMain> {
                       SizedBox(
                         width: wt * 0.02,
                       ),
-                      Icon(Icons.credit_card)
+                      const Icon(Icons.credit_card)
                     ],
                   ),
                 ),

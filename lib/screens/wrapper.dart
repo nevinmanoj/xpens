@@ -17,9 +17,9 @@ class _wrapperState extends State<wrapper> {
   Widget build(BuildContext context) {
     final user = Provider.of<User?>(context);
     if (user == null) {
-      return Authenticate();
+      return const Authenticate();
     } else {
-      return HomeScreen();
+      return const HomeScreen();
     }
   }
 }

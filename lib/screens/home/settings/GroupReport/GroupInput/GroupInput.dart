@@ -5,7 +5,7 @@ import '../../../../../services/providers/UserInfoProvider.dart';
 
 class GroupInput extends StatefulWidget {
   final Function(String) setGroup;
-  const GroupInput({required this.setGroup});
+  const GroupInput({super.key, required this.setGroup});
 
   @override
   State<GroupInput> createState() => _GroupInputState();
@@ -53,7 +53,7 @@ class _GroupInputState extends State<GroupInput> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                  color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
                 ),
               ],
             ),
@@ -69,7 +69,7 @@ class _GroupInputState extends State<GroupInput> {
               decoration: InputDecoration(
                 suffixIcon: fieldTextEditingController.text.isNotEmpty
                     ? IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         color: Colors.black.withOpacity(0.5),
                         onPressed: () {
                           widget.setGroup("");

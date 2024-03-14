@@ -21,8 +21,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     var userInfo = Provider.of<UserInfoProvider>(context);
 
     List items = [
@@ -33,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
           Navigator.push(
               context,
               CupertinoPageRoute(
-                  builder: (context) => DownloadStatementMain()));
+                  builder: (context) => const DownloadStatementMain()));
         }
       },
       {
@@ -49,7 +49,7 @@ class SettingsScreen extends StatelessWidget {
         "title": "Group Summary",
         "onTap": () {
           Navigator.push(context,
-              CupertinoPageRoute(builder: (context) => GroupReportMain()));
+              CupertinoPageRoute(builder: (context) => const GroupReportMain()));
         }
       },
       {
@@ -61,14 +61,14 @@ class SettingsScreen extends StatelessWidget {
         "icon": Icons.star_rate,
         "title": "Credit Points Usage",
         "onTap": () => Navigator.push(
-            context, CupertinoPageRoute(builder: (context) => PointsMain())),
+            context, CupertinoPageRoute(builder: (context) => const PointsMain())),
       },
       {
         "icon": Icons.auto_delete,
         "title": "Trash",
         "onTap": () {
           Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => TrashMain()));
+              context, CupertinoPageRoute(builder: (context) => const TrashMain()));
         }
       },
     ];
@@ -77,7 +77,7 @@ class SettingsScreen extends StatelessWidget {
         "icon": Icons.logo_dev,
         "title": "Dev Dash",
         "onTap": () => Navigator.push(
-            context, CupertinoPageRoute(builder: (context) => DevDash())),
+            context, CupertinoPageRoute(builder: (context) => const DevDash())),
       });
     }
     return SizedBox(
@@ -92,7 +92,7 @@ class SettingsScreen extends StatelessWidget {
               child: const SettingsHeader(),
             ),
             GridView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,

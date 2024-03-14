@@ -11,7 +11,7 @@ import '../../shared/loading.dart';
 
 class login extends StatefulWidget {
   final Function toggleView;
-  login({required this.toggleView});
+  const login({super.key, required this.toggleView});
 
   @override
   State<login> createState() => _loginState();

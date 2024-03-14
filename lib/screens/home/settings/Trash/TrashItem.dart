@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,7 @@ import '../../../../shared/constants.dart';
 
 import 'package:intl/intl.dart';
 
-import 'ActionConfirm.dart';
+import '../../components/ActionConfirm.dart';
 import 'TrashItemExapanded.dart';
 
 Widget trashItemWidget(
@@ -38,7 +37,7 @@ Widget trashItemWidget(
     groupTag: 'same',
     startActionPane: ActionPane(
       dragDismissible: true,
-      motion: ScrollMotion(),
+      motion: const ScrollMotion(),
       children: [
         SlidableAction(
           onPressed: (BuildContext context) {
@@ -125,7 +124,7 @@ Widget trashItemWidget(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                   width: 150,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,13 +133,13 @@ Widget trashItemWidget(
                         display1,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         display2,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 16,
                             color: Color.fromARGB(255, 143, 134, 134)),
                       ),
@@ -156,7 +155,7 @@ Widget trashItemWidget(
                         display3,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                             color: Color.fromARGB(255, 144, 144, 144)),
@@ -168,7 +167,7 @@ Widget trashItemWidget(
                         display4,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       )),
                 ],
               ),

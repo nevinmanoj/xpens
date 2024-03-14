@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
@@ -6,7 +5,7 @@ import 'package:xpens/shared/constants.dart';
 class FilterDetails extends StatefulWidget {
   final String filter;
   final Function(String) onFilterChanged;
-  FilterDetails({required this.onFilterChanged, required this.filter});
+  const FilterDetails({super.key, required this.onFilterChanged, required this.filter});
   @override
   State<FilterDetails> createState() => _FilterDetailsState();
 }
@@ -16,9 +15,9 @@ class _FilterDetailsState extends State<FilterDetails> {
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
-    List<bool> _selectedfilter = [];
+    List<bool> selectedfilter = [];
     for (int i = 0; i < filterList.length; i++) {
-      _selectedfilter.add(widget.filter == filterList[i]);
+      selectedfilter.add(widget.filter == filterList[i]);
     }
     return Center(
       child: ToggleButtons(
@@ -41,7 +40,7 @@ class _FilterDetailsState extends State<FilterDetails> {
           // minWidth: wt * 0.23,
           minWidth: wt * 0.25,
         ),
-        isSelected: _selectedfilter,
+        isSelected: selectedfilter,
         children: widgetList(filterList),
       ),
     );

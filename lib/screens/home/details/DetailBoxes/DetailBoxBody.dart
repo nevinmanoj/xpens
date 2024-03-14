@@ -8,8 +8,8 @@ class DetailBoxBody extends StatelessWidget {
   final List sortedList;
   final double sum;
   final Function() toggleShowAll;
-  DetailBoxBody(
-      {required this.heading,
+  const DetailBoxBody(
+      {super.key, required this.heading,
       required this.showAll,
       required this.sortedList,
       required this.sum,
@@ -31,7 +31,7 @@ class DetailBoxBody extends StatelessWidget {
       // height: 200,
       width: 0.9 * wt,
       child: Padding(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,11 +40,11 @@ class DetailBoxBody extends StatelessWidget {
               children: [
                 Text(
                   heading,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   "TOTAL:  ${sum.toInt().toString()} ₹ ",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ],
             ),

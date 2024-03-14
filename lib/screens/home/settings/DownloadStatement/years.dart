@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Year extends StatefulWidget {
   final Function(String) setVal;
 
-  Year({required this.setVal});
+  const Year({super.key, required this.setVal});
   @override
   State<Year> createState() => _YearState();
 }
@@ -20,7 +20,7 @@ class _YearState extends State<Year> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -49,14 +49,14 @@ class _YearState extends State<Year> {
                 return null;
               },
               decoration:
-                  InputDecoration(hintText: "Year", border: InputBorder.none),
+                  const InputDecoration(hintText: "Year", border: InputBorder.none),
               onChanged: (val) {
                 widget.setVal(val);
               },
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

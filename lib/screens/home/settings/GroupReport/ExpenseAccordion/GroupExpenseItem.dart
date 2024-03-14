@@ -15,7 +15,7 @@ Widget groupitemWidget(
 
     startActionPane: ActionPane(
       dragDismissible: true,
-      motion: ScrollMotion(),
+      motion: const ScrollMotion(),
       children: [
         SlidableAction(
           onPressed: (BuildContext context) => showDialog(
@@ -83,7 +83,7 @@ Widget groupitemWidget(
                       item['itemName'],
                       overflow: TextOverflow.ellipsis,
                       maxLines: 3,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     Text(
                       item['remarks'],
@@ -103,7 +103,7 @@ Widget groupitemWidget(
                   "₹ ${item['cost'].toString()}",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 )),
           ],
         ),

@@ -4,8 +4,8 @@ import 'package:xpens/shared/constants.dart';
 class OrderByRadioAccordion extends StatefulWidget {
   final Function(String?) onOrderChange;
   final String? selectedOption;
-  OrderByRadioAccordion(
-      {required this.onOrderChange, required this.selectedOption});
+  const OrderByRadioAccordion(
+      {super.key, required this.onOrderChange, required this.selectedOption});
   @override
   _OrderByRadioAccordionState createState() => _OrderByRadioAccordionState();
 }
@@ -16,23 +16,23 @@ class _OrderByRadioAccordionState extends State<OrderByRadioAccordion> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             ExpansionPanelList(
               elevation: 0,
-              expandedHeaderPadding: EdgeInsets.all(0),
-              expansionCallback: (int index, bool _isExpanded) {
+              expandedHeaderPadding: const EdgeInsets.all(0),
+              expansionCallback: (int index, bool isExpanded) {
                 setState(() {
                   // Update the selected option when an accordion is expanded
-                  isExpanded = !_isExpanded;
+                  isExpanded = !isExpanded;
                 });
               },
               children: [
                 ExpansionPanel(
                   canTapOnHeader: true,
-                  headerBuilder: (BuildContext context, bool _isExpanded) {
+                  headerBuilder: (BuildContext context, bool isExpanded) {
                     return const ListTile(
                       title: Text(
                         "Order By",

@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+
 import '../../../shared/constants.dart';
 
-class DeleteConfirm extends StatefulWidget {
+class ActionConfirm extends StatelessWidget {
   final String title;
   final String msg;
   final Function() cancel;
   final Function() delete;
+  const ActionConfirm(
+      {super.key,
+      required this.title,
+      required this.msg,
+      required this.cancel,
+      required this.delete});
 
-  const DeleteConfirm({
-    required this.title,
-    required this.cancel,
-    required this.delete,
-    required this.msg,
-  });
-  @override
-  State<DeleteConfirm> createState() => _DeleteConfirmState();
-}
-
-class _DeleteConfirmState extends State<DeleteConfirm> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -35,15 +31,15 @@ class _DeleteConfirmState extends State<DeleteConfirm> {
           ),
           title: Center(
               child: Text(
-            widget.title,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
             Text(
-              widget.msg,
+              msg,
               textAlign: TextAlign.center,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -57,15 +53,13 @@ class _DeleteConfirmState extends State<DeleteConfirm> {
                   width: wt * 0.3,
                   child: ElevatedButton(
                       onPressed: () async {
-                        widget.delete();
+                        delete();
                       },
-                      child: Text(
+                      style: buttonDecoration,
+                      child: const Text(
                         'Confirm',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              primaryAppColor))),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      )),
                 ),
                 SizedBox(
                   width: wt * 0.025,
@@ -75,15 +69,13 @@ class _DeleteConfirmState extends State<DeleteConfirm> {
                   width: wt * 0.3,
                   child: ElevatedButton(
                       onPressed: () {
-                        widget.cancel();
+                        cancel();
                       },
-                      child: Text(
+                      style: secBtnDecoration,
+                      child: const Text(
                         'Cancel',
-                        style: TextStyle(color: primaryAppColor, fontSize: 16),
-                      ),
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(236, 255, 255, 255)))),
+                        style: TextStyle(fontSize: 16),
+                      )),
                 ),
               ],
             ),

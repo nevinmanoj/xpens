@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
 // DateTime currentPhoneDate = DateTime.now();
 
-typedef void DateCallback(DateTime date);
+typedef DateCallback = void Function(DateTime date);
 
 class Calendar extends StatefulWidget {
   final DateCallback onDateChanged;
   final DateTime dateToDisplay;
-  Calendar({required this.onDateChanged, required this.dateToDisplay});
+  const Calendar(
+      {super.key, required this.onDateChanged, required this.dateToDisplay});
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -34,7 +34,7 @@ class _CalendarState extends State<Calendar> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
               primary: primaryAppColor, // <-- SEE HERE
               onPrimary: secondaryAppColor, // <-- SEE HERE
               onSurface: primaryAppColor, // <-- SEE HERE
@@ -65,13 +65,18 @@ class _CalendarState extends State<Calendar> {
       width: 130,
       child: OutlinedButton(
         style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll<Color>(primaryAppColor)),
+          foregroundColor: MaterialStatePropertyAll<Color>(primaryAppColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          )),
+        ),
         onPressed: () {
           _selectDate(context);
         },
         child: Text(
           DateFormat.yMMMd().format(widget.dateToDisplay).toString(),
-          style: TextStyle(fontSize: 15),
+          style: const TextStyle(fontSize: 15),
         ),
       ),
     );

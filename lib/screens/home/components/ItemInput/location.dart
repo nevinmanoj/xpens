@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:xpens/shared/constants.dart';
 
 class Location extends StatefulWidget {
   final String location;
   final Function(String) onLocationChanged;
-  Location({required this.location, required this.onLocationChanged});
+  const Location({super.key, required this.location, required this.onLocationChanged});
 
   @override
   State<Location> createState() => _LocationState();
@@ -16,7 +15,7 @@ class _LocationState extends State<Location> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.width;
-    return Container(
+    return SizedBox(
         // color: Colors.amber,
         width: wt * 0.8,
         height: ht * 0.13,
@@ -38,7 +37,7 @@ class _LocationState extends State<Location> {
                         border: Border.all(
                           color: Colors.grey.withOpacity(0.4),
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(7)),
+                        borderRadius: const BorderRadius.all(Radius.circular(7)),
                         color: loc == widget.location
                             ? primaryAppColor
                             : Colors.white),

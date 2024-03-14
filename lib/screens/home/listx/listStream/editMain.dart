@@ -10,7 +10,7 @@ class EditxDetails extends StatefulWidget {
   final String id;
   final dynamic item;
 
-  EditxDetails({
+  const EditxDetails({super.key, 
     required this.id,
     required this.item,
   });
@@ -28,7 +28,7 @@ class _EditxDetailsState extends State<EditxDetails> {
       bool res =
           await DatabaseService(uid: user!.uid).editItem(I: I, id: widget.id);
       String msg = res ? "successfully" : "failed";
-      showToast(context: context, msg: "Expense updated " + msg);
+      showToast(context: context, msg: "Expense updated $msg");
       Navigator.pop(context);
     }
 
@@ -37,7 +37,7 @@ class _EditxDetailsState extends State<EditxDetails> {
         // resizeToAvoidBottomInset: false,
         appBar: AppBar(
             centerTitle: true,
-            title: Text(
+            title: const Text(
               "Update Details",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),

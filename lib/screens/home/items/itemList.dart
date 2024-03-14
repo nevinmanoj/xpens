@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/components/ActionConfirm.dart';
 import 'package:xpens/screens/home/components/items/addItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../../services/database.dart';
 
-import '../components/deleteConfirm.dart';
 import 'searchItems.dart';
 
 class ItemList extends StatefulWidget {
@@ -73,9 +73,9 @@ class _ItemListState extends State<ItemList> {
                             children: [
                               Text(
                                 list[i - 1],
-                                style: TextStyle(fontSize: 16),
+                                style: const TextStyle(fontSize: 16),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
 
                                   // onPressed:null,
@@ -83,7 +83,7 @@ class _ItemListState extends State<ItemList> {
                                     await showDialog(
                                         context: context,
                                         builder: (_) {
-                                          return DeleteConfirm(
+                                          return ActionConfirm(
                                             cancel: () {
                                               Navigator.pop(context);
                                             },

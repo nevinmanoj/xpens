@@ -9,7 +9,7 @@ class ItemName extends StatefulWidget {
   final Function(String) onNameChange;
   final String itemName;
 
-  ItemName({required this.onNameChange, required this.itemName});
+  const ItemName({super.key, required this.onNameChange, required this.itemName});
 
   @override
   State<ItemName> createState() => _ItemNameState();
@@ -35,7 +35,7 @@ class _ItemNameState extends State<ItemName> {
                   : "Other",
               validator: (value) =>
                   value!.isEmpty ? ' Must select a category for item' : null,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(border: InputBorder.none),
               hint: Text(
                 "Category of Item",
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
@@ -52,7 +52,7 @@ class _ItemNameState extends State<ItemName> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         (widget.itemName == "Other" || !allItems.contains(widget.itemName))
             ? InputAutoFill(
                 docs: userInfo.docs,

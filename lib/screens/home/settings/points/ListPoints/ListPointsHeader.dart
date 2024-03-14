@@ -6,7 +6,7 @@ import '../../../../../services/providers/UserInfoProvider.dart';
 class ListPointsHeader extends StatefulWidget {
   final String card;
   final Function(String) onValChange;
-  ListPointsHeader({super.key, required this.card, required this.onValChange});
+  const ListPointsHeader({super.key, required this.card, required this.onValChange});
 
   @override
   State<ListPointsHeader> createState() => _ListPointsHeaderState();
@@ -33,7 +33,7 @@ class _ListPointsHeaderState extends State<ListPointsHeader> {
           value: widget.card,
           validator: (value) =>
               value!.isEmpty ? ' Must select a category for item' : null,
-          decoration: InputDecoration(border: InputBorder.none),
+          decoration: const InputDecoration(border: InputBorder.none),
           hint: Text(
             "Category of Item",
             style: TextStyle(color: Colors.grey.withOpacity(0.8)),

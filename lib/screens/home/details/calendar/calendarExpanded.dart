@@ -101,21 +101,21 @@ Widget buildItem(
   return Row(
     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Container(
+      SizedBox(
           width: 120,
           child: Text(
             data['itemName'],
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           )),
-      Container(
+      SizedBox(
           width: 90,
           child: Text(
             "₹ ${data['cost'].toString()}",
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           )),
-      Spacer(),
+      const Spacer(),
       IconButton(
           onPressed: () {
             Navigator.push(
@@ -126,7 +126,7 @@ Widget buildItem(
                           item: data,
                         )));
           },
-          icon: Icon(
+          icon: const Icon(
             color: primaryAppColor,
             Icons.edit,
           )),
@@ -142,7 +142,7 @@ Widget buildItem(
                   );
                 },
               ),
-          icon: Icon(
+          icon: const Icon(
             color: primaryAppColor,
             Icons.delete,
           )),
@@ -153,16 +153,16 @@ Widget buildItem(
 Widget buildLastRow(double cost) {
   return Row(
     children: [
-      Container(
+      const SizedBox(
           width: 120,
           child: Text(
             "TOTAL",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           )),
-      Container(
+      SizedBox(
           width: 90,
           child: Text(
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             "₹ $cost",
             overflow: TextOverflow.ellipsis,
             maxLines: 3,

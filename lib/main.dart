@@ -6,30 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
+import 'ThemeData.dart';
 import 'screens/wrapper.dart';
 import 'services/auth.dart';
-
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-
-//   runApp(StreamProvider<User?>.value(
-//     value: AuthSerivice().user,
-//     initialData: null,
-//     builder: (context, child) {
-//       final _user = Provider.of<User?>(context);
-//       return ChangeNotifierProvider(
-//         create: (context) => UserInfoProvider(user: _user),
-//         builder: (context, child) {
-//           return MaterialApp(
-//             debugShowCheckedModeBanner: false,
-//             home: wrapper(),
-//           );
-//         },
-//       );
-//     },
-//   ));
-// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,9 +18,9 @@ Future<void> main() async {
     value: AuthSerivice().user,
     initialData: null,
     builder: (context, child) {
-      var _user = Provider.of<User?>(context);
+      var user = Provider.of<User?>(context);
       return ChangeNotifierProxyProvider<User?, UserInfoProvider>(
-        create: (_) => UserInfoProvider(user: _user),
+        create: (_) => UserInfoProvider(user: user),
         update: (context, user, userInfoProvider) {
           if (userInfoProvider == null) return UserInfoProvider(user: user);
           if (user != null) userInfoProvider.setUser(user);
@@ -51,6 +30,7 @@ Future<void> main() async {
         builder: (context, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
+            theme: themedata,
             home: wrapper(),
           );
         },

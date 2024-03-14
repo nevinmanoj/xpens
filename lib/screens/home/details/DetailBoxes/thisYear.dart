@@ -6,7 +6,7 @@ class ThisYear extends StatefulWidget {
 
   final int year;
 
-  ThisYear({super.key, required this.year, required this.data});
+  const ThisYear({super.key, required this.year, required this.data});
 
   @override
   State<ThisYear> createState() => _ThisYearState();
@@ -44,7 +44,7 @@ class _ThisYearState extends State<ThisYear> {
     List<MapEntry<String, double>> sortedList = ranks.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
-    String heading = (year == DateTime.now().year) ? "This Year" : "${year}";
+    String heading = (year == DateTime.now().year) ? "This Year" : "$year";
 
     return GestureDetector(
         onHorizontalDragEnd: (details) {

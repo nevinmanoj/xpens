@@ -8,7 +8,7 @@ import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 
-import '../../components/deleteConfirm.dart';
+import '../../components/ActionConfirm.dart';
 
 class ExpandItem extends StatefulWidget {
   final String id;
@@ -16,7 +16,8 @@ class ExpandItem extends StatefulWidget {
   final String date;
 
   final item;
-  ExpandItem({required this.id, required this.date, required this.item});
+  const ExpandItem(
+      {super.key, required this.id, required this.date, required this.item});
   @override
   State<ExpandItem> createState() => _MyWidgetState();
 }
@@ -26,8 +27,8 @@ class _MyWidgetState extends State<ExpandItem> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    User? user = _auth.currentUser;
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
     return Center(
         child: SizedBox(
       width: wt * 0.9,
@@ -45,7 +46,7 @@ class _MyWidgetState extends State<ExpandItem> {
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             buildDetail(
@@ -63,7 +64,7 @@ class _MyWidgetState extends State<ExpandItem> {
                 ? Container()
                 : buildDetail(
                     key: "Group", value: widget.item['group'], wt: wt),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -78,13 +79,13 @@ class _MyWidgetState extends State<ExpandItem> {
                                   )));
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.edit)),
+                    icon: const Icon(Icons.edit)),
                 IconButton(
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (context) {
-                          return DeleteConfirm(
+                          return ActionConfirm(
                             cancel: () {
                               Navigator.pop(context);
                             },
@@ -105,7 +106,7 @@ class _MyWidgetState extends State<ExpandItem> {
                         },
                       );
                     },
-                    icon: Icon(Icons.delete))
+                    icon: const Icon(Icons.delete))
               ],
             )
           ])),
@@ -114,14 +115,14 @@ class _MyWidgetState extends State<ExpandItem> {
 }
 
 Widget buildDetail({required key, required value, required wt}) {
-  return Container(
+  return SizedBox(
     width: wt * 0.7,
     child: Row(
       // mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(child: Container(width: wt * 0.3, child: Text(key))),
-        Text(": "),
-        Spacer(),
+        SizedBox(child: SizedBox(width: wt * 0.3, child: Text(key))),
+        const Text(": "),
+        const Spacer(),
         Container(
           alignment: Alignment.centerRight,
           width: wt * 0.35,
@@ -129,7 +130,7 @@ Widget buildDetail({required key, required value, required wt}) {
             value,
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         )
       ],

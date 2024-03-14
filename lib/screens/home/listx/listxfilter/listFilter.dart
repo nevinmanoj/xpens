@@ -7,13 +7,13 @@ import 'package:xpens/shared/constants.dart';
 
 class FilterWindow extends StatefulWidget {
   final Function(dynamic) onFilterChange;
-  FilterWindow({required this.onFilterChange});
+  const FilterWindow({super.key, required this.onFilterChange});
   @override
   State<FilterWindow> createState() => _FilterWindowState();
 }
 
 class _FilterWindowState extends State<FilterWindow> {
-  Color backdropColor = Color(0x66C4C4C4);
+  Color backdropColor = const Color(0x66C4C4C4);
   bool showFilter = false;
   double _height = 0;
   String? name;
@@ -57,7 +57,7 @@ class _FilterWindowState extends State<FilterWindow> {
     } else {
       //show filter
       setState(() {
-        backdropColor = Color(0x66C4C4C4);
+        backdropColor = const Color(0x66C4C4C4);
         _height = 500;
         showFilter = true;
       });
@@ -70,14 +70,14 @@ class _FilterWindowState extends State<FilterWindow> {
     double wt = MediaQuery.of(context).size.width;
 
     if (showFilter) {
-      return Container(
+      return SizedBox(
         height: ht,
         child: Stack(
           children: [
             InkWell(
               onTap: toggleFilter,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1000),
                 curve: Curves.fastOutSlowIn,
                 color: backdropColor,
               ),
@@ -94,12 +94,12 @@ class _FilterWindowState extends State<FilterWindow> {
                 ),
                 height: _height,
                 width: wt,
-                duration: Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1000),
                 curve: Curves.fastOutSlowIn,
                 child: Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 40),
+                      padding: const EdgeInsets.only(top: 40),
                       child: ListView(children: [
                         NameRadioAccordion(
                           onNameChange: namechange,
@@ -128,7 +128,7 @@ class _FilterWindowState extends State<FilterWindow> {
                         alignment: Alignment.topRight,
                         child: InkWell(
                           onTap: toggleFilter,
-                          child: Icon(Icons.close),
+                          child: const Icon(Icons.close),
                         ),
                       ),
                     ),
@@ -149,8 +149,8 @@ class _FilterWindowState extends State<FilterWindow> {
           height: 56,
           width: 56,
           decoration:
-              BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
-          child: Icon(
+              const BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
+          child: const Icon(
             Icons.sort,
             color: secondaryAppColor,
           ),

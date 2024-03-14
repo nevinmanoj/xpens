@@ -47,6 +47,8 @@ const yearList = [
 ];
 
 class InjectTestData extends StatefulWidget {
+  const InjectTestData({super.key});
+
   @override
   State<InjectTestData> createState() => _InjectTestDataState();
 }
@@ -74,16 +76,16 @@ class _InjectTestDataState extends State<InjectTestData> {
                                 0,
                                 ht * 0.1,
                               ),
-                              title: Center(
+                              title: const Center(
                                   child: Text(
                                 "Inject Random test data to DB",
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )),
                               content: Column(
                                 children: [
-                                  years(),
-                                  months(),
-                                  Count(),
+                                  const years(),
+                                  const months(),
+                                  const Count(),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
@@ -106,19 +108,21 @@ class _InjectTestDataState extends State<InjectTestData> {
                                                 count:
                                                     double.parse(selectCount));
                                           },
-                                          child: Text('Inject data')),
+                                          child: const Text('Inject data')),
                                     ],
                                   )
                                 ],
                               ))));
                 });
           },
-          child: Text('Select month-year to inject test data')),
+          child: const Text('Select month-year to inject test data')),
     );
   }
 }
 
 class Count extends StatefulWidget {
+  const Count({super.key});
+
   @override
   State<Count> createState() => _CountState();
 }
@@ -135,7 +139,7 @@ class _CountState extends State<Count> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -145,7 +149,7 @@ class _CountState extends State<Count> {
               value: selectCount,
               validator: (value) =>
                   value!.isEmpty ? ' Must select a count' : null,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(border: InputBorder.none),
               onChanged: (Value) {
                 setState(() {
                   selectCount = Value!;
@@ -160,13 +164,15 @@ class _CountState extends State<Count> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
 }
 
 class years extends StatefulWidget {
+  const years({super.key});
+
   @override
   State<years> createState() => _yearsState();
 }
@@ -183,7 +189,7 @@ class _yearsState extends State<years> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -193,7 +199,7 @@ class _yearsState extends State<years> {
               value: selectYear,
               validator: (value) =>
                   value!.isEmpty ? ' Must select a year' : null,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(border: InputBorder.none),
               onChanged: (Value) {
                 setState(() {
                   selectYear = Value!;
@@ -208,13 +214,15 @@ class _yearsState extends State<years> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }
 }
 
 class months extends StatefulWidget {
+  const months({super.key});
+
   @override
   State<months> createState() => _monthsState();
 }
@@ -231,7 +239,7 @@ class _monthsState extends State<months> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -241,7 +249,7 @@ class _monthsState extends State<months> {
               value: selectMonth,
               validator: (value) =>
                   value!.isEmpty ? ' Must select a month' : null,
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: const InputDecoration(border: InputBorder.none),
               onChanged: (Value) {
                 setState(() {
                   selectMonth = Value!;
@@ -256,7 +264,7 @@ class _monthsState extends State<months> {
             ),
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

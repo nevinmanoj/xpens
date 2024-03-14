@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
 import 'TrashBody.dart';
 import 'TrashSelector.dart';
-import 'package:intl/intl.dart';
 
 class TrashMain extends StatefulWidget {
   const TrashMain({super.key});

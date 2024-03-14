@@ -11,7 +11,7 @@ class AddItemWidget extends StatefulWidget {
 }
 
 class _AddItemWidgetState extends State<AddItemWidget> {
-  Color backdropColor = Color(0x66C4C4C4);
+  Color backdropColor = const Color(0x66C4C4C4);
   bool showFilter = false;
   double _height = 0;
   bool showError = false;
@@ -27,7 +27,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
     } else {
       //show filter
       setState(() {
-        backdropColor = Color(0x66C4C4C4);
+        backdropColor = const Color(0x66C4C4C4);
         _height = 150;
         showFilter = true;
       });
@@ -47,7 +47,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
             InkWell(
               onTap: toggleFilter,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1000),
                 curve: Curves.fastOutSlowIn,
                 color: backdropColor,
               ),
@@ -65,12 +65,12 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                 ),
                 height: _height,
                 width: wt,
-                duration: Duration(milliseconds: 1000),
+                duration: const Duration(milliseconds: 1000),
                 curve: Curves.fastOutSlowIn,
                 child: Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(top: 60),
+                      padding: const EdgeInsets.only(top: 60),
                       child: Column(
                         // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -78,8 +78,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
-                                    padding: EdgeInsets.only(left: 10),
-                                    margin: EdgeInsets.only(right: 10),
+                                    padding: const EdgeInsets.only(left: 10),
+                                    margin: const EdgeInsets.only(right: 10),
                                     decoration: addInputDecoration,
                                     width: wt * 0.7,
                                     height: ht * 0.055,
@@ -105,7 +105,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           setState(() {
                                             showError = true;
                                           });
-                                          Future.delayed(Duration(seconds: 2),
+                                          Future.delayed(const Duration(seconds: 2),
                                               () {
                                             setState(() {
                                               showError = false;
@@ -116,13 +116,13 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           toggleFilter();
                                         }
                                       },
-                                      child: Text("Add")),
+                                      child: const Text("Add")),
                                 ),
                               ]),
                           showError
                               ? Text(
                                   "Note: ${widget.tag} name cannot be empty",
-                                  style: TextStyle(color: Colors.red),
+                                  style: const TextStyle(color: Colors.red),
                                 )
                               : Container()
                         ],
@@ -134,7 +134,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                         alignment: Alignment.topRight,
                         child: InkWell(
                           onTap: toggleFilter,
-                          child: Icon(Icons.close),
+                          child: const Icon(Icons.close),
                         ),
                       ),
                     ),
@@ -155,8 +155,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
           height: 56,
           width: 56,
           decoration:
-              BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
-          child: Icon(
+              const BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
+          child: const Icon(
             Icons.add,
             color: secondaryAppColor,
           ),

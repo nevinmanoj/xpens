@@ -24,7 +24,8 @@ class ItemInputs extends StatefulWidget {
   final Function(AddItem) buttonfunc;
 
   const ItemInputs(
-      {required this.group,
+      {super.key,
+      required this.group,
       required this.itemName,
       required this.costS,
       required this.date,

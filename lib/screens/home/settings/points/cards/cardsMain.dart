@@ -6,7 +6,7 @@ import 'package:xpens/services/database.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
 
-import '../../../components/deleteConfirm.dart';
+import '../../../components/ActionConfirm.dart';
 import '../../../components/items/addItem.dart';
 import 'cardsExpanded.dart';
 
@@ -79,7 +79,7 @@ class _CardsMainState extends State<CardsMain> {
                                   children: [
                                     Text(
                                       userInfo.cards[i],
-                                      style: TextStyle(fontSize: 18),
+                                      style: const TextStyle(fontSize: 18),
                                     ),
                                     Text(
                                       "${sums[i].toInt().toString()} points spent",
@@ -90,7 +90,7 @@ class _CardsMainState extends State<CardsMain> {
                                     ),
                                   ],
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 IconButton(
 
                                     // onPressed:null,
@@ -98,7 +98,7 @@ class _CardsMainState extends State<CardsMain> {
                                       await showDialog(
                                           context: context,
                                           builder: (_) {
-                                            return DeleteConfirm(
+                                            return ActionConfirm(
                                               cancel: () {
                                                 Navigator.pop(context);
                                               },

@@ -60,7 +60,7 @@ class _ListSearchMainState extends State<ListSearchMain> {
 
             boxShadow: [
               BoxShadow(
-                color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -77,7 +77,7 @@ class _ListSearchMainState extends State<ListSearchMain> {
               decoration: InputDecoration(
                 suffixIcon: showClear
                     ? IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         color: Colors.black.withOpacity(0.5),
                         onPressed: () {
                           updateFilter("");

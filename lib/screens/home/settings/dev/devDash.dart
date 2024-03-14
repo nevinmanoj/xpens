@@ -38,7 +38,10 @@ class _DevDashState extends State<DevDash> {
             onPressed: () async {
               await DevService().modify();
             },
-            child: Text("modify")),
+            child: Text(
+              "Modify",
+              style: TextStyle(color: Colors.white),
+            )),
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {

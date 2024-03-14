@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/toast.dart';
 
-import '../../../components/deleteConfirm.dart';
+import '../../../components/ActionConfirm.dart';
 import '../../dev/injectData.dart';
 import 'EditListPointItem.dart';
 
@@ -16,7 +16,8 @@ class ExpandPointItem extends StatefulWidget {
   final String date;
 
   final item;
-  ExpandPointItem({required this.id, required this.date, required this.item});
+  const ExpandPointItem(
+      {super.key, required this.id, required this.date, required this.item});
   @override
   State<ExpandPointItem> createState() => _MyWidgetState();
 }
@@ -37,78 +38,78 @@ class _MyWidgetState extends State<ExpandPointItem> {
             0,
             ht * 0.1,
           ),
-          title: Center(
+          title: const Center(
               child: Text(
             "Point Details",
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
           content: Column(children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Container(
+            SizedBox(
               width: wt * 0.7,
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(width: wt * 0.3, child: Text("Item Name")),
+                  SizedBox(width: wt * 0.3, child: const Text("Item Name")),
 
-                  Text(": "),
-                  Spacer(),
+                  const Text(": "),
+                  const Spacer(),
                   //
                   Text(
                     widget.item['itemName'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: wt * 0.7,
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(width: wt * 0.3, child: Text("Points used")),
-                  Text(": "),
-                  Spacer(),
+                  SizedBox(width: wt * 0.3, child: const Text("Points used")),
+                  const Text(": "),
+                  const Spacer(),
                   Text(
                     "${widget.item['points']}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: wt * 0.7,
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(width: wt * 0.3, child: Text("Item Date")),
-                  Text(": "),
-                  Spacer(),
+                  SizedBox(width: wt * 0.3, child: const Text("Item Date")),
+                  const Text(": "),
+                  const Spacer(),
                   Text(
                     widget.date,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               width: wt * 0.7,
               child: Row(
                 // mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(width: wt * 0.3, child: Text("Card")),
-                  Text(": "),
-                  Spacer(),
+                  SizedBox(width: wt * 0.3, child: const Text("Card")),
+                  const Text(": "),
+                  const Spacer(),
                   Text(
                     widget.item['cardName'],
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -123,14 +124,14 @@ class _MyWidgetState extends State<ExpandPointItem> {
                                   )));
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.edit)),
+                    icon: const Icon(Icons.edit)),
                 IconButton(
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (context) {
                           // return DeleteConfirm(id: widget.id);
-                          return DeleteConfirm(
+                          return ActionConfirm(
                             cancel: () {
                               Navigator.pop(context);
                             },
@@ -151,7 +152,7 @@ class _MyWidgetState extends State<ExpandPointItem> {
                         },
                       );
                     },
-                    icon: Icon(Icons.delete))
+                    icon: const Icon(Icons.delete))
               ],
             )
           ])),
