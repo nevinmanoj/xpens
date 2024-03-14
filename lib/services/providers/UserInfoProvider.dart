@@ -6,7 +6,7 @@ import 'package:xpens/shared/Db.dart';
 class UserInfoProvider with ChangeNotifier {
   User? user;
   UserInfoProvider({required this.user}) {
-    if (user != null) _init();
+    if (user != null) init();
   }
   String option = "Expenses";
 
@@ -32,7 +32,7 @@ class UserInfoProvider with ChangeNotifier {
   void setUser(User? usr) {
     // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
-    _init();
+    init();
   }
 
   void setOption(v) {
@@ -40,7 +40,8 @@ class UserInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _init() {
+  void init() {
+    print("initializing");
     _fetchUserInfo();
     _fetchExpenses();
     _fetchPoints();
@@ -50,63 +51,84 @@ class UserInfoProvider with ChangeNotifier {
     if (user != null) {
       final docRef = FirebaseFirestore.instance.collection(db).doc(user!.uid);
 
-      docRef.snapshots().listen((snapshot) {
-        if (snapshot.exists) {
-          _myArray = List.from(snapshot.data()!['items']);
-          _userName = snapshot.data()!['Name'];
-          _phno = snapshot.data()!['PhoneNumber'];
-          _dev = snapshot.data()!['isDev'];
-          _cards = List.from(snapshot.data()!['cards']);
-          _cards.remove("Other");
-          _cards.add("Other");
-          _myArray.remove("Other");
-          _myArray.add("Other");
-        } else {
-          _userName = "";
-          _myArray = ["Other"];
-          _phno = "";
-          _cards = ["Other"];
-        }
+      try {
+        docRef.snapshots().listen((snapshot) {
+          if (snapshot.exists) {
+            _myArray = List.from(snapshot.data()!['items']);
+            _userName = snapshot.data()!['Name'];
+            _phno = snapshot.data()!['PhoneNumber'];
+            _dev = snapshot.data()!['isDev'];
+            _cards = List.from(snapshot.data()!['cards']);
+            _cards.remove("Other");
+            _cards.add("Other");
+            _myArray.remove("Other");
+            _myArray.add("Other");
+          } else {
+            _userName = "";
+            _myArray = ["Other"];
+            _phno = "";
+            _cards = ["Other"];
+          }
 
-        notifyListeners();
-      });
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 
   Future<void> _fetchExpenses() async {
     if (user != null) {
-      final colRef = FirebaseFirestore.instance
-          .collection("$db/${user!.uid}/list")
-          .orderBy("date", descending: true);
-
-      colRef.snapshots().listen((snapshot) {
-        _docs = snapshot.docs.where((item) {
-          return item['isTrash'] == false;
-        }).toList();
-        _eTrash = snapshot.docs.where((item) {
-          return item['isTrash'] == true;
-        }).toList();
-        notifyListeners();
-      });
+      try {
+        final colRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/list")
+            .where("isTrash", isEqualTo: false)
+            .orderBy("date", descending: true);
+        colRef.snapshots().listen((event) {
+          print("fetching expense");
+          _docs = event.docs;
+          notifyListeners();
+        });
+        // zWxHz89t7qc1KhfSOhhicSTyyJI3 nevin
+        final trashcolRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/list")
+            .where("isTrash", isEqualTo: true)
+            .orderBy("date", descending: true);
+        trashcolRef.snapshots().listen((event) {
+          print("fetching expense trash");
+          _eTrash = event.docs;
+        });
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 
   Future<void> _fetchPoints() async {
     if (user != null) {
-      final colRef = FirebaseFirestore.instance
-          .collection("$db/${user!.uid}/points")
-          .orderBy("date", descending: true);
-
-      colRef.snapshots().listen((snapshot) {
-        
-         _pointDocs = snapshot.docs.where((item) {
-          return item['isTrash'] == false;
-        }).toList();
-        _pTrash = snapshot.docs.where((item) {
-          return item['isTrash'] == true;
-        }).toList();
-        notifyListeners();
-      });
+      try {
+        final colRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/points")
+            .where("isTrash", isEqualTo: false)
+            .orderBy("date", descending: true);
+        colRef.snapshots().listen((event) {
+          print("fetching expense");
+          _pointDocs = event.docs;
+          notifyListeners();
+        });
+        // zWxHz89t7qc1KhfSOhhicSTyyJI3 nevin
+        final trashcolRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/points")
+            .where("isTrash", isEqualTo: true)
+            .orderBy("date", descending: true);
+        trashcolRef.snapshots().listen((event) {
+          print("fetching expense trash");
+          _pTrash = event.docs;
+        });
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 }

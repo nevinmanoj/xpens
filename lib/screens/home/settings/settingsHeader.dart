@@ -31,7 +31,7 @@ class SettingsHeader extends StatelessWidget {
           width: wt * 0.04,
         ),
         SizedBox(
-          height: ht * 0.09,
+          height: ht * 0.1,
           // color: Colors.amber,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.center,
