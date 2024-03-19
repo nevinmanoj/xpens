@@ -41,7 +41,7 @@ class UserInfoProvider with ChangeNotifier {
   }
 
   void init() {
-    print("initializing");
+    // print("initializing");
     _fetchUserInfo();
     _fetchExpenses();
     _fetchPoints();
@@ -86,7 +86,7 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: false)
             .orderBy("date", descending: true);
         colRef.snapshots().listen((event) {
-          print("fetching expense");
+          // print("fetching expense");
           _docs = event.docs;
           notifyListeners();
         });
@@ -96,7 +96,7 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: true)
             .orderBy("date", descending: true);
         trashcolRef.snapshots().listen((event) {
-          print("fetching expense trash");
+          // print("fetching expense trash");
           _eTrash = event.docs;
         });
       } catch (e) {
@@ -113,7 +113,7 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: false)
             .orderBy("date", descending: true);
         colRef.snapshots().listen((event) {
-          print("fetching expense");
+          // print("fetching expense");
           _pointDocs = event.docs;
           notifyListeners();
         });
@@ -123,7 +123,7 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: true)
             .orderBy("date", descending: true);
         trashcolRef.snapshots().listen((event) {
-          print("fetching expense trash");
+          // print("fetching expense trash");
           _pTrash = event.docs;
         });
       } catch (e) {

@@ -4,7 +4,8 @@ import 'package:xpens/shared/constants.dart';
 class LocRadioAccordion extends StatefulWidget {
   final Function(String?) onLocChange;
   final String? selectedOption;
-  const LocRadioAccordion({super.key, required this.onLocChange, required this.selectedOption});
+  const LocRadioAccordion(
+      {super.key, required this.onLocChange, required this.selectedOption});
   @override
   _LocRadioAccordionState createState() => _LocRadioAccordionState();
 }
@@ -22,7 +23,7 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
             ExpansionPanelList(
               elevation: 0,
               expandedHeaderPadding: const EdgeInsets.all(0),
-              expansionCallback: (int index, bool isExpanded) {
+              expansionCallback: (int index, bool x) {
                 setState(() {
                   // Update the selected option when an accordion is expanded
                   isExpanded = !isExpanded;
@@ -31,7 +32,7 @@ class _LocRadioAccordionState extends State<LocRadioAccordion> {
               children: [
                 ExpansionPanel(
                   canTapOnHeader: true,
-                  headerBuilder: (BuildContext context, bool isExpanded) {
+                  headerBuilder: (BuildContext context, bool x) {
                     return const ListTile(
                       title: Text(
                         "Location",

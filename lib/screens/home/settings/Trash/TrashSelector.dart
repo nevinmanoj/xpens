@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import '../../../../shared/constants.dart';
 
@@ -14,7 +16,6 @@ class TrashSelector extends StatefulWidget {
 class _TrashSelectorState extends State<TrashSelector> {
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
     return Container(
       margin: const EdgeInsets.fromLTRB(15, 20, 15, 0),
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
