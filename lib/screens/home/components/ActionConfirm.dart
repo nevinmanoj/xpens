@@ -74,7 +74,7 @@ class ActionConfirm extends StatelessWidget {
                       style: secBtnDecoration,
                       child: const Text(
                         'Cancel',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: primaryAppColor),
                       )),
                 ),
               ],
