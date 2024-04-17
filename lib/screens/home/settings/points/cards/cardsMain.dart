@@ -7,7 +7,7 @@ import 'package:xpens/services/database.dart';
 import '../../../../../services/providers/UserInfoProvider.dart';
 
 import '../../../components/ActionConfirm.dart';
-import '../../../components/items/addItem.dart';
+import '../../../components/addItem.dart';
 import 'cardsExpanded.dart';
 
 class CardsMain extends StatefulWidget {

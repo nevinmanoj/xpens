@@ -8,6 +8,7 @@ import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
 import 'Trash/TrashMain.dart';
+import 'billSplit/billSplitMain.dart';
 import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
@@ -48,8 +49,10 @@ class SettingsScreen extends StatelessWidget {
         "icon": Icons.sell,
         "title": "Group Summary",
         "onTap": () {
-          Navigator.push(context,
-              CupertinoPageRoute(builder: (context) => const GroupReportMain()));
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => const GroupReportMain()));
         }
       },
       {
@@ -60,15 +63,23 @@ class SettingsScreen extends StatelessWidget {
       {
         "icon": Icons.star_rate,
         "title": "Credit Points Usage",
-        "onTap": () => Navigator.push(
-            context, CupertinoPageRoute(builder: (context) => const PointsMain())),
+        "onTap": () => Navigator.push(context,
+            CupertinoPageRoute(builder: (context) => const PointsMain())),
       },
       {
         "icon": Icons.auto_delete,
         "title": "Trash",
         "onTap": () {
-          Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => const TrashMain()));
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const TrashMain()));
+        }
+      },
+      {
+        "icon": IonIcons.receipt,
+        "title": "Bill Split",
+        "onTap": () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const BillSplitMain()));
         }
       },
     ];

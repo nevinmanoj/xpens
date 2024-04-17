@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../shared/constants.dart';
+import '../../../../shared/constants.dart';
 
 class AddItemWidget extends StatefulWidget {
   final String tag;
@@ -105,8 +105,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           setState(() {
                                             showError = true;
                                           });
-                                          Future.delayed(const Duration(seconds: 2),
-                                              () {
+                                          Future.delayed(
+                                              const Duration(seconds: 2), () {
                                             setState(() {
                                               showError = false;
                                             });
@@ -154,8 +154,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
         child: Container(
           height: 56,
           width: 56,
-          decoration:
-              const BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
+          decoration: const BoxDecoration(
+              color: primaryAppColor, shape: BoxShape.circle),
           child: const Icon(
             Icons.add,
             color: secondaryAppColor,
