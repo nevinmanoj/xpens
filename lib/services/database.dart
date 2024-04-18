@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
-import '../shared/datamodals.dart';
+import 'package:xpens/shared/dataModals/AddItemModal.dart';
+import '../shared/dataModals/AddPointModal.dart';
+import '../shared/dataModals/ExpenseModal.dart';
 
 class DatabaseService {
   final String uid;

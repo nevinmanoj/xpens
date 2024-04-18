@@ -126,6 +126,10 @@ class _CardsMainState extends State<CardsMain> {
                     );
             }),
         AddItemWidget(
+          icon: Icons.add_card,
+          btnPostionBottom: 10,
+          postionBottom: 0,
+          btnPositionRight: 10,
           addFunc: (val) async {
             await DatabaseService(uid: user!.uid)
                 .updateCardsArray(add: true, card: val);

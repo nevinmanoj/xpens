@@ -19,23 +19,3 @@ class AddItem {
       required this.time,
       required this.group});
 }
-
-class Expense {
-  String key;
-  Map<String, dynamic> data;
-  Expense({required this.key, required this.data});
-}
-
-class AddPoint {
-  double point;
-  String card;
-  String itemName;
-  DateTime date;
-  TimeOfDay time;
-  AddPoint(
-      {required this.card,
-      required this.date,
-      required this.time,
-      required this.itemName,
-      required this.point});
-}

@@ -41,7 +41,6 @@ class UserInfoProvider with ChangeNotifier {
   }
 
   void init() {
-    // print("initializing");
     _fetchUserInfo();
     _fetchExpenses();
     _fetchPoints();
@@ -88,6 +87,7 @@ class UserInfoProvider with ChangeNotifier {
         colRef.snapshots().listen((event) {
           // print("fetching expense");
           _docs = event.docs;
+
           notifyListeners();
         });
         // zWxHz89t7qc1KhfSOhhicSTyyJI3 nevin
@@ -98,6 +98,7 @@ class UserInfoProvider with ChangeNotifier {
         trashcolRef.snapshots().listen((event) {
           // print("fetching expense trash");
           _eTrash = event.docs;
+          notifyListeners();
         });
       } catch (e) {
         print(e.toString());
@@ -125,6 +126,7 @@ class UserInfoProvider with ChangeNotifier {
         trashcolRef.snapshots().listen((event) {
           // print("fetching expense trash");
           _pTrash = event.docs;
+          notifyListeners();
         });
       } catch (e) {
         print(e.toString());

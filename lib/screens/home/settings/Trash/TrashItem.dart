@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/database.dart';
-import '../../../../services/toast.dart';
+import '../../../../shared/utils/toast.dart';
 import '../../../../shared/constants.dart';
 
 import 'package:intl/intl.dart';

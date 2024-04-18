@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/billSplit/billSplitGetxController.dart';
 
 import '../../../../shared/constants.dart';
-import '../../components/addItem.dart';
 import 'billSplitFooter.dart';
-import 'items/itemsMain.dart';
+import 'billItems/billItemsMain.dart';
 import 'persons/personsMain.dart';
 
 class BillSplitMain extends StatefulWidget {
@@ -14,13 +17,31 @@ class BillSplitMain extends StatefulWidget {
 }
 
 class _BillSplitMainState extends State<BillSplitMain> {
+  final controller = Get.put(BillSplitController());
+
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
+    double total = controller.total;
     return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            actions: [
+              InkWell(
+                  onTap: () => controller.discardBill(),
+                  child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10)),
+                      padding: EdgeInsets.fromLTRB(wt * 0.02, 0, wt * 0.02, 0),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Discard",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: const Color.fromARGB(255, 203, 203, 203)),
+                      )))
+            ],
             centerTitle: true,
             backgroundColor: primaryAppColor,
             bottom: TabBar(
@@ -66,20 +87,22 @@ class _BillSplitMainState extends State<BillSplitMain> {
               ],
             ),
           ),
-          body: Stack(
-            children: [
-              const TabBarView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ItemsMain(),
-                  PersonsMain(),
-                ],
-              ),
-              BillSplitFooter(
-                value: wt,
-              )
-            ],
-          ),
+          body: GetBuilder<BillSplitController>(builder: (context) {
+            return Stack(
+              children: [
+                const TabBarView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    BillItemsMain(),
+                    PersonsMain(),
+                  ],
+                ),
+                BillSplitFooter(
+                  value: total,
+                )
+              ],
+            );
+          }),
         ));
   }
 }

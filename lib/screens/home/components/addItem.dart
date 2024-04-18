@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../../../../shared/constants.dart';
 
 class AddItemWidget extends StatefulWidget {
   final String tag;
   final Function(String) addFunc;
-  const AddItemWidget({super.key, required this.tag, required this.addFunc});
+  final double postionBottom;
+  final double btnPostionBottom;
+  final double btnPositionRight;
+  final IconData icon;
+  const AddItemWidget({
+    super.key,
+    required this.tag,
+    required this.addFunc,
+    required this.postionBottom,
+    required this.btnPostionBottom,
+    required this.btnPositionRight,
+    required this.icon,
+  });
 
   @override
   State<AddItemWidget> createState() => _AddItemWidgetState();
@@ -52,8 +65,8 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                 color: backdropColor,
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
+            Positioned(
+              bottom: widget.postionBottom,
               child: AnimatedContainer(
                 // padding: EdgeInsets.only(top: 20),
                 decoration: const BoxDecoration(
@@ -113,6 +126,7 @@ class _AddItemWidgetState extends State<AddItemWidget> {
                                           });
                                         } else {
                                           widget.addFunc(nameController.text);
+                                          nameController.text = "";
                                           toggleFilter();
                                         }
                                       },
@@ -147,17 +161,17 @@ class _AddItemWidgetState extends State<AddItemWidget> {
       );
     }
     return Positioned(
-      bottom: 10,
-      right: 10,
+      bottom: widget.btnPostionBottom,
+      right: widget.btnPositionRight,
       child: InkWell(
         onTap: toggleFilter,
         child: Container(
           height: 56,
           width: 56,
-          decoration: const BoxDecoration(
-              color: primaryAppColor, shape: BoxShape.circle),
-          child: const Icon(
-            Icons.add,
+          decoration:
+              BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
+          child: Icon(
+            widget.icon,
             color: secondaryAppColor,
           ),
         ),

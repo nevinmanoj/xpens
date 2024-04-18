@@ -5,7 +5,7 @@ import 'package:xpens/screens/home/components/ActionConfirm.dart';
 
 import 'package:intl/intl.dart';
 import '../../../../services/database.dart';
-import '../../../../services/toast.dart';
+import '../../../../shared/utils/toast.dart';
 
 class TrashItemExpanded extends StatelessWidget {
   final item;

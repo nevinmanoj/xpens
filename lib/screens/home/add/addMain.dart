@@ -7,10 +7,12 @@ import 'package:xpens/screens/home/add/welcome.dart';
 import 'package:xpens/screens/home/components/ItemInput/ItemInputsMain.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/datamodals.dart';
+import 'package:xpens/shared/dataModals/ExpenseModal.dart';
 
+import '../../../shared/dataModals/AddItemModal.dart';
+import '../../../shared/dataModals/AddPointModal.dart';
 import '../components/PointInput/PointInputMain.dart';
 
 class AddX extends StatefulWidget {

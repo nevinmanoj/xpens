@@ -19,7 +19,8 @@ class BillSplitFooter extends StatelessWidget {
         decoration: BoxDecoration(color: primaryAppColor, boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 7,
+            // color: Colors.amber,
+            spreadRadius: 10,
             blurRadius: 7,
             offset: Offset(0, 3), // changes position of shadow
           ),
@@ -31,7 +32,7 @@ class BillSplitFooter extends StatelessWidget {
               padding: EdgeInsets.fromLTRB(wt * 0.04, 0, 0, 0),
               child: Text(
                 "Total",
-                style: TextStyle(fontSize: 20, color: Colors.white),
+                style: TextStyle(fontSize: 24, color: Colors.white),
               ),
             ),
             Padding(

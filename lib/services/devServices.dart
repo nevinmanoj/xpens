@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/shared/constants.dart';
-import '../../../../shared/datamodals.dart';
+
+import '../shared/dataModals/AddItemModal.dart';
 
 class DevService {
   Future<void> modify() async {

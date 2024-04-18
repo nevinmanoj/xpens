@@ -110,6 +110,10 @@ class _ItemListState extends State<ItemList> {
                     );
             }),
         AddItemWidget(
+            icon: Icons.add,
+            btnPostionBottom: 10,
+            postionBottom: 0,
+            btnPositionRight: 10,
             tag: 'itemName',
             addFunc: (name) async {
               name = name.substring(0, 1).toUpperCase() + name.substring(1);
