@@ -49,7 +49,7 @@ Widget trashItemWidget(
                   cancel: () {
                     Navigator.pop(context);
                   },
-                  delete: () async {
+                  confirm: () async {
                     await DatabaseService(uid: user!.uid).permaDelete(
                       id: item.id,
                       type: type,
@@ -84,7 +84,7 @@ Widget trashItemWidget(
                   cancel: () {
                     Navigator.pop(context);
                   },
-                  delete: () async {
+                  confirm: () async {
                     await DatabaseService(uid: user!.uid).restore(
                       id: item.id,
                       type: type,

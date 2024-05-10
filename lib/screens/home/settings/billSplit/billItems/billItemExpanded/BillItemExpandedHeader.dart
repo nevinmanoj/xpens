@@ -23,6 +23,7 @@ class BillItemExpandedHeader extends StatelessWidget {
       child: Column(
         children: [
           TextFormField(
+            initialValue: item.cost.toString(),
             cursorColor: Colors.white,
             cursorWidth: 1,
             keyboardType: TextInputType.number,
@@ -42,6 +43,7 @@ class BillItemExpandedHeader extends StatelessWidget {
             padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
             // decoration: BoxDecoration(color: Colors.amber),
             child: TextFormField(
+              initialValue: item.itemName,
               cursorColor: Colors.white,
               cursorWidth: 1,
               keyboardType: TextInputType.text,

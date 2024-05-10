@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:xpens/screens/home/settings/billSplit/billSplitGetxController.dart';
 import 'package:xpens/screens/home/settings/billSplit/persons/PersonExpanded.dart';
-import 'package:xpens/shared/dataModals/BillISplitModal.dart';
 
 import '../../../components/addItem.dart';
 import 'PersonWidget.dart';
@@ -23,7 +22,7 @@ class _PersonsMainState extends State<PersonsMain> {
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
-    double wt = MediaQuery.of(context).size.width;
+    // double wt = MediaQuery.of(context).size.width;
 
     return Stack(
       children: [

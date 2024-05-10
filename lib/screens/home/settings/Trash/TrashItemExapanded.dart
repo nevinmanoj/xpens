@@ -73,7 +73,7 @@ class TrashItemExpanded extends StatelessWidget {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).restore(
                                 id: item.id,
                                 type: type,
@@ -101,7 +101,7 @@ class TrashItemExpanded extends StatelessWidget {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).permaDelete(
                                 id: item.id,
                                 type: type,

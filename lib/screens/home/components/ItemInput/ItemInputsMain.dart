@@ -8,7 +8,6 @@ import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/ExpenseModal.dart';
 
 import '../../../../shared/dataModals/AddItemModal.dart';
 import 'group.dart';

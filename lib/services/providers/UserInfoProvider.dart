@@ -19,6 +19,7 @@ class UserInfoProvider with ChangeNotifier {
   List _eTrash = [];
   List _pTrash = [];
   bool _dev = false;
+  DateTime? _streakDate;
 
   List get eTrash => _eTrash;
   List get pTrash => _pTrash;
@@ -29,6 +30,7 @@ class UserInfoProvider with ChangeNotifier {
   List get items => _myArray;
   String get userName => _userName;
   String get phone => _phno;
+  DateTime? get streakDate => _streakDate;
   void setUser(User? usr) {
     // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
@@ -62,11 +64,18 @@ class UserInfoProvider with ChangeNotifier {
             _cards.add("Other");
             _myArray.remove("Other");
             _myArray.add("Other");
+            if (snapshot.data()!['streakDate'] != "") {
+              _streakDate = DateTime.parse(snapshot.data()!['streakDate']);
+            } else {
+              _streakDate = null;
+            }
           } else {
+            _dev = false;
             _userName = "";
             _myArray = ["Other"];
             _phno = "";
             _cards = ["Other"];
+            _streakDate = null;
           }
 
           notifyListeners();

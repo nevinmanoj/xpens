@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/settings/billSplit/billSplitGetxController.dart';
 
 import '../../../../shared/constants.dart';
@@ -22,7 +21,8 @@ class _BillSplitMainState extends State<BillSplitMain> {
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
-    double total = controller.total;
+    double ht = MediaQuery.of(context).size.height;
+
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -87,22 +87,22 @@ class _BillSplitMainState extends State<BillSplitMain> {
               ],
             ),
           ),
-          body: GetBuilder<BillSplitController>(builder: (context) {
-            return Stack(
-              children: [
-                const TabBarView(
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    BillItemsMain(),
-                    PersonsMain(),
-                  ],
-                ),
-                BillSplitFooter(
-                  value: total,
-                )
-              ],
-            );
-          }),
+          body: Stack(
+            children: [
+              const TabBarView(
+                physics: BouncingScrollPhysics(),
+                children: [
+                  BillItemsMain(),
+                  PersonsMain(),
+                ],
+              ),
+              GetBuilder<BillSplitController>(builder: (context) {
+                return BillSplitFooter(
+                  value: controller.total,
+                );
+              })
+            ],
+          ),
         ));
   }
 }

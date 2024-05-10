@@ -33,37 +33,31 @@ class BillSplitController extends GetxController {
     update();
   }
 
-  void updateBillItem(BillItem I, List<Share> shares) {
-    total = total + I.cost;
+  void updateBillItem(BillItem I, List<Share> shares, int index) {
+    print(shares);
+    total = total + (I.cost - billItems[index].cost);
+    billItems[index] = I;
 
-    for (var item in billItems) {
-      if (item.itemName == I.itemName) {
-        total = total + I.cost - item.cost;
-        item = I;
-
-        shareList.removeWhere((e) {
-          if (e.itemName == I.itemName) {
-            double cost = (billItems
-                    .firstWhere((item) => item.itemName == e.itemName)
-                    .cost) *
-                e.fraction.toDouble();
-            persons[e.person] = persons[e.person]! - cost;
-            return true;
-          }
-          return false;
-        });
-        for (var share in shares) {
-          double cost = (billItems
-                  .firstWhere((item) => item.itemName == share.itemName)
-                  .cost) *
-              share.fraction.toDouble();
-          persons[share.person] = persons[share.person]! + cost;
-        }
-
-        update();
-        return;
+    shareList.removeWhere((e) {
+      if (e.itemName == I.itemName) {
+        double cost = (billItems[index].cost) * e.fraction.toDouble();
+        persons[e.person] = persons[e.person]! - cost;
+        return true;
       }
+      return false;
+    });
+    for (var share in shares) {
+      double cost = (billItems
+              .firstWhere((item) => item.itemName == share.itemName)
+              .cost) *
+          share.fraction.toDouble();
+      persons[share.person] = persons[share.person]! + cost;
     }
+    shareList.addAll(shares);
+    update();
+    return;
+
+    // }
   }
 
   void removeBillItem(String name) {

@@ -30,6 +30,7 @@ class _BillItemsMainState extends State<BillItemsMain> {
                         context,
                         CupertinoPageRoute(
                             builder: (context) => BillItemExpandedMain(
+                                  index: index,
                                   isAdd: false,
                                   shares: ctrl.shareList
                                       .where((shr) =>
@@ -56,6 +57,7 @@ class _BillItemsMainState extends State<BillItemsMain> {
                 context,
                 CupertinoPageRoute(
                     builder: (context) => BillItemExpandedMain(
+                          index: ctrl.billItems.length,
                           isAdd: true,
                           shares: [],
                           item: BillItem(

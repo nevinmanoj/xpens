@@ -102,7 +102,7 @@ class _CardsMainState extends State<CardsMain> {
                                               cancel: () {
                                                 Navigator.pop(context);
                                               },
-                                              delete: () async {
+                                              confirm: () async {
                                                 await DatabaseService(
                                                         uid: user!.uid)
                                                     .updateCardsArray(

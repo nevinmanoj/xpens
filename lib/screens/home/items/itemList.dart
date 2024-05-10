@@ -87,7 +87,7 @@ class _ItemListState extends State<ItemList> {
                                             cancel: () {
                                               Navigator.pop(context);
                                             },
-                                            delete: () async {
+                                            confirm: () async {
                                               await DatabaseService(
                                                       uid: user!.uid)
                                                   .updateItemsArray(

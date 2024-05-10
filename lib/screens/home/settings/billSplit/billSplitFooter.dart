@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:xpens/shared/constants.dart';
+
+import 'billSplitGetxController.dart';
 
 class BillSplitFooter extends StatelessWidget {
   final double value;
@@ -35,16 +38,18 @@ class BillSplitFooter extends StatelessWidget {
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0, 0, wt * 0.04, 0),
-              child: Text(
-                "₹ ${value.toString()}",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 208, 208, 208)),
-              ),
-            )
+            GetBuilder<BillSplitController>(builder: (context) {
+              return Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, wt * 0.04, 0),
+                child: Text(
+                  "₹ ${value.toString()}",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromARGB(255, 208, 208, 208)),
+                ),
+              );
+            })
           ],
         ),
       ),

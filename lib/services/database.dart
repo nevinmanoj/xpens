@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/dataModals/AddItemModal.dart';
 import '../shared/dataModals/AddPointModal.dart';
-import '../shared/dataModals/ExpenseModal.dart';
 
 class DatabaseService {
   final String uid;

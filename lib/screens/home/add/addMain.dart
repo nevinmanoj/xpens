@@ -9,7 +9,6 @@ import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/ExpenseModal.dart';
 
 import '../../../shared/dataModals/AddItemModal.dart';
 import '../../../shared/dataModals/AddPointModal.dart';

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/Streaks.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 class Welcome extends StatefulWidget {
@@ -38,9 +39,18 @@ class _WelcomeState extends State<Welcome> {
                 'Welcome',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              Text(
-                userInfo.userName,
-                style: TextStyle(fontSize: 25),
+              InkWell(
+                enableFeedback: false,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onLongPress: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StreakPage())),
+                child: Text(
+                  userInfo.userName,
+                  style: TextStyle(fontSize: 25),
+                ),
               )
             ],
           ),

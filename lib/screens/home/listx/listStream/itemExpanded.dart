@@ -89,7 +89,7 @@ class _MyWidgetState extends State<ExpandItem> {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).moveToTrash(
                                 id: widget.id,
                                 type: 'expense',
