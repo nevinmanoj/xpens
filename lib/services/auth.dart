@@ -53,7 +53,8 @@ class AuthSerivice {
       User? user = result.user;
 
       DatabaseService(uid: user!.uid).updateUserInfo("Name", name);
-      DatabaseService(uid: user!.uid).updateUserInfo("streakDate", "");
+      DatabaseService(uid: user.uid).updateUserInfo("streakDate", "");
+      DatabaseService(uid: user.uid).updateUserInfo("highestStreak", 0);
       DatabaseService(uid: user.uid).updateUserInfo("Email", email);
       DatabaseService(uid: user.uid).updateUserInfo("isDev", false);
       DatabaseService(uid: user.uid).updateUserInfo("PhoneNumber", "");

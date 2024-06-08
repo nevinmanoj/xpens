@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/Db.dart';
+import 'package:xpens/shared/utils/safeParse.dart';
 
 class UserInfoProvider with ChangeNotifier {
   User? user;
@@ -18,6 +19,7 @@ class UserInfoProvider with ChangeNotifier {
   List _docs = [];
   List _eTrash = [];
   List _pTrash = [];
+  int _highestStreak = 0;
   bool _dev = false;
   DateTime? _streakDate;
 
@@ -31,6 +33,7 @@ class UserInfoProvider with ChangeNotifier {
   String get userName => _userName;
   String get phone => _phno;
   DateTime? get streakDate => _streakDate;
+  int get highestStreak => _highestStreak;
   void setUser(User? usr) {
     // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
@@ -69,6 +72,7 @@ class UserInfoProvider with ChangeNotifier {
             } else {
               _streakDate = null;
             }
+            _highestStreak = snapshot.data()!['highestStreak'];
           } else {
             _dev = false;
             _userName = "";
@@ -76,6 +80,7 @@ class UserInfoProvider with ChangeNotifier {
             _phno = "";
             _cards = ["Other"];
             _streakDate = null;
+            _highestStreak = 0;
           }
 
           notifyListeners();

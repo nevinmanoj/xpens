@@ -18,16 +18,42 @@ class _StreakPageState extends State<StreakPage> {
   @override
   Widget build(BuildContext context) {
     DateTime? streakDate = Provider.of<UserInfoProvider>(context).streakDate;
-    var isStart = streakDate == null;
+    int highestStreak = Provider.of<UserInfoProvider>(context).highestStreak;
+    bool isStart = (streakDate == null);
     final user = Provider.of<User?>(context);
-    String displayDate = "";
+    int displayDate = 0;
     if (!isStart) {
-      displayDate = DateTime.now().difference(streakDate).inDays.toString();
+      displayDate = DateTime.now().difference(streakDate).inDays;
+    }
+    if (displayDate > highestStreak) {
+      DatabaseService(uid: user!.uid)
+          .updateUserInfo("highestStreak", displayDate);
+    }
+
+    void handleScoreReset() {
+      DatabaseService(uid: user!.uid)
+          .updateUserInfo("streakDate", DateTime.now().toString());
     }
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryAppColor,
+        actions: isStart
+            ? null
+            : [
+                Row(
+                  children: [
+                    Text(
+                      highestStreak.toString(),
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Icon(
+                      Icons.emoji_events,
+                      size: 30,
+                    )
+                  ],
+                )
+              ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -38,7 +64,7 @@ class _StreakPageState extends State<StreakPage> {
               isStart
                   ? Container()
                   : Text(
-                      displayDate,
+                      displayDate.toString(),
                       style: TextStyle(fontSize: 60),
                     ),
               Icon(
@@ -55,8 +81,7 @@ class _StreakPageState extends State<StreakPage> {
                 ? ElevatedButton(
                     style: buttonDecoration,
                     onPressed: () {
-                      DatabaseService(uid: user!.uid).updateUserInfo(
-                          "streakDate", DateTime.now().toString());
+                      handleScoreReset();
                     },
                     child: Text(
                       "Start",
@@ -89,10 +114,13 @@ class _StreakPageState extends State<StreakPage> {
                               ));
                     },
                     child: Text(
-                      "Lost",
+                      "Reset",
                       style: TextStyle(color: Colors.red),
                     )),
-          )
+          ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
