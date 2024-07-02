@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/Streaks.dart';
+import 'package:xpens/screens/home/Streaks/Streaks.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 class Welcome extends StatefulWidget {

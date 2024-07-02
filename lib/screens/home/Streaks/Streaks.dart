@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/Streaks/StreakDetails.dart';
 import 'package:xpens/screens/home/components/ActionConfirm.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
@@ -15,6 +16,7 @@ class StreakPage extends StatefulWidget {
 }
 
 class _StreakPageState extends State<StreakPage> {
+  bool streakDeatilsVisible = false;
   @override
   Widget build(BuildContext context) {
     DateTime? streakDate = Provider.of<UserInfoProvider>(context).streakDate;
@@ -33,6 +35,12 @@ class _StreakPageState extends State<StreakPage> {
     void handleScoreReset() {
       DatabaseService(uid: user!.uid)
           .updateUserInfo("streakDate", DateTime.now().toString());
+    }
+
+    void handleStreakDetailVisibility(bool val) {
+      setState(() {
+        streakDeatilsVisible = val;
+      });
     }
 
     return Scaffold(
@@ -58,6 +66,16 @@ class _StreakPageState extends State<StreakPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          isStart
+              ? Container()
+              : Visibility(
+                  visible: streakDeatilsVisible,
+                  child: StreakDetails(
+                    dateTime: streakDate,
+                  )),
+          SizedBox(
+            height: 25,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -67,9 +85,13 @@ class _StreakPageState extends State<StreakPage> {
                       displayDate.toString(),
                       style: TextStyle(fontSize: 60),
                     ),
-              Icon(
-                Bootstrap.fire,
-                size: 60,
+              GestureDetector(
+                onTap: () =>
+                    handleStreakDetailVisibility(!streakDeatilsVisible),
+                child: Icon(
+                  Bootstrap.fire,
+                  size: 60,
+                ),
               ),
             ],
           ),
