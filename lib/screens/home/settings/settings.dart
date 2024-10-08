@@ -3,11 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/defaults/defaultMain.dart';
 import 'package:xpens/screens/home/settings/points/PointsMain.dart';
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
 import 'Trash/TrashMain.dart';
+import 'billSplit/billSplitMain.dart';
 import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
@@ -48,8 +50,10 @@ class SettingsScreen extends StatelessWidget {
         "icon": Icons.sell,
         "title": "Group Summary",
         "onTap": () {
-          Navigator.push(context,
-              CupertinoPageRoute(builder: (context) => const GroupReportMain()));
+          Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => const GroupReportMain()));
         }
       },
       {
@@ -60,15 +64,31 @@ class SettingsScreen extends StatelessWidget {
       {
         "icon": Icons.star_rate,
         "title": "Credit Points Usage",
-        "onTap": () => Navigator.push(
-            context, CupertinoPageRoute(builder: (context) => const PointsMain())),
+        "onTap": () => Navigator.push(context,
+            CupertinoPageRoute(builder: (context) => const PointsMain())),
       },
       {
         "icon": Icons.auto_delete,
         "title": "Trash",
         "onTap": () {
-          Navigator.push(
-              context, CupertinoPageRoute(builder: (context) => const TrashMain()));
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const TrashMain()));
+        }
+      },
+      // {
+      //   "icon": IonIcons.receipt,
+      //   "title": "Bill Split",
+      //   "onTap": () {
+      //     Navigator.push(context,
+      //         CupertinoPageRoute(builder: (context) => const BillSplitMain()));
+      //   }
+      // },
+      {
+        "icon": Icons.tune,
+        "title": "Defaults",
+        "onTap": () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const Defaults()));
         }
       },
     ];
@@ -112,100 +132,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-
-// class SettingsScreen extends StatelessWidget {
-//   const SettingsScreen({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     double wt = MediaQuery.of(context).size.width;
-//     double ht = MediaQuery.of(context).size.height;
-//     FirebaseAuth _auth = FirebaseAuth.instance;
-//     User? user = _auth.currentUser;
-//     var userInfo = Provider.of<UserInfoProvider>(context);
-//     return Column(
-//       children: [
-//         InkWell(
-//           onTap: () {
-//             Navigator.push(
-//                 context,
-//                 CupertinoPageRoute(
-//                     builder: (context) => Profile(
-//                           name: userInfo.userName,
-//                           phoneNumber: userInfo.phone,
-//                         )));
-//           },
-//           child: Container(
-//             color: Colors.grey[300],
-//             width: wt,
-//             height: ht * 0.06,
-//             child: Align(
-//                 alignment: Alignment.centerLeft,
-//                 child: Padding(
-//                   padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-//                   child: Text(
-//                     "Profile",
-//                     style: TextStyle(fontSize: 18),
-//                   ),
-//                 )),
-//           ),
-//         ),
-//         Padding(
-//           padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
-//           child: InkWell(
-//             onTap: () async {
-//               var email = user!.email;
-//               if (email != null) AuthSerivice().Passwordreset(email, context);
-//             },
-//             child: Container(
-//               // decoration: ,
-//               color: Colors.grey[300],
-//               width: wt,
-//               height: ht * 0.06,
-//               child: Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Padding(
-//                       padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-//                       child: const Icon(Icons.lock_reset))),
-//             ),
-//           ),
-//         ),
-//         Padding(
-//           padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
-//           child: InkWell(
-//             onTap: () async => AuthSerivice().signOut(),
-//             child: Container(
-//               // decoration: ,
-//               color: Colors.grey[300],
-//               width: wt,
-//               height: ht * 0.06,
-//               child: Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Padding(
-//                       padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-//                       child: const Icon(Icons.logout))),
-//             ),
-//           ),
-//         ),
-//         Padding(
-//           padding: EdgeInsets.fromLTRB(wt * 0.01, ht * 0.005, wt * 0.01, 0),
-//           child: InkWell(
-//             onTap: () async => Navigator.push(
-//                 context, CupertinoPageRoute(builder: (context) => DevDash())),
-//             child: Container(
-//               // decoration: ,
-//               color: Colors.grey[300],
-//               width: wt,
-//               height: ht * 0.06,
-//               child: Align(
-//                   alignment: Alignment.centerLeft,
-//                   child: Padding(
-//                       padding: EdgeInsets.fromLTRB(wt * 0.03, 0, 0, 0),
-//                       child: const Icon(Icons.logo_dev_sharp))),
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

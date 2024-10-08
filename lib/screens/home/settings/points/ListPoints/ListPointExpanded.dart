@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 
 import '../../../components/ActionConfirm.dart';
 import '../../dev/injectData.dart';
@@ -135,7 +135,7 @@ class _MyWidgetState extends State<ExpandPointItem> {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).moveToTrash(
                                 id: widget.id,
                                 type: 'points',

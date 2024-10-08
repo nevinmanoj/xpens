@@ -5,7 +5,7 @@ import 'package:xpens/screens/home/components/ActionConfirm.dart';
 
 import 'package:intl/intl.dart';
 import '../../../../services/database.dart';
-import '../../../../services/toast.dart';
+import '../../../../shared/utils/toast.dart';
 
 class TrashItemExpanded extends StatelessWidget {
   final item;
@@ -73,7 +73,7 @@ class TrashItemExpanded extends StatelessWidget {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).restore(
                                 id: item.id,
                                 type: type,
@@ -101,7 +101,7 @@ class TrashItemExpanded extends StatelessWidget {
                             cancel: () {
                               Navigator.pop(context);
                             },
-                            delete: () async {
+                            confirm: () async {
                               await DatabaseService(uid: user!.uid).permaDelete(
                                 id: item.id,
                                 type: type,

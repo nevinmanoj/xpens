@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ActionConfirm.dart';
-import 'package:xpens/screens/home/components/items/addItem.dart';
+import 'package:xpens/screens/home/components/addItem.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../../services/database.dart';
@@ -87,7 +87,7 @@ class _ItemListState extends State<ItemList> {
                                             cancel: () {
                                               Navigator.pop(context);
                                             },
-                                            delete: () async {
+                                            confirm: () async {
                                               await DatabaseService(
                                                       uid: user!.uid)
                                                   .updateItemsArray(
@@ -110,6 +110,10 @@ class _ItemListState extends State<ItemList> {
                     );
             }),
         AddItemWidget(
+            icon: Icons.add,
+            btnPostionBottom: 10,
+            postionBottom: 0,
+            btnPositionRight: 10,
             tag: 'itemName',
             addFunc: (name) async {
               name = name.substring(0, 1).toUpperCase() + name.substring(1);

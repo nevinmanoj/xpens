@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
 class DeleteExpense extends StatefulWidget {

@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/Db.dart';
+import 'package:xpens/shared/constants.dart';
 
 class UserInfoProvider with ChangeNotifier {
   User? user;
   UserInfoProvider({required this.user}) {
     if (user != null) init();
   }
-  String option = "Expenses";
+  String option = inputTypes[0];
 
+  List _defaults = [];
   List _cards = ["Other"];
   List _myArray = ["Other"];
   String _userName = "";
@@ -18,9 +20,12 @@ class UserInfoProvider with ChangeNotifier {
   List _docs = [];
   List _eTrash = [];
   List _pTrash = [];
+  int _highestStreak = 0;
   bool _dev = false;
+  DateTime? _streakDate;
 
   List get eTrash => _eTrash;
+  List get defaults => _defaults;
   List get pTrash => _pTrash;
   List get cards => _cards;
   bool get isDev => _dev;
@@ -29,6 +34,8 @@ class UserInfoProvider with ChangeNotifier {
   List get items => _myArray;
   String get userName => _userName;
   String get phone => _phno;
+  DateTime? get streakDate => _streakDate;
+  int get highestStreak => _highestStreak;
   void setUser(User? usr) {
     // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
@@ -41,10 +48,10 @@ class UserInfoProvider with ChangeNotifier {
   }
 
   void init() {
-    print("initializing");
     _fetchUserInfo();
     _fetchExpenses();
     _fetchPoints();
+    _fetchDefaults();
   }
 
   Future<void> _fetchUserInfo() async {
@@ -63,11 +70,20 @@ class UserInfoProvider with ChangeNotifier {
             _cards.add("Other");
             _myArray.remove("Other");
             _myArray.add("Other");
+            if (snapshot.data()!['streakDate'] != "") {
+              _streakDate = DateTime.parse(snapshot.data()!['streakDate']);
+            } else {
+              _streakDate = null;
+            }
+            _highestStreak = snapshot.data()!['highestStreak'];
           } else {
+            _dev = false;
             _userName = "";
             _myArray = ["Other"];
             _phno = "";
             _cards = ["Other"];
+            _streakDate = null;
+            _highestStreak = 0;
           }
 
           notifyListeners();
@@ -86,8 +102,9 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: false)
             .orderBy("date", descending: true);
         colRef.snapshots().listen((event) {
-          print("fetching expense");
+          // print("fetching expense");
           _docs = event.docs;
+
           notifyListeners();
         });
         // zWxHz89t7qc1KhfSOhhicSTyyJI3 nevin
@@ -96,8 +113,9 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: true)
             .orderBy("date", descending: true);
         trashcolRef.snapshots().listen((event) {
-          print("fetching expense trash");
+          // print("fetching expense trash");
           _eTrash = event.docs;
+          notifyListeners();
         });
       } catch (e) {
         print(e.toString());
@@ -113,7 +131,7 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: false)
             .orderBy("date", descending: true);
         colRef.snapshots().listen((event) {
-          print("fetching expense");
+          // print("fetching expense");
           _pointDocs = event.docs;
           notifyListeners();
         });
@@ -123,8 +141,25 @@ class UserInfoProvider with ChangeNotifier {
             .where("isTrash", isEqualTo: true)
             .orderBy("date", descending: true);
         trashcolRef.snapshots().listen((event) {
-          print("fetching expense trash");
+          // print("fetching expense trash");
           _pTrash = event.docs;
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<void> _fetchDefaults() async {
+    if (user != null) {
+      try {
+        final colRef =
+            FirebaseFirestore.instance.collection("$db/${user!.uid}/defaults");
+        colRef.snapshots().listen((event) {
+          // print("fetching expense");
+          _defaults = event.docs;
+          notifyListeners();
         });
       } catch (e) {
         print(e.toString());

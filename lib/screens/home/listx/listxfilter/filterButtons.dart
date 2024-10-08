@@ -5,13 +5,12 @@ class FilterBtns extends StatelessWidget {
   final Function() toggleFilter;
   final Function(dynamic) onFilterChange;
   final Function() clearFilter;
-  final String? name;
   final String order;
   final String? location;
   const FilterBtns(
-      {super.key, required this.order,
+      {super.key,
+      required this.order,
       required this.onFilterChange,
-      required this.name,
       required this.location,
       required this.toggleFilter,
       required this.clearFilter});
@@ -45,9 +44,6 @@ class FilterBtns extends StatelessWidget {
               var base = {};
               base['order'] = order;
 
-              if (name != null) {
-                base['itemName'] = name;
-              }
               if (location != null) {
                 base['location'] = location;
               }

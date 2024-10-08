@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
-import '../shared/datamodals.dart';
+import 'package:xpens/shared/dataModals/AddItemModal.dart';
+import '../shared/dataModals/AddPointModal.dart';
 
 class DatabaseService {
   final String uid;
@@ -285,5 +286,32 @@ class DatabaseService {
         return false;
       }
     }
+  }
+
+  Future updateDefaults({required String type, required AddItem I}) async {
+    String formattedTime = DateFormat('HH:mm')
+        .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
+    I.date = DateTime(
+        I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
+    try {
+      await FirebaseFirestore.instance
+          .collection('$db/$uid/defaults')
+          .doc(type)
+          .set({
+        "group": I.group,
+        "cost": I.cost,
+        "remarks": I.remarks,
+        "date": I.date.toString(),
+        "time": formattedTime,
+        "itemName": I.itemName,
+        "location": I.location,
+        "type": type
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+
+    return true;
   }
 }

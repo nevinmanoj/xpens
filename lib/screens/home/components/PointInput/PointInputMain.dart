@@ -7,8 +7,8 @@ import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/datamodals.dart';
 
+import '../../../../shared/dataModals/AddPointModal.dart';
 import 'cardName.dart';
 
 class PointInputMain extends StatefulWidget {
@@ -23,7 +23,8 @@ class PointInputMain extends StatefulWidget {
   final Function(AddPoint) buttonfunc;
 
   const PointInputMain(
-      {super.key, required this.group,
+      {super.key,
+      required this.group,
       required this.cardName,
       required this.costS,
       required this.date,
@@ -121,6 +122,7 @@ class _PointInputMainState extends State<PointInputMain> {
                 value: itemName,
               ),
               ItemQuantity(
+                req: true,
                 // onCostChanged: updateCost,
                 costs: costController.text,
                 onctrlchange: updatecostctrl,

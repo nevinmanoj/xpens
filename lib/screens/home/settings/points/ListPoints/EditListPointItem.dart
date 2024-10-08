@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../services/database.dart';
-import '../../../../../services/toast.dart';
+import '../../../../../shared/utils/toast.dart';
 import '../../../../../shared/constants.dart';
 import '../../../components/PointInput/PointInputMain.dart';
 

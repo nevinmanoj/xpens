@@ -6,13 +6,13 @@ class ActionConfirm extends StatelessWidget {
   final String title;
   final String msg;
   final Function() cancel;
-  final Function() delete;
+  final Function() confirm;
   const ActionConfirm(
       {super.key,
       required this.title,
       required this.msg,
       required this.cancel,
-      required this.delete});
+      required this.confirm});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class ActionConfirm extends StatelessWidget {
                   width: wt * 0.3,
                   child: ElevatedButton(
                       onPressed: () async {
-                        delete();
+                        confirm();
                       },
                       style: buttonDecoration,
                       child: const Text(
@@ -74,7 +74,7 @@ class ActionConfirm extends StatelessWidget {
                       style: secBtnDecoration,
                       child: const Text(
                         'Cancel',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 16, color: primaryAppColor),
                       )),
                 ),
               ],

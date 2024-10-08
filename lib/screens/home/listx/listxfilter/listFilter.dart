@@ -16,22 +16,14 @@ class _FilterWindowState extends State<FilterWindow> {
   Color backdropColor = const Color(0x66C4C4C4);
   bool showFilter = false;
   double _height = 0;
-  String? name;
   String? location;
   String order = "new";
   void clearFilter() {
     setState(() {
-      name = null;
       location = null;
       order = "new";
     });
     widget.onFilterChange({'order': 'new'});
-  }
-
-  void namechange(newName) {
-    setState(() {
-      name = newName;
-    });
   }
 
   void locchange(newLoc) {
@@ -101,10 +93,6 @@ class _FilterWindowState extends State<FilterWindow> {
                     Padding(
                       padding: const EdgeInsets.only(top: 40),
                       child: ListView(children: [
-                        NameRadioAccordion(
-                          onNameChange: namechange,
-                          selectedOption: name,
-                        ),
                         LocRadioAccordion(
                           onLocChange: locchange,
                           selectedOption: location,
@@ -117,7 +105,6 @@ class _FilterWindowState extends State<FilterWindow> {
                             clearFilter: clearFilter,
                             toggleFilter: toggleFilter,
                             onFilterChange: widget.onFilterChange,
-                            name: name,
                             location: location,
                             order: order),
                       ]),
@@ -148,8 +135,8 @@ class _FilterWindowState extends State<FilterWindow> {
         child: Container(
           height: 56,
           width: 56,
-          decoration:
-              const BoxDecoration(color: primaryAppColor, shape: BoxShape.circle),
+          decoration: const BoxDecoration(
+              color: primaryAppColor, shape: BoxShape.circle),
           child: const Icon(
             Icons.sort,
             color: secondaryAppColor,

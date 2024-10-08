@@ -16,13 +16,13 @@ class CalendarDisp extends StatefulWidget {
 }
 
 class _CalendarDispState extends State<CalendarDisp> {
-  DateTime _selectedDate = DateTime.now();
+  // DateTime _selectedDate = DateTime.now();
   var _calendarFormat = CalendarFormat.week;
-  @override
-  void initState() {
-    super.initState();
-    _selectedDate = DateTime.now();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _selectedDate = DateTime.now();
+  // }
 
   void _onDaySelected(DateTime selectedDate, DateTime selectedDate2) {
     showDialog(
@@ -35,10 +35,10 @@ class _CalendarDispState extends State<CalendarDisp> {
             date: date,
           );
         });
-    setState(() {
-      _selectedDate =
-          DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    });
+    // setState(() {
+    //   _selectedDate =
+    //       DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+    // });
   }
 
   @override
@@ -59,7 +59,7 @@ class _CalendarDispState extends State<CalendarDisp> {
         });
       },
       onDaySelected: _onDaySelected,
-      selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+      selectedDayPredicate: (day) => isSameDay(DateTime.now(), day),
       calendarStyle: CalendarStyle(
         defaultDecoration: BoxDecoration(
           color: Colors.grey.withOpacity(0.1),
@@ -95,7 +95,7 @@ class _CalendarDispState extends State<CalendarDisp> {
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: isSameDay(_selectedDate, day)
+                      color: isSameDay(DateTime.now(), day)
                           ? Colors.white
                           : Colors.black),
                 ),

@@ -5,9 +5,10 @@ import 'package:xpens/screens/home/components/ItemInput/ItemInputsMain.dart';
 
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/datamodals.dart';
+
+import '../../../../shared/dataModals/AddItemModal.dart';
 
 class AddFromCal extends StatefulWidget {
   final DateTime date;
@@ -35,6 +36,8 @@ class _AddFromCalState extends State<AddFromCal> {
       body: Center(
         child: SingleChildScrollView(
           child: ItemInputs(
+              optionDefault: null,
+              isData: true,
               group: "none",
               itemName: allItems[0],
               costS: "",

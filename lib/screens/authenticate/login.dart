@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:xpens/screens/authenticate/components/password.dart';
 import 'package:xpens/screens/authenticate/components/textInput.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 
 import '../../services/auth.dart';
 import '../../shared/constants.dart';

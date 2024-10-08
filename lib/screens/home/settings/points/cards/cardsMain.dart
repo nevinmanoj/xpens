@@ -7,7 +7,7 @@ import 'package:xpens/services/database.dart';
 import '../../../../../services/providers/UserInfoProvider.dart';
 
 import '../../../components/ActionConfirm.dart';
-import '../../../components/items/addItem.dart';
+import '../../../components/addItem.dart';
 import 'cardsExpanded.dart';
 
 class CardsMain extends StatefulWidget {
@@ -102,7 +102,7 @@ class _CardsMainState extends State<CardsMain> {
                                               cancel: () {
                                                 Navigator.pop(context);
                                               },
-                                              delete: () async {
+                                              confirm: () async {
                                                 await DatabaseService(
                                                         uid: user!.uid)
                                                     .updateCardsArray(
@@ -126,6 +126,10 @@ class _CardsMainState extends State<CardsMain> {
                     );
             }),
         AddItemWidget(
+          icon: Icons.add_card,
+          btnPostionBottom: 10,
+          postionBottom: 0,
+          btnPositionRight: 10,
           addFunc: (val) async {
             await DatabaseService(uid: user!.uid)
                 .updateCardsArray(add: true, card: val);

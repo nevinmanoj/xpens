@@ -26,7 +26,7 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
             ExpansionPanelList(
               elevation: 0,
               expandedHeaderPadding: const EdgeInsets.all(0),
-              expansionCallback: (int index, bool isExpanded) {
+              expansionCallback: (int index, bool x) {
                 setState(() {
                   // Update the selected option when an accordion is expanded
                   isExpanded = !isExpanded;
@@ -35,7 +35,7 @@ class _NameRadioAccordionState extends State<NameRadioAccordion> {
               children: [
                 ExpansionPanel(
                   canTapOnHeader: true,
-                  headerBuilder: (BuildContext context, bool isExpanded) {
+                  headerBuilder: (BuildContext context, bool x) {
                     return const ListTile(
                       title: Text(
                         'Name',

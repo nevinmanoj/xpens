@@ -2,7 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/Streaks/Streaks.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
+
+import '../../../shared/constants.dart';
 
 class Welcome extends StatefulWidget {
   const Welcome({super.key});
@@ -12,11 +15,13 @@ class Welcome extends StatefulWidget {
 }
 
 class _WelcomeState extends State<Welcome> {
-  List<PopupMenuEntry<String>> options = [
-    getwidget("Expenses"),
-    getwidget("Points")
-  ];
-  String selecteditem = "Expenses";
+  List<PopupMenuEntry<String>> options =
+      inputTypes.map((e) => getwidget(e)).toList();
+  // List<PopupMenuEntry<String>> options = [
+  //   getwidget("Expense"),
+  //   getwidget("Points")
+  // ];
+  String selecteditem = "Expense";
   @override
   Widget build(BuildContext context) {
     // var userInfo = Provider.of<UserInfoProvider>(context);
@@ -38,9 +43,18 @@ class _WelcomeState extends State<Welcome> {
                 'Welcome',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
-              Text(
-                userInfo.userName,
-                style: TextStyle(fontSize: 25),
+              InkWell(
+                enableFeedback: false,
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onLongPress: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const StreakPage())),
+                child: Text(
+                  userInfo.userName,
+                  style: TextStyle(fontSize: 25),
+                ),
               )
             ],
           ),
@@ -87,7 +101,7 @@ PopupMenuItem<String> getwidget(value) {
 
 IconData geticon(value) {
   switch (value) {
-    case "Expenses":
+    case "Expense":
       return Icons.currency_rupee;
 
     case "Points":

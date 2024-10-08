@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/components/ItemInput/ItemInputsMain.dart';
 
 import 'package:xpens/services/database.dart';
-import 'package:xpens/services/toast.dart';
+import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
 class EditxDetails extends StatefulWidget {
   final String id;
   final dynamic item;
 
-  const EditxDetails({super.key, 
+  const EditxDetails({
+    super.key,
     required this.id,
     required this.item,
   });
@@ -45,6 +46,8 @@ class _EditxDetailsState extends State<EditxDetails> {
         body: Center(
           child: SingleChildScrollView(
             child: ItemInputs(
+                optionDefault: null,
+                isData: true,
                 group: widget.item['group'],
                 itemName: widget.item['itemName'],
                 costS: widget.item['cost'].toString(),
