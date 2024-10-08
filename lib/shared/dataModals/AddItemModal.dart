@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class AddItem {
-  double cost;
+  double? cost;
   String itemName;
   DateTime date;
   TimeOfDay time;
-  String remarks;
+  String? remarks;
   String location;
-  bool isOther;
+  bool? isOther;
   String group;
   AddItem(
-      {required this.cost,
-      required this.remarks,
+      {this.cost,
+      this.remarks,
       required this.location,
       required this.date,
       required this.itemName,
-      required this.isOther,
+      this.isOther,
       required this.time,
       required this.group});
 }

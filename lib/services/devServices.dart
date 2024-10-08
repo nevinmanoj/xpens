@@ -28,13 +28,11 @@ class DevService {
     // querySnapshot.docs.forEach((document) async {
     //   updateDocumentsWithWordArray(document.id);
     // });
-
+    return null;
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     addFieldToACollection(
-        collectionPath: "UserInfo/${user!.uid}/points",
-        fieldName: "isTrash",
-        fieldValue: false);
+        collectionPath: "UserInfo", fieldName: "isTrash", fieldValue: false);
   }
 
   Future<void> updateDocumentsWithWordArray(uid) async {
@@ -70,9 +68,19 @@ class DevService {
     QuerySnapshot querySnapshot = await collection.get();
 
     querySnapshot.docs.forEach((document) async {
-      await collection.doc(document.id).update({
-        fieldName: fieldValue,
-      });
+      // await collection.doc(document.id).update({
+      //   fieldName: fieldValue,
+      // });
+      print(document.id);
+      DatabaseService(uid: document.id).updateDefaults(
+          type: "expense",
+          I: AddItem(
+              remarks: "",
+              location: "Personel",
+              date: DateTime.now(),
+              itemName: "Breakfast",
+              time: TimeOfDay.now(),
+              group: "none"));
     });
   }
 

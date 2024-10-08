@@ -36,6 +36,8 @@ class _AddFromCalState extends State<AddFromCal> {
       body: Center(
         child: SingleChildScrollView(
           child: ItemInputs(
+              optionDefault: null,
+              isData: true,
               group: "none",
               itemName: allItems[0],
               costS: "",

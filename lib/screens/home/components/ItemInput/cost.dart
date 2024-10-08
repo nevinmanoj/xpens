@@ -5,11 +5,13 @@ class ItemQuantity extends StatefulWidget {
   // final Function(String) onCostChanged;
   final String costs;
   final Function(TextEditingController) onctrlchange;
+  final req;
 
   const ItemQuantity(
       {super.key,
       // required this.onCostChanged,
       required this.costs,
+      required this.req,
       required this.onctrlchange});
 
   @override
@@ -47,7 +49,8 @@ class _ItemQuantityState extends State<ItemQuantity> {
             widget.onctrlchange(costController!);
           },
 
-          validator: (value) => value!.isEmpty ? 'Cost must not be null' : null,
+          validator: (value) =>
+              value!.isEmpty && widget.req ? 'Cost must not be null' : null,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             border: InputBorder.none,

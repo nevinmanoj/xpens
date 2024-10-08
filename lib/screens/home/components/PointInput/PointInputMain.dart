@@ -122,6 +122,7 @@ class _PointInputMainState extends State<PointInputMain> {
                 value: itemName,
               ),
               ItemQuantity(
+                req: true,
                 // onCostChanged: updateCost,
                 costs: costController.text,
                 onctrlchange: updatecostctrl,

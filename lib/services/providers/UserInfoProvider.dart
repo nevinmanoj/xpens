@@ -2,15 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/Db.dart';
-import 'package:xpens/shared/utils/safeParse.dart';
+import 'package:xpens/shared/constants.dart';
 
 class UserInfoProvider with ChangeNotifier {
   User? user;
   UserInfoProvider({required this.user}) {
     if (user != null) init();
   }
-  String option = "Expenses";
+  String option = inputTypes[0];
 
+  List _defaults = [];
   List _cards = ["Other"];
   List _myArray = ["Other"];
   String _userName = "";
@@ -24,6 +25,7 @@ class UserInfoProvider with ChangeNotifier {
   DateTime? _streakDate;
 
   List get eTrash => _eTrash;
+  List get defaults => _defaults;
   List get pTrash => _pTrash;
   List get cards => _cards;
   bool get isDev => _dev;
@@ -49,6 +51,7 @@ class UserInfoProvider with ChangeNotifier {
     _fetchUserInfo();
     _fetchExpenses();
     _fetchPoints();
+    _fetchDefaults();
   }
 
   Future<void> _fetchUserInfo() async {
@@ -140,6 +143,22 @@ class UserInfoProvider with ChangeNotifier {
         trashcolRef.snapshots().listen((event) {
           // print("fetching expense trash");
           _pTrash = event.docs;
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<void> _fetchDefaults() async {
+    if (user != null) {
+      try {
+        final colRef =
+            FirebaseFirestore.instance.collection("$db/${user!.uid}/defaults");
+        colRef.snapshots().listen((event) {
+          // print("fetching expense");
+          _defaults = event.docs;
           notifyListeners();
         });
       } catch (e) {

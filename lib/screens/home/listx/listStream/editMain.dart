@@ -46,6 +46,8 @@ class _EditxDetailsState extends State<EditxDetails> {
         body: Center(
           child: SingleChildScrollView(
             child: ItemInputs(
+                optionDefault: null,
+                isData: true,
                 group: widget.item['group'],
                 itemName: widget.item['itemName'],
                 costS: widget.item['cost'].toString(),

@@ -12,7 +12,7 @@ Future<File> jsonToExcel(
   var sheet = excel[month];
 
   // Add the header row to the sheet
-  sheet.appendRow(['Name', 'Cost', 'Date', 'Location', 'Remarks']);
+  sheet.appendRow(['Name', 'Cost', 'Date', 'Location', 'Remarks', "Group"]);
   for (int i = 0; i < list.length; i++) {
     jsonData = list[i];
     if ((jsonData['year'] == year) && (jsonData['month'] == month)) {
@@ -23,7 +23,8 @@ Future<File> jsonToExcel(
         jsonData['cost'],
         formattedDate,
         jsonData['location'],
-        jsonData['remarks']
+        jsonData['remarks'],
+        jsonData['group']
       ]);
     }
   }

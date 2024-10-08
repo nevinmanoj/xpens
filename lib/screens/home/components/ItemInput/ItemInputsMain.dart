@@ -10,9 +10,11 @@ import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 
 import '../../../../shared/dataModals/AddItemModal.dart';
+import '../../../../shared/utils/toast.dart';
 import 'group.dart';
 
 class ItemInputs extends StatefulWidget {
+  final bool isData;
   final String itemName;
   final DateTime date;
   final TimeOfDay time;
@@ -22,9 +24,12 @@ class ItemInputs extends StatefulWidget {
   final String buttonLabel;
   final String group;
   final Function(AddItem) buttonfunc;
+  final dynamic optionDefault;
 
   const ItemInputs(
       {super.key,
+      required this.optionDefault,
+      required this.isData,
       required this.group,
       required this.itemName,
       required this.costS,
@@ -103,6 +108,12 @@ class _ItemInputsState extends State<ItemInputs> {
     });
   }
 
+  String notNullReturnValue(key, defaultValue) {
+    return widget.optionDefault == null || widget.optionDefault[key] == null
+        ? defaultValue.toString()
+        : widget.optionDefault[key].toString();
+  }
+
   bool loading = false;
   @override
   Widget build(BuildContext context) {
@@ -145,6 +156,7 @@ class _ItemInputsState extends State<ItemInputs> {
                 height: 15,
               ),
               ItemQuantity(
+                req: widget.isData,
                 // onCostChanged: updateCost,
                 costs: costController.text,
                 onctrlchange: updatecostctrl,
@@ -198,37 +210,90 @@ class _ItemInputsState extends State<ItemInputs> {
                               loading = true;
                             });
 
-                            // cost = double.parse(costS);
-                            double cost = double.parse(costController.text);
+                            double cost = 0;
+                            bool costConvFailed = false;
+                            try {
+                              cost = double.parse(costController.text);
+                            } catch (e) {
+                              costConvFailed = true;
+                              if (widget.isData) {
+                                showToast(
+                                    context: context,
+                                    msg: "Invalid value for cost");
+                                costController.clear();
+                                setState(() {
+                                  loading = false;
+                                });
+                                return;
+                              }
+                            }
+                            if (widget.isData) {
+                              AddItem I = AddItem(
+                                  group: group,
+                                  isOther:
+                                      (!allItems.contains(itemName.trim())) ||
+                                          itemName == "Other",
+                                  location: location,
+                                  remarks: remarksController.text.trim(),
+                                  cost: cost,
+                                  date: date,
+                                  itemName: itemName.trim(),
+                                  time: time);
 
-                            if (itemName == "Other") {}
-                            AddItem I = AddItem(
-                                group: group,
-                                isOther:
-                                    (!allItems.contains(itemName.trim())) ||
-                                        itemName == "Other",
+                              widget.buttonfunc(I);
+                            } else {
+                              AddItem I = AddItem(
                                 location: location,
-                                remarks: remarksController.text.trim(),
-                                cost: cost,
                                 date: date,
+                                cost: costConvFailed ? null : cost,
                                 itemName: itemName.trim(),
-                                time: time);
+                                time: time,
+                                group: group,
+                                remarks: remarksController.text.trim(),
+                              );
+                              widget.buttonfunc(I);
+                            }
 
-                            widget.buttonfunc(I);
                             FocusManager.instance.primaryFocus?.unfocus();
                             costController.clear();
                             remarksController.clear();
-                            // updateItemName(allItems[0]);
-                            // updateDate(DateTime.now());
-                            // updateTIme(TimeOfDay.now());
-                            // updateLocation(locationList[0]);
-                            // updateGroup("none");
+
+                            if (widget.isData) {
+                              if (widget.optionDefault == null) {
+                                setState(() {
+                                  itemName = allItems[0];
+                                  date = DateTime.now();
+                                  time = TimeOfDay.now();
+                                  location = locationList[0];
+                                  group = "none";
+                                });
+                              } else {
+                                setState(() {
+                                  itemName = notNullReturnValue(
+                                      "itemName", allItems[0]);
+
+                                  group = notNullReturnValue("group", "none");
+
+                                  costController.text =
+                                      notNullReturnValue("cost", "");
+                                  date = DateTime.parse(notNullReturnValue(
+                                      "date", DateTime.now()));
+                                  location = notNullReturnValue(
+                                      "location", locationList[0]);
+                                  remarksController.text =
+                                      notNullReturnValue("remarks", "");
+
+                                  time = TimeOfDay(
+                                      hour: int.parse(notNullReturnValue(
+                                              "time", TimeOfDay.now())
+                                          .split(":")[0]),
+                                      minute: int.parse(notNullReturnValue(
+                                              "time", TimeOfDay.now())
+                                          .split(":")[1]));
+                                });
+                              }
+                            }
                             setState(() {
-                              itemName = allItems[0];
-                              date = DateTime.now();
-                              time = TimeOfDay.now();
-                              location = locationList[0];
-                              group = "none";
                               loading = false;
                             });
                           }
