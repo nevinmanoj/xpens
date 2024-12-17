@@ -7,11 +7,22 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/enums/Period.dart';
 
 import '../shared/dataModals/AddItemModal.dart';
 
 class DevService {
+  String uid;
+  late DatabaseService mainDB;
+  late MilestoneDatabaseService milestoneDB;
+  DevService({required this.uid}) {
+    mainDB = DatabaseService(uid: uid);
+    milestoneDB = MilestoneDatabaseService(uid: uid);
+  }
+
   Future<void> modify() async {
     // print("check codebase");
     // getData();
@@ -169,6 +180,23 @@ class DevService {
           itemName: itemName,
           time: formattedTime));
     }
+  }
+
+  Future injectTestDataMS() async {
+    milestoneDB.addMilestoneTemplate(
+        item: MilestoneTemplate(
+            addedDate: DateTime.now(),
+            title: "ms 3",
+            period: Period.quarter,
+            skipFirst: false,
+            endVal: 500));
+    // milestoneDB.addMilestoneTemplate(
+    //     item: MilestoneTemplate(
+    //         addedDate: DateTime.now(),
+    //         title: "ms 2",
+    //         period: Period.weekly,
+    //         skipFirst: true,
+    //         endVal: 200));
   }
 
   void getData() async {

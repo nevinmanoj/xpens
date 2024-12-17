@@ -24,7 +24,6 @@ class _ItemQuantityState extends State<ItemQuantity> {
   @override
   void initState() {
     costController = TextEditingController(text: widget.costs);
-    // TODO: implement initState
     super.initState();
   }
 

@@ -6,7 +6,8 @@ import '../../../../shared/constants.dart';
 import 'inputAutofill.dart';
 
 class ItemGroup extends StatefulWidget {
-  const ItemGroup({super.key, 
+  const ItemGroup({
+    super.key,
     required this.itemGroup,
     required this.onGroupChange,
   });
@@ -31,7 +32,6 @@ class _ItemGroupState extends State<ItemGroup> {
 
   @override
   void didUpdateWidget(covariant ItemGroup oldWidget) {
-    // TODO: implement didUpdateWidget
     addToGroup = widget.itemGroup != "none";
     super.didUpdateWidget(oldWidget);
   }

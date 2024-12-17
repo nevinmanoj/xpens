@@ -20,7 +20,6 @@ class _CalendarState extends State<Calendar> {
   late DateTime dateToDisplay;
   @override
   void initState() {
-    // TODO: implement initState
     dateToDisplay = widget.dateToDisplay;
     super.initState();
   }
