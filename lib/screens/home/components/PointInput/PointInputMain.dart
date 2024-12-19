@@ -39,7 +39,7 @@ class PointInputMain extends StatefulWidget {
 
 class _PointInputMainState extends State<PointInputMain> {
   String cardName = "";
-  DateTime date = DateTime.now();
+  DateTime? date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
   String group = "";
@@ -72,7 +72,7 @@ class _PointInputMainState extends State<PointInputMain> {
     });
   }
 
-  void updateDate(DateTime newDate) {
+  void updateDate(DateTime? newDate) {
     setState(() {
       date = newDate;
     });
@@ -142,8 +142,9 @@ class _PointInputMainState extends State<PointInputMain> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Calendar(
+                      isData: false,
                       dateToDisplay: date,
-                      onDateChanged: (DateTime newId) {
+                      onDateChanged: (DateTime? newId) {
                         updateDate(newId);
                       },
                     ),
@@ -178,7 +179,7 @@ class _PointInputMainState extends State<PointInputMain> {
                             widget.buttonfunc(AddPoint(
                                 card: cardName,
                                 time: time,
-                                date: date,
+                                date: date!,
                                 point: cost,
                                 itemName: itemName));
 
