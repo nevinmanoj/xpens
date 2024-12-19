@@ -83,15 +83,6 @@ class DevService {
       //   fieldName: fieldValue,
       // });
       print(document.id);
-      DatabaseService(uid: document.id).updateDefaults(
-          type: "expense",
-          I: AddItem(
-              remarks: "",
-              location: "Personel",
-              date: DateTime.now(),
-              itemName: "Breakfast",
-              time: TimeOfDay.now(),
-              group: "none"));
     });
   }
 

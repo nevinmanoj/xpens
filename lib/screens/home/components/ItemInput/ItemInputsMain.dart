@@ -8,6 +8,7 @@ import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 
 import '../../../../shared/dataModals/AddItemModal.dart';
 import '../../../../shared/utils/toast.dart';
@@ -16,14 +17,14 @@ import 'group.dart';
 class ItemInputs extends StatefulWidget {
   final bool isData;
   final String itemName;
-  final DateTime date;
+  final DateTime? date;
   final TimeOfDay time;
   final String costS;
   final String remarks;
   final String location;
   final String buttonLabel;
   final String group;
-  final Function(AddItem) buttonfunc;
+  final Function buttonfunc;
   final dynamic optionDefault;
 
   const ItemInputs(
@@ -45,7 +46,7 @@ class ItemInputs extends StatefulWidget {
 
 class _ItemInputsState extends State<ItemInputs> {
   String itemName = "";
-  DateTime date = DateTime.now();
+  DateTime? date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
   String group = "";
@@ -84,7 +85,7 @@ class _ItemInputsState extends State<ItemInputs> {
     });
   }
 
-  void updateDate(DateTime newDate) {
+  void updateDate(DateTime? newDate) {
     setState(() {
       date = newDate;
     });
@@ -176,8 +177,9 @@ class _ItemInputsState extends State<ItemInputs> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Calendar(
+                      isData: widget.isData,
                       dateToDisplay: date,
-                      onDateChanged: (DateTime newId) {
+                      onDateChanged: (DateTime? newId) {
                         updateDate(newId);
                       },
                     ),
@@ -236,13 +238,13 @@ class _ItemInputsState extends State<ItemInputs> {
                                   location: location,
                                   remarks: remarksController.text.trim(),
                                   cost: cost,
-                                  date: date,
+                                  date: date!,
                                   itemName: itemName.trim(),
                                   time: time);
 
                               widget.buttonfunc(I);
                             } else {
-                              AddItem I = AddItem(
+                              ExpenseDefault I = ExpenseDefault(
                                 location: location,
                                 date: date,
                                 cost: costConvFailed ? null : cost,
