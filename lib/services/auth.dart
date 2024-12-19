@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:xpens/shared/dataModals/AddItemModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 
 import 'database.dart';
 import '../shared/utils/toast.dart';
@@ -61,7 +61,7 @@ class AuthSerivice {
       DatabaseService(uid: user.uid).updateUserInfo("PhoneNumber", "");
       DatabaseService(uid: user.uid).updateDefaults(
           type: "expense",
-          I: AddItem(
+          I: ExpenseDefault(
               remarks: "",
               location: "Personel",
               date: DateTime.now(),

@@ -1,12 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 
 import '../../../../services/database.dart';
 import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
-import '../../../../shared/dataModals/AddItemModal.dart';
 import '../../../../shared/utils/CapsFirst.dart';
 import '../../../../shared/utils/toast.dart';
 import '../../components/ItemInput/ItemInputsMain.dart';
@@ -25,6 +27,7 @@ class _DefaultsState extends State<Defaults> {
 
     double ht = MediaQuery.of(context).size.height;
     var userInfo = Provider.of<UserInfoProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryAppColor,
@@ -34,6 +37,13 @@ class _DefaultsState extends State<Defaults> {
       body: ListView.builder(
           itemCount: userInfo.defaults.length,
           itemBuilder: (c, i) {
+            String notNullReturnValue(key, defaultValue) {
+              return userInfo.defaults[i] == null ||
+                      userInfo.defaults[i][key] == null
+                  ? defaultValue.toString()
+                  : userInfo.defaults[i][key].toString();
+            }
+
             return InkWell(
               onTap: () => Navigator.push(context,
                   CupertinoPageRoute(builder: (context) {
@@ -48,12 +58,14 @@ class _DefaultsState extends State<Defaults> {
                     child: ItemInputs(
                         optionDefault: null,
                         isData: false,
-                        itemName: userInfo.defaults[i]["itemName"],
-                        costS: userInfo.defaults[i]["cost"] == null
-                            ? ""
-                            : "${userInfo.defaults[i]["cost"]}",
-                        group: userInfo.defaults[i]["group"],
-                        date: DateTime.parse(userInfo.defaults[i]["date"]),
+                        itemName:
+                            notNullReturnValue("itemName", userInfo.items[0]),
+                        costS: notNullReturnValue("cost", ""),
+                        group: notNullReturnValue("group", "none"),
+                        date: userInfo.defaults[i]["date"] == null
+                            ? null
+                            : DateTime.parse(
+                                userInfo.defaults[i]["date"].toString()),
                         location: userInfo.defaults[i]["location"],
                         remarks: "",
                         time: TimeOfDay(
@@ -62,7 +74,7 @@ class _DefaultsState extends State<Defaults> {
                             minute: int.parse(
                                 userInfo.defaults[i]["time"].split(":")[1])),
                         buttonLabel: "Save",
-                        buttonfunc: (AddItem I) async {
+                        buttonfunc: (ExpenseDefault I) async {
                           bool res = await DatabaseService(uid: user!.uid)
                               .updateDefaults(
                                   type: userInfo.defaults[i].id, I: I);
