@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
+import 'package:xpens/screens/home/milestones/MilestonesMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
-import 'items/itemList.dart';
+import 'settings/items/itemList.dart';
 import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AddX(),
     listx(),
     Details(),
-    ItemList(),
+    MilestonesMain(),
     SettingsScreen(),
   ];
 
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       {
         "icon": Icon(Icons.category),
-        "label": "Items",
+        "label": "Milestones",
       },
       {
         "icon": Icon(Icons.person_4),
