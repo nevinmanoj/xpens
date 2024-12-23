@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:icons_plus/icons_plus.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
-import 'package:xpens/screens/home/milestones/MilestonesMain.dart';
+import 'package:xpens/screens/home/milestone/MilestonesMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';
-import 'settings/items/itemList.dart';
 import 'listx/listMain.dart';
 import 'settings/settings.dart';
 
@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List navItems = [];
 
-  static List<Widget> _widgetOptions = <Widget>[
+  List<Widget> _widgetOptions = <Widget>[
     AddX(),
     listx(),
     Details(),
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "label": "Analyze",
       },
       {
-        "icon": Icon(Icons.category),
+        "icon": Icon(FontAwesome.calendar_check),
         "label": "Milestones",
       },
       {
