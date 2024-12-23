@@ -1,0 +1,47 @@
+name: Flutter Build and Deploy APK
+
+on:
+  push:
+    branches: [ "public-apk" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+          
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Create APK directory
+        run: |
+          mkdir -p public
+          cp -r build/app/outputs/flutter-apk/* public/
+          # Create an index.html file for download page
+          echo "<html><body><h2>Download APK</h2><p><a href='app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: public
+          force_orphan: true
