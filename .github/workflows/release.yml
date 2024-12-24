@@ -9,38 +9,58 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    permissions:
+      contents: read
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
           
-      - name: Get dependencies
-        run: flutter pub get
+      - run: flutter pub get
+      - run: flutter build apk
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-build
+          path: build/app/outputs/flutter-apk/
 
-      - name: Build APK
-        run: flutter build apk
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-build
+          path: public
 
-      - name: Create APK directory
+      - name: Create index.html
         run: |
-          mkdir -p public
-          cp -r build/app/outputs/flutter-apk/* public/
-          # Create an index.html file for download page
           echo "<html><body><h2>Download APK</h2><p><a href='app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: public
-          force_orphan: true
+      # - name: Deploy to GitHub Pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: public
+      #     force_orphan: true
 
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
 
 # name: release
