@@ -2,7 +2,7 @@ name: Flutter Build and Deploy APK
 
 on:
   push:
-    branches: [ "public-apk" ]
+    branches: [ "gh-pages" ]
   workflow_dispatch:
 
 jobs:
