@@ -33,9 +33,11 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    
     permissions:
-      contents: write
+      pages: write
       id-token: write
+    
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -45,58 +47,21 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: apk-build
-          path: public
-          
+          path: public/apk
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Create index.html
         run: |
-          echo "<html><body><h2>Download APK</h2><p><a href='app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
+          mkdir -p public
+          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
 
-      # - name: Deploy to GitHub Pages
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: public
-      #     force_orphan: true
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-
-# name: release
-
-# on:
-#   push:
-#     branches: [ "public-apk" ]
-
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: write
-#     steps:
-#       - uses: actions/checkout@v2
-
-#       - name: Setup Flutter
-#         uses: subosito/flutter-action@v2
-#         with:
-#           flutter-version: '3.3.1'
-#           channel: 'stable'
-          
-#       - name: Read version information
-#         id: read_version
-#         run: |
-#           echo "VERSION=$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)" >> $GITHUB_ENV
-
-#         shell: bash
-
-#       - run: flutter doctor -v
-
-#       - name: Build APK
-#         run: flutter build apk
-
-
