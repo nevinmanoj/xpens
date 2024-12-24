@@ -46,6 +46,9 @@ jobs:
         with:
           name: apk-build
           path: public
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Create index.html
         run: |
