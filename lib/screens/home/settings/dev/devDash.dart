@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/services/appUpdate.dart';
 
 import 'package:xpens/shared/constants.dart';
 
@@ -33,6 +34,15 @@ class _DevDashState extends State<DevDash> {
           child: Column(children: [
         InjectTestData(),
         Test(),
+        ElevatedButton(
+            style: buttonDecoration,
+            onPressed: () async {
+              await AppUpdater.checkAndUpdate();
+            },
+            child: Text(
+              "update app",
+              style: TextStyle(color: Colors.white),
+            )),
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
