@@ -2,21 +2,21 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
-// import 'package:package_info_plus/package_info_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:install_plugin/install_plugin.dart';
 
 class AppUpdater {
   static Future<void> checkAndUpdate() async {
     String updateUrl = "https://nevinmanoj.github.io/xpens/apk/app-release.apk";
     try {
-      if (!await _checkPermissions()) {
-        throw 'Required permissions not granted';
-      }
+      // if (!await _checkPermissions()) {
+      //   throw 'Required permissions not granted';
+      // }
 
-      // final packageInfo = await PackageInfo.fromPlatform();
-      // final currentVersion = packageInfo.version;
-      // final packageName = packageInfo.packageName;
-
+      final packageInfo = await PackageInfo.fromPlatform();
+      final currentVersion = packageInfo.version;
+      final packageName = packageInfo.packageName;
+      print("cv:${currentVersion} , pkname:${packageName}");
       final dir = await getExternalStorageDirectory();
       final filePath = '${dir?.path}/app-release.apk';
 
@@ -24,7 +24,6 @@ class AppUpdater {
       await _installUpdate(filePath);
     } catch (e) {
       print('Update failed: $e');
-      rethrow;
     }
   }
 

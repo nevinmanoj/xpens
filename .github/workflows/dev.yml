@@ -2,7 +2,7 @@ name: Flutter Build and Deploy APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev","version-bumps" ]
   workflow_dispatch:
 
 jobs:
@@ -55,7 +55,7 @@ jobs:
       - name: Create index.html
         run: |
           mkdir -p public
-          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
+          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p><a href='apk/app-debug.apk'>Download debug APK</a></body></html>" > public/index.html
           
 
       - name: Upload Pages artifact

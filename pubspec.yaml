@@ -53,7 +53,7 @@ dependencies:
   get: ^4.6.6
   intl: any
   install_plugin: ^2.1.0
-  # package_info_plus: ^8.0.2
+  package_info_plus: ^8.0.2
   dio: ^5.7.0
   permission_handler: ^11.3.1
 dev_dependencies:

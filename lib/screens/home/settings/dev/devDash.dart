@@ -40,7 +40,7 @@ class _DevDashState extends State<DevDash> {
               await AppUpdater.checkAndUpdate();
             },
             child: Text(
-              "update app",
+              "update app 1",
               style: TextStyle(color: Colors.white),
             )),
         ElevatedButton(
