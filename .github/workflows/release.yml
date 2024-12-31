@@ -20,7 +20,9 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
-          
+      - name: Decode Google Services JSON
+        run: |
+          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
       - run: flutter pub get
       - run: flutter build apk
       
