@@ -21,7 +21,7 @@ class _ItemRemarkState extends State<ItemRemark> {
   @override
   void initState() {
     remarksController = TextEditingController(text: widget.remarks);
-    // TODO: implement initState
+
     super.initState();
   }
 

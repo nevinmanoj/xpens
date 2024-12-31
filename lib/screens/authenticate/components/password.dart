@@ -14,7 +14,6 @@ class _passState extends State<Password> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

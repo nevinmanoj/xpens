@@ -1,8 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/enums/Period.dart';
+import 'package:xpens/shared/dataModals/enums/Status.dart';
+import 'package:xpens/shared/dataModals/subModals/PeriodDates.dart';
+import 'package:xpens/shared/utils/getDateTimesFromPeriod.dart';
 
 class UserInfoProvider with ChangeNotifier {
   User? user;
@@ -23,6 +31,10 @@ class UserInfoProvider with ChangeNotifier {
   int _highestStreak = 0;
   bool _dev = false;
   DateTime? _streakDate;
+  List _milestoneTemplatesDocs = [];
+  List _milestoneDocs = [];
+  //TODO: input and handle this to firebase
+  String milestoneSyncDate = "";
 
   List get eTrash => _eTrash;
   List get defaults => _defaults;
@@ -36,6 +48,12 @@ class UserInfoProvider with ChangeNotifier {
   String get phone => _phno;
   DateTime? get streakDate => _streakDate;
   int get highestStreak => _highestStreak;
+  List get milestones => _milestoneDocs;
+  List get milestoneTemplates => _milestoneTemplatesDocs;
+
+  bool msrunning = false;
+  bool msurunning = false;
+
   void setUser(User? usr) {
     // print("switching user to ${usr!.email} from ${user!.email}");
     user = usr;
@@ -52,6 +70,12 @@ class UserInfoProvider with ChangeNotifier {
     _fetchExpenses();
     _fetchPoints();
     _fetchDefaults();
+    _fetchmilestoneTemplates();
+    _fetchmilestones();
+    _addUpcomingMilestonesForAllTemplates();
+    _checkActiveOrClosedMilestonesExistForAllTemplates();
+
+    // _addUpcomingMilestonesForAllTemplates();
   }
 
   Future<void> _fetchUserInfo() async {
@@ -164,6 +188,156 @@ class UserInfoProvider with ChangeNotifier {
       } catch (e) {
         print(e.toString());
       }
+    }
+  }
+
+  Future<void> _fetchmilestones() async {
+    if (user != null) {
+      try {
+        final colRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/milestones")
+            .orderBy("endDate", descending: false);
+        colRef.snapshots().listen((event) {
+          _milestoneDocs = event.docs;
+
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future<void> _fetchmilestoneTemplates() async {
+    if (user != null) {
+      try {
+        final colRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/milestone-templates")
+            .orderBy("addedDate", descending: true);
+        colRef.snapshots().listen((event) async {
+          _milestoneTemplatesDocs = event.docs;
+          _checkActiveOrClosedMilestonesExistForAllTemplates();
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
+  }
+
+  Future _addUpcomingMilestonesForAllTemplates() async {
+    int today = DateTime.now().millisecondsSinceEpoch;
+    if (!msurunning) {
+      msurunning = true;
+      if (user != null) {
+        try {
+          for (var mst in _milestoneTemplatesDocs) {
+            DateRange currentDateRange = getDateTimesFromPeriod(
+                date: DateTime.now(),
+                p: deserializePeriod(mst["period"]),
+                isNextPeriod: false);
+            DateRange nextDateRange = getDateTimesFromPeriod(
+                date: DateTime.now(),
+                p: deserializePeriod(mst["period"]),
+                isNextPeriod: true);
+            //for { quarter, halfYear, year } before 7 days,
+            //for { monthly } before 4 days
+            //for { weekly } before 2 days
+            //for { daily } before 1 day
+            Duration daysBefore = Duration();
+
+            switch (deserializePeriod(mst["period"])) {
+              case Period.quarter:
+              case Period.halfYear:
+              case Period.year:
+                daysBefore = const Duration(days: 7);
+                break;
+              case Period.daily:
+                daysBefore = const Duration(days: 1);
+                break;
+              case Period.weekly:
+                daysBefore = const Duration(days: 2);
+                break;
+              case Period.monthly:
+                daysBefore = const Duration(days: 4);
+                break;
+            }
+            if (today >
+                currentDateRange.endDate
+                    .subtract(daysBefore)
+                    .millisecondsSinceEpoch) {
+              //current time is past the period
+              List ms = _milestoneDocs.where((item) {
+                return (mst.id == item["templateID"] &&
+                    (item["currentStatus"] == "upcoming") &&
+                    (nextDateRange.startDate.millisecondsSinceEpoch ==
+                        item["startDate"]) &&
+                    (nextDateRange.endDate.millisecondsSinceEpoch ==
+                        item["endDate"]));
+              }).toList();
+              if (ms.isEmpty) {
+                MilestoneDatabaseService(uid: user!.uid).addMilestone(
+                    template: MilestoneTemplate.fromJson(mst),
+                    skipCurrent: true,
+                    templateID: mst.id);
+              }
+            }
+          }
+        } catch (e) {
+          print(e.toString());
+        }
+      }
+      msurunning = false;
+    }
+  }
+
+  Future _checkActiveOrClosedMilestonesExistForAllTemplates() async {
+    if (!msrunning) {
+      msrunning = true;
+      int today = DateTime.now().millisecondsSinceEpoch;
+      //TODO: check sync date before
+      if (user != null) {
+        try {
+          for (var mst in _milestoneTemplatesDocs) {
+            DateRange firstDateRange = getDateTimesFromPeriod(
+                date: DateTime.fromMillisecondsSinceEpoch(mst["addedDate"]),
+                p: deserializePeriod(mst["period"]),
+                isNextPeriod: false);
+            if (mst["skipFirst"] &&
+                (today > firstDateRange.startDate.millisecondsSinceEpoch) &&
+                (today <= firstDateRange.endDate.millisecondsSinceEpoch)) {
+              continue;
+            }
+
+            List ms = _milestoneDocs.where((item) {
+              return (mst.id == item["templateID"] &&
+                  (today > item["startDate"]) &&
+                  (today <= item["endDate"]));
+            }).toList();
+            if (ms.isEmpty) {
+              await MilestoneDatabaseService(uid: user!.uid).addMilestone(
+                  template: MilestoneTemplate.fromJson(mst),
+                  skipCurrent: false,
+                  templateID: mst.id);
+              continue;
+            }
+
+            var upcomingItem = ms.firstWhereOrNull(
+                (item) => (item["currentStatus"] == "upcoming"));
+            if (upcomingItem != null) {
+              Milestone ms = Milestone.fromJson(upcomingItem);
+
+              ms.currentStatus = Status.active;
+              await MilestoneDatabaseService(uid: user!.uid)
+                  .editMilestoneorTemplate(
+                      item: ms, id: upcomingItem.id, isTemplate: false);
+            }
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+      msrunning = false;
     }
   }
 }

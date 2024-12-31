@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,7 @@ class _DevDashState extends State<DevDash> {
   @override
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfoProvider>(context);
+    var user = Provider.of<User?>(context);
     // double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -36,10 +38,10 @@ class _DevDashState extends State<DevDash> {
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
-              await DevService().modify();
+              DevService(uid: user!.uid).injectTestDataMS();
             },
             child: Text(
-              "Modify",
+              "Inject ms data",
               style: TextStyle(color: Colors.white),
             )),
         ElevatedButton(

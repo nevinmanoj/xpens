@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xpens/screens/home/listx/listxfilter/filterButtons.dart';
 import 'package:xpens/screens/home/listx/listxfilter/locationFilter.dart';
-import 'package:xpens/screens/home/listx/listxfilter/namefilter.dart';
 import 'package:xpens/screens/home/listx/listxfilter/orderBy.dart';
 import 'package:xpens/shared/constants.dart';
 

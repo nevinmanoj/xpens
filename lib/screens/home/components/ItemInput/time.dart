@@ -18,7 +18,6 @@ class _ClockState extends State<Clock> {
   late TimeOfDay selectTime;
   @override
   void initState() {
-    // TODO: implement initState
     selectTime = widget.selectTime;
     super.initState();
   }
