@@ -1,0 +1,28 @@
+name: Flutter Build for pull request
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+      - name: Decode Google Services JSON
+        run: |
+          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+      - run: flutter pub get
+      - run: flutter build apk
+

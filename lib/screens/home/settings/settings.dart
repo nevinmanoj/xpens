@@ -30,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
 
     List items = [
       {
-        "icon": FontAwesome.file_arrow_down,
+        "icon": FontAwesome.file_arrow_down_solid,
         "title": "Download Statement",
         "onTap": () {
           Navigator.push(

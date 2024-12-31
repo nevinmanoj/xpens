@@ -112,7 +112,7 @@ class _BillItemExpandedMainState extends State<BillItemExpandedMain> {
                     child: const Icon(Icons.balance),
                   ),
                   Tab(
-                    child: const Icon(Bootstrap.num123),
+                    child: const Icon(Bootstrap.number_123),
                   ),
                   Tab(
                     child: const Icon(Icons.pie_chart),
