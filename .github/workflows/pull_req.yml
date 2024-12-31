@@ -25,7 +25,7 @@ jobs:
           echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
       - name: Verify File
         run: |
-          ls -l app/google-services.json
+          ls -l android/app/google-services.json
           # Don't use cat in production as it will expose the contents
           cat android/app/google-services.json
       - run: flutter pub get
