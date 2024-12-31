@@ -23,11 +23,6 @@ jobs:
       - name: Decode Google Services JSON
         run: |
           echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
-      - name: Verify File
-        run: |
-          ls -l android/app/google-services.json
-          # Don't use cat in production as it will expose the contents
-          cat android/app/google-services.json
       - run: flutter pub get
       - run: flutter build apk
 
