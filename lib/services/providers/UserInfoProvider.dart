@@ -72,8 +72,9 @@ class UserInfoProvider with ChangeNotifier {
     _fetchDefaults();
     _fetchmilestoneTemplates();
     _fetchmilestones();
-    _addUpcomingMilestonesForAllTemplates();
-    _checkActiveOrClosedMilestonesExistForAllTemplates();
+    // _addUpcomingMilestonesForAllTemplates();
+    // _checkActiveOrClosedMilestonesExistForAllTemplates();
+    getmstandcheckforms();
 
     // _addUpcomingMilestonesForAllTemplates();
   }
@@ -216,7 +217,8 @@ class UserInfoProvider with ChangeNotifier {
             .orderBy("addedDate", descending: true);
         colRef.snapshots().listen((event) async {
           _milestoneTemplatesDocs = event.docs;
-          _checkActiveOrClosedMilestonesExistForAllTemplates();
+          // _checkActiveOrClosedMilestonesExistForAllTemplates();
+          getmstandcheckforms();
           notifyListeners();
         });
       } catch (e) {
@@ -225,13 +227,83 @@ class UserInfoProvider with ChangeNotifier {
     }
   }
 
-  Future _addUpcomingMilestonesForAllTemplates() async {
+  Future _checkMilestonesForAllTemplates(
+      {required List msdata, required List mstdata}) async {
     int today = DateTime.now().millisecondsSinceEpoch;
     if (!msurunning) {
       msurunning = true;
       if (user != null) {
+        //change expired to closed
         try {
-          for (var mst in _milestoneTemplatesDocs) {
+          List expiredMsList =
+              msdata.where((item) => today > item["endDate"]).toList();
+          for (var expms in expiredMsList) {
+            Milestone ms = Milestone.fromJson(expms);
+            ms.currentStatus = Status.closed;
+
+            await MilestoneDatabaseService(uid: user!.uid)
+                .editMilestoneorTemplate(
+                    item: ms, id: expms.id, isTemplate: false);
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+        msdata = await FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/milestones")
+            .get()
+            .then((value) => value.docs);
+
+        //closed or active
+        try {
+          for (var mst in mstdata) {
+            DateRange firstDateRange = getDateTimesFromPeriod(
+                date: DateTime.fromMillisecondsSinceEpoch(mst["addedDate"]),
+                p: deserializePeriod(mst["period"]),
+                isNextPeriod: false);
+            if (mst["skipFirst"] &&
+                (today > firstDateRange.startDate.millisecondsSinceEpoch) &&
+                (today <= firstDateRange.endDate.millisecondsSinceEpoch)) {
+              continue;
+            }
+
+            List ms = msdata.where((item) {
+              return (mst.id == item["templateID"] &&
+                  (today > item["startDate"]) &&
+                  (today <= item["endDate"]));
+            }).toList();
+            if (ms.isEmpty) {
+              await MilestoneDatabaseService(uid: user!.uid).addMilestone(
+                  template: MilestoneTemplate.fromJson(mst),
+                  skipCurrent: false,
+                  templateID: mst.id);
+              msdata = await FirebaseFirestore.instance
+                  .collection("$db/${user!.uid}/milestones")
+                  .get()
+                  .then((value) => value.docs);
+              continue;
+            }
+
+            var upcomingItem = ms.firstWhereOrNull(
+                (item) => (item["currentStatus"] == "upcoming"));
+            if (upcomingItem != null) {
+              Milestone ms = Milestone.fromJson(upcomingItem);
+
+              ms.currentStatus = Status.active;
+              await MilestoneDatabaseService(uid: user!.uid)
+                  .editMilestoneorTemplate(
+                      item: ms, id: upcomingItem.id, isTemplate: false);
+              msdata = await FirebaseFirestore.instance
+                  .collection("$db/${user!.uid}/milestones")
+                  .get()
+                  .then((value) => value.docs);
+            }
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+        //upcomming
+        try {
+          for (var mst in mstdata) {
             DateRange currentDateRange = getDateTimesFromPeriod(
                 date: DateTime.now(),
                 p: deserializePeriod(mst["period"]),
@@ -247,6 +319,7 @@ class UserInfoProvider with ChangeNotifier {
             Duration daysBefore = Duration();
 
             switch (deserializePeriod(mst["period"])) {
+              //using fall down method for first three
               case Period.quarter:
               case Period.halfYear:
               case Period.year:
@@ -267,7 +340,7 @@ class UserInfoProvider with ChangeNotifier {
                     .subtract(daysBefore)
                     .millisecondsSinceEpoch) {
               //current time is past the period
-              List ms = _milestoneDocs.where((item) {
+              List ms = msdata.where((item) {
                 return (mst.id == item["templateID"] &&
                     (item["currentStatus"] == "upcoming") &&
                     (nextDateRange.startDate.millisecondsSinceEpoch ==
@@ -276,15 +349,20 @@ class UserInfoProvider with ChangeNotifier {
                         item["endDate"]));
               }).toList();
               if (ms.isEmpty) {
-                MilestoneDatabaseService(uid: user!.uid).addMilestone(
+                await MilestoneDatabaseService(uid: user!.uid).addMilestone(
                     template: MilestoneTemplate.fromJson(mst),
                     skipCurrent: true,
                     templateID: mst.id);
+
+                msdata = await FirebaseFirestore.instance
+                    .collection("$db/${user!.uid}/milestones")
+                    .get()
+                    .then((value) => value.docs);
               }
             }
           }
         } catch (e) {
-          print(e.toString());
+          debugPrint(e.toString());
         }
       }
       msurunning = false;
@@ -339,5 +417,18 @@ class UserInfoProvider with ChangeNotifier {
       }
       msrunning = false;
     }
+  }
+
+  Future getmstandcheckforms() async {
+    final List ms = await FirebaseFirestore.instance
+        .collection("$db/${user!.uid}/milestones")
+        .get()
+        .then((value) => value.docs);
+    final List mst = await FirebaseFirestore.instance
+        .collection("$db/${user!.uid}/milestone-templates")
+        .get()
+        .then((value) => value.docs);
+
+    await _checkMilestonesForAllTemplates(msdata: ms, mstdata: mst);
   }
 }
