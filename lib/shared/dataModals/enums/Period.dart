@@ -1,4 +1,11 @@
-enum Period { quarter, halfYear, year, daily, weekly, monthly }
+enum Period {
+  daily,
+  weekly,
+  monthly,
+  quarter,
+  halfYear,
+  year,
+}
 
 String serializePeriod(Period s) => s.name;
 

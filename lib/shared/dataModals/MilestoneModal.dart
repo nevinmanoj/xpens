@@ -2,6 +2,7 @@ import 'package:xpens/shared/dataModals/enums/Status.dart';
 import 'package:xpens/shared/dataModals/subModals/PeriodDates.dart';
 
 class Milestone {
+  String selfId;
   String title;
   DateRange dateRange;
   double? currentVal;
@@ -11,6 +12,7 @@ class Milestone {
 
   Milestone(
       {required this.dateRange,
+      required this.selfId,
       required this.title,
       required this.templateID,
       this.currentVal,
@@ -33,6 +35,7 @@ class Milestone {
   // Create from JSON (Deserialization)
   factory Milestone.fromJson(json) {
     return Milestone(
+      selfId: json.id,
       title: json['title'] as String,
       templateID: json['templateID'] as String,
       currentStatus:

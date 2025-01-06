@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -176,6 +175,7 @@ class DevService {
   Future injectTestDataMS() async {
     milestoneDB.addMilestoneTemplate(
         item: MilestoneTemplate(
+            templateId: "place_holder",
             addedDate: DateTime.now(),
             title: "ms 3",
             period: Period.quarter,

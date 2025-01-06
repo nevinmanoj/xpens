@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneModal.dart';
@@ -32,16 +31,21 @@ class MilestoneItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: wt * 0.9,
-              height: ht * 0.04,
-              child: Text(
-                overflow: TextOverflow.fade,
-                ms.title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromRGBO(101, 101, 101, 1)),
-              ),
+            Row(
+              children: [
+                Container(
+                  color: Colors.amber,
+                  width: wt * 0.65,
+                  height: ht * 0.04,
+                  child: Text(
+                    overflow: TextOverflow.fade,
+                    ms.title,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(101, 101, 101, 1)),
+                  ),
+                ),
+              ],
             ),
             const Spacer(),
             Row(
@@ -73,28 +77,32 @@ class MilestoneItem extends StatelessWidget {
                 ),
               ],
             ),
-            Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  DateFormat.yMMMd().format(ms.dateRange.startDate),
-                  style: const TextStyle(
-                      fontSize: 15, color: Color.fromARGB(255, 65, 65, 65)),
-                ),
-                Text(
-                  ms.dateRange.timeLeftString(),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                      color: Color.fromARGB(255, 170, 170, 170)),
-                ),
-                Text(
-                  DateFormat.yMMMd().format(ms.dateRange.endDate),
-                  style: const TextStyle(
-                      fontSize: 15, color: Color.fromARGB(255, 65, 65, 65)),
-                )
-              ],
+            Container(
+              margin: EdgeInsets.fromLTRB(0, 10, 0, 00),
+              // color: Colors.amber,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    DateFormat.yMMMd().format(ms.dateRange.startDate),
+                    style: const TextStyle(
+                        fontSize: 15, color: Color.fromARGB(255, 65, 65, 65)),
+                  ),
+                  Text(
+                    ms.dateRange.timeLeftString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                        color: Color.fromARGB(255, 170, 170, 170)),
+                  ),
+                  Text(
+                    DateFormat.yMMMd().format(ms.dateRange.endDate),
+                    style: const TextStyle(
+                        fontSize: 15, color: Color.fromARGB(255, 65, 65, 65)),
+                  )
+                ],
+              ),
             ),
           ],
         ),

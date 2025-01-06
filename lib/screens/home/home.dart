@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:icons_plus/icons_plus.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
 import 'package:xpens/screens/home/milestone/MilestonesMain.dart';
@@ -59,7 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
         "label": "Analyze",
       },
       {
-        "icon": Icon(FontAwesome.calendar_check),
+        // "icon": Icon(FontAwesome.calendar_check),
+        "icon": Icon(Icons.checklist),
         "label": "Milestones",
       },
       {

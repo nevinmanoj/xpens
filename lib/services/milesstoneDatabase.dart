@@ -10,10 +10,11 @@ class MilestoneDatabaseService {
   MilestoneDatabaseService({required this.uid});
 
   Future addMilestoneTemplate({required MilestoneTemplate item}) async {
-    await FirebaseFirestore.instance
+    final docRef = await FirebaseFirestore.instance
         .collection('$db/$uid/milestone-templates')
-        .doc()
-        .set(item.toJson(), SetOptions(merge: true));
+        .doc();
+    item.templateId = docRef.id;
+    docRef.set(item.toJson(), SetOptions(merge: true));
   }
 
   Future editMilestoneorTemplate(
@@ -39,6 +40,7 @@ class MilestoneDatabaseService {
       required bool skipCurrent,
       required String templateID}) async {
     Milestone ms = Milestone(
+        selfId: "Place holder",
         dateRange: getDateTimesFromPeriod(
             p: template.period,
             date: DateTime.now(),

@@ -2,6 +2,7 @@
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 
 class MilestoneTemplate {
+  String templateId;
   String title;
   DateTime addedDate;
   Period period;
@@ -11,6 +12,7 @@ class MilestoneTemplate {
   MilestoneTemplate(
       {required this.addedDate,
       required this.title,
+      required this.templateId,
       required this.period,
       required this.skipFirst,
       required this.endVal});
@@ -35,6 +37,7 @@ class MilestoneTemplate {
       endVal:
           json['endVal'] != null ? (json['endVal'] as num).toDouble() : null,
       skipFirst: json['skipFirst'] as bool,
+      templateId: json.id,
     );
   }
 }

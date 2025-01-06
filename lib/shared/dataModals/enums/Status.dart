@@ -1,4 +1,8 @@
-enum Status { closed, upcoming, active }
+enum Status {
+  active,
+  upcoming,
+  closed,
+}
 
 String serializeStatus(Status s) => s.name;
 
