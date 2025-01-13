@@ -241,9 +241,9 @@ class UserInfoProvider with ChangeNotifier {
             Milestone ms = Milestone.fromJson(expms);
             ms.currentStatus = Status.closed;
 
-            await MilestoneDatabaseService(uid: user!.uid)
-                .editMilestoneorTemplate(
-                    item: ms, id: expms.id, isTemplate: false);
+            await MilestoneDatabaseService(uid: user!.uid).editMilestone(
+              item: ms,
+            );
           }
         } catch (e) {
           debugPrint(e.toString());
@@ -290,8 +290,7 @@ class UserInfoProvider with ChangeNotifier {
 
               ms.currentStatus = Status.active;
               await MilestoneDatabaseService(uid: user!.uid)
-                  .editMilestoneorTemplate(
-                      item: ms, id: upcomingItem.id, isTemplate: false);
+                  .editMilestone(item: ms);
               msdata = await FirebaseFirestore.instance
                   .collection("$db/${user!.uid}/milestones")
                   .get()
@@ -407,8 +406,7 @@ class UserInfoProvider with ChangeNotifier {
 
               ms.currentStatus = Status.active;
               await MilestoneDatabaseService(uid: user!.uid)
-                  .editMilestoneorTemplate(
-                      item: ms, id: upcomingItem.id, isTemplate: false);
+                  .editMilestone(item: ms);
             }
           }
         } catch (e) {

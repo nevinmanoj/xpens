@@ -178,7 +178,7 @@ class DevService {
             templateId: "place_holder",
             addedDate: DateTime.now(),
             title: "ms 3",
-            period: Period.quarter,
+            period: Period.daily,
             skipFirst: false,
             endVal: 500));
     // milestoneDB.addMilestoneTemplate(

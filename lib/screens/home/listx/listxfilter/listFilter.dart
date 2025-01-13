@@ -13,7 +13,6 @@ class FilterWindow extends StatefulWidget {
 
 class _FilterWindowState extends State<FilterWindow> {
   Color backdropColor = const Color(0x66C4C4C4);
-  bool showFilter = false;
   double _height = 0;
   String? location;
   String order = "new";
@@ -38,19 +37,17 @@ class _FilterWindowState extends State<FilterWindow> {
   }
 
   void toggleFilter() {
-    if (showFilter) {
+    if (_height == 500) {
       //hide filter
       setState(() {
         backdropColor = Colors.white;
         _height = 0;
-        showFilter = false;
       });
     } else {
       //show filter
       setState(() {
         backdropColor = const Color(0x66C4C4C4);
         _height = 500;
-        showFilter = true;
       });
     }
   }
@@ -60,87 +57,87 @@ class _FilterWindowState extends State<FilterWindow> {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
 
-    if (showFilter) {
-      return SizedBox(
-        height: ht,
-        child: Stack(
-          children: [
-            InkWell(
+    return SizedBox(
+      height: ht,
+      child: Stack(
+        children: [
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: InkWell(
               onTap: toggleFilter,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 1000),
-                curve: Curves.fastOutSlowIn,
-                color: backdropColor,
+              child: Container(
+                height: 56,
+                width: 56,
+                decoration: const BoxDecoration(
+                    color: primaryAppColor, shape: BoxShape.circle),
+                child: const Icon(
+                  Icons.sort,
+                  color: secondaryAppColor,
+                ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: AnimatedContainer(
-                // padding: EdgeInsets.only(top: 20),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(40),
-                      topLeft: Radius.circular(40)),
-                ),
-                height: _height,
-                width: wt,
-                duration: const Duration(milliseconds: 1000),
-                curve: Curves.fastOutSlowIn,
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: ListView(children: [
-                        LocRadioAccordion(
-                          onLocChange: locchange,
-                          selectedOption: location,
-                        ),
-                        OrderByRadioAccordion(
-                          selectedOption: order,
-                          onOrderChange: orderchange,
-                        ),
-                        FilterBtns(
-                            clearFilter: clearFilter,
-                            toggleFilter: toggleFilter,
-                            onFilterChange: widget.onFilterChange,
-                            location: location,
-                            order: order),
-                      ]),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, ht * 0.02, wt * 0.08, 0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: InkWell(
-                          onTap: toggleFilter,
-                          child: const Icon(Icons.close),
-                        ),
+          ),
+          _height == 500
+              ? InkWell(
+                  onTap: toggleFilter,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 1000),
+                    curve: Curves.fastOutSlowIn,
+                    color: backdropColor,
+                  ),
+                )
+              : Container(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              // padding: EdgeInsets.only(top: 20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(40),
+                    topLeft: Radius.circular(40)),
+              ),
+              height: _height,
+              width: wt,
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.fastOutSlowIn,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: ListView(children: [
+                      LocRadioAccordion(
+                        onLocChange: locchange,
+                        selectedOption: location,
+                      ),
+                      OrderByRadioAccordion(
+                        selectedOption: order,
+                        onOrderChange: orderchange,
+                      ),
+                      FilterBtns(
+                          clearFilter: clearFilter,
+                          toggleFilter: toggleFilter,
+                          onFilterChange: widget.onFilterChange,
+                          location: location,
+                          order: order),
+                    ]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, ht * 0.02, wt * 0.08, 0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: toggleFilter,
+                        child: const Icon(Icons.close),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            )
-          ],
-        ),
-      );
-    }
-    return Positioned(
-      bottom: 10,
-      right: 10,
-      child: InkWell(
-        onTap: toggleFilter,
-        child: Container(
-          height: 56,
-          width: 56,
-          decoration: const BoxDecoration(
-              color: primaryAppColor, shape: BoxShape.circle),
-          child: const Icon(
-            Icons.sort,
-            color: secondaryAppColor,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

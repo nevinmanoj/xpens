@@ -4,13 +4,17 @@ import 'package:xpens/shared/constants.dart';
 class ItemRemark extends StatefulWidget {
   // final Function(String) onRemarkChanged;
   final String remarks;
+  final String hint;
+  final bool required;
   final Function(TextEditingController) onctrlchange;
 
   const ItemRemark(
       {super.key,
       //  required this.onRemarkChanged,
       required this.onctrlchange,
-      required this.remarks});
+      required this.remarks,
+      required this.hint,
+      required this.required});
 
   @override
   State<ItemRemark> createState() => _ItemRemarkState();
@@ -45,11 +49,15 @@ class _ItemRemarkState extends State<ItemRemark> {
             widget.onctrlchange(remarksController!);
             // widget.onRemarkChanged(value);
           },
+          validator: (value) =>
+              (value == null || value == '') && (widget.required)
+                  ? "This Cannot be empty"
+                  : null,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-            hintText: 'Remarks',
+            hintText: widget.hint,
           ),
         ),
       ),

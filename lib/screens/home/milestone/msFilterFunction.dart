@@ -1,19 +1,17 @@
 import 'package:xpens/shared/dataModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/enums/Status.dart';
 
 List<Milestone> applyMSFilter(
     {required List<Milestone> data,
     required List<MilestoneTemplate> templates,
     required List periodList,
-    required List statusList}) {
+    required Status currentStatus}) {
   //filter status
-  data = data.where((e) => statusList.contains(e.currentStatus)).toList();
+  data = data.where((e) => currentStatus == e.currentStatus).toList();
   //find parent and filter periods
-  data = data
-      .where((milestone) => periodList.contains(templates
-          .firstWhere((template) => template.templateId == milestone.templateID)
-          .period))
-      .toList();
+  data = data.where((e) => periodList.contains(e.period)).toList();
+
   //TODO:do order by expire time, and more
   return data;
 }

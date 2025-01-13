@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/milestone/MileStonePopup/MilestonePopupMain.dart';
+import 'package:xpens/screens/home/milestone/MilestoneHeader.dart';
 import 'package:xpens/screens/home/milestone/MilestonePills.dart';
 import 'package:xpens/screens/home/milestone/milestoneItem.dart';
 import 'package:xpens/screens/home/milestone/msFilterFunction.dart';
@@ -18,8 +20,9 @@ class MilestonesMain extends StatefulWidget {
 }
 
 class _MilestonesMainState extends State<MilestonesMain> {
+  Milestone? expandedMS;
   List periodList = [...Period.values];
-  List statusList = [Status.active];
+  Status currentStatus = Status.active;
   void setPeriodList(item) {
     Period p = deserializePeriod(item);
 
@@ -37,16 +40,9 @@ class _MilestonesMainState extends State<MilestonesMain> {
 
   void setStatusList(item) {
     Status p = deserializeStatus(item);
-
-    if (statusList.contains(p)) {
-      setState(() {
-        statusList.remove(p);
-      });
-    } else {
-      setState(() {
-        statusList.add(p);
-      });
-    }
+    setState(() {
+      currentStatus = p;
+    });
   }
 
   @override
@@ -60,34 +56,46 @@ class _MilestonesMainState extends State<MilestonesMain> {
     mslist = applyMSFilter(
         data: mslist,
         periodList: periodList,
-        statusList: statusList,
+        currentStatus: currentStatus,
         templates: mstList);
 
     double ht = MediaQuery.of(context).size.height;
-    return Column(
+    return Stack(
       children: [
-        MilestonePills(
-          names: Status.values.map((e) => e.name).toList(),
-          selected: Status.values.map((e) => statusList.contains(e)).toList(),
-          toggle: setStatusList,
-          items: Status.values,
+        Column(
+          children: [
+            MilestoneHeader(),
+            MilestonePills(
+              names: Status.values.map((e) => e.name).toList(),
+              selected: Status.values.map((e) => e == currentStatus).toList(),
+              toggle: setStatusList,
+              items: Status.values,
+            ),
+            MilestonePills(
+              names: Period.values.map((e) => e.name).toList(),
+              selected:
+                  Period.values.map((e) => periodList.contains(e)).toList(),
+              toggle: setPeriodList,
+              items: Period.values,
+            ),
+            Container(
+              height: ht * 0.6,
+              color: const Color.fromARGB(255, 227, 227, 227),
+              // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: ListView.builder(
+                  itemCount: mslist.length,
+                  itemBuilder: ((context, i) {
+                    return InkWell(
+                        onTap: (() => setState(() => expandedMS = mslist[i])),
+                        child: MilestoneItem(ms: mslist[i]));
+                  })),
+            ),
+          ],
         ),
-        MilestonePills(
-          names: Period.values.map((e) => e.name).toList(),
-          selected: Period.values.map((e) => periodList.contains(e)).toList(),
-          toggle: setPeriodList,
-          items: Period.values,
-        ),
-        Container(
-          height: ht * 0.6,
-          color: const Color.fromARGB(255, 227, 227, 227),
-          // padding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          child: ListView.builder(
-              itemCount: mslist.length,
-              itemBuilder: ((context, i) {
-                return MilestoneItem(ms: mslist[i]);
-              })),
+        MilestonePopup(
+          clearMs: () => setState(() => expandedMS = null),
+          ms: expandedMS,
         ),
       ],
     );

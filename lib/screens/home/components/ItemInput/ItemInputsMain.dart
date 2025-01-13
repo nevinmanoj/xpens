@@ -149,7 +149,9 @@ class _ItemInputsState extends State<ItemInputs> {
                 height: 15,
               ),
               ItemRemark(
+                required: false,
                 // onRemarkChanged: updateRemarks,
+                hint: "Remarks",
                 onctrlchange: updateRemarkctrl,
                 remarks: remarksController.text,
               ),
@@ -157,6 +159,8 @@ class _ItemInputsState extends State<ItemInputs> {
                 height: 15,
               ),
               ItemQuantity(
+                hint: "Cost",
+                enabled: true,
                 req: widget.isData,
                 // onCostChanged: updateCost,
                 costs: costController.text,
