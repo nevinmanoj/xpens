@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/milesstoneDatabase.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 
 import '../shared/dataModals/AddItemModal.dart';
@@ -38,11 +40,11 @@ class DevService {
     // querySnapshot.docs.forEach((document) async {
     //   updateDocumentsWithWordArray(document.id);
     // });
-    return null;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    addFieldToACollection(
-        collectionPath: "UserInfo", fieldName: "isTrash", fieldValue: false);
+
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    // addFieldToACollection(
+    //     collectionPath: "UserInfo", fieldName: "isTrash", fieldValue: false);
   }
 
   Future<void> updateDocumentsWithWordArray(uid) async {
@@ -188,6 +190,16 @@ class DevService {
     //         period: Period.weekly,
     //         skipFirst: true,
     //         endVal: 200));
+  }
+
+  Future injectStreakData() async {
+    FirebaseFirestore.instance.collection("$db/$uid/streaks").add(Streak(
+            selectRed: false,
+            addedDate: DateTime.now().subtract(const Duration(days: 10)),
+            list: [],
+            selfId: "placeholder",
+            title: "test")
+        .toJson());
   }
 
   void getData() async {

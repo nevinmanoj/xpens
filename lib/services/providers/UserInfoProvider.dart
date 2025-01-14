@@ -33,6 +33,7 @@ class UserInfoProvider with ChangeNotifier {
   DateTime? _streakDate;
   List _milestoneTemplatesDocs = [];
   List _milestoneDocs = [];
+  List _streakDocs = [];
   //TODO: input and handle this to firebase
   String milestoneSyncDate = "";
 
@@ -50,6 +51,7 @@ class UserInfoProvider with ChangeNotifier {
   int get highestStreak => _highestStreak;
   List get milestones => _milestoneDocs;
   List get milestoneTemplates => _milestoneTemplatesDocs;
+  List get streaks => _streakDocs;
 
   bool msrunning = false;
   bool msurunning = false;
@@ -75,6 +77,7 @@ class UserInfoProvider with ChangeNotifier {
     // _addUpcomingMilestonesForAllTemplates();
     // _checkActiveOrClosedMilestonesExistForAllTemplates();
     getmstandcheckforms();
+    getStreaks();
 
     // _addUpcomingMilestonesForAllTemplates();
   }
@@ -368,55 +371,6 @@ class UserInfoProvider with ChangeNotifier {
     }
   }
 
-  Future _checkActiveOrClosedMilestonesExistForAllTemplates() async {
-    if (!msrunning) {
-      msrunning = true;
-      int today = DateTime.now().millisecondsSinceEpoch;
-      //TODO: check sync date before
-      if (user != null) {
-        try {
-          for (var mst in _milestoneTemplatesDocs) {
-            DateRange firstDateRange = getDateTimesFromPeriod(
-                date: DateTime.fromMillisecondsSinceEpoch(mst["addedDate"]),
-                p: deserializePeriod(mst["period"]),
-                isNextPeriod: false);
-            if (mst["skipFirst"] &&
-                (today > firstDateRange.startDate.millisecondsSinceEpoch) &&
-                (today <= firstDateRange.endDate.millisecondsSinceEpoch)) {
-              continue;
-            }
-
-            List ms = _milestoneDocs.where((item) {
-              return (mst.id == item["templateID"] &&
-                  (today > item["startDate"]) &&
-                  (today <= item["endDate"]));
-            }).toList();
-            if (ms.isEmpty) {
-              await MilestoneDatabaseService(uid: user!.uid).addMilestone(
-                  template: MilestoneTemplate.fromJson(mst),
-                  skipCurrent: false,
-                  templateID: mst.id);
-              continue;
-            }
-
-            var upcomingItem = ms.firstWhereOrNull(
-                (item) => (item["currentStatus"] == "upcoming"));
-            if (upcomingItem != null) {
-              Milestone ms = Milestone.fromJson(upcomingItem);
-
-              ms.currentStatus = Status.active;
-              await MilestoneDatabaseService(uid: user!.uid)
-                  .editMilestone(item: ms);
-            }
-          }
-        } catch (e) {
-          debugPrint(e.toString());
-        }
-      }
-      msrunning = false;
-    }
-  }
-
   Future getmstandcheckforms() async {
     final List ms = await FirebaseFirestore.instance
         .collection("$db/${user!.uid}/milestones")
@@ -428,5 +382,21 @@ class UserInfoProvider with ChangeNotifier {
         .then((value) => value.docs);
 
     await _checkMilestonesForAllTemplates(msdata: ms, mstdata: mst);
+  }
+
+  Future getStreaks() async {
+    if (user != null) {
+      try {
+        final colRef =
+            FirebaseFirestore.instance.collection("$db/${user!.uid}/streaks");
+        colRef.snapshots().listen((event) {
+          _streakDocs = event.docs;
+
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
+    }
   }
 }

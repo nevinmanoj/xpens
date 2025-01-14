@@ -50,6 +50,12 @@ class _DevDashState extends State<DevDash> {
               userInfo.init();
             },
             child: Text("Reload")),
+        ElevatedButton(
+            style: buttonDecoration,
+            onPressed: () async {
+              DevService(uid: user!.uid).injectStreakData();
+            },
+            child: Text("Add streak data")),
       ])),
     );
   }

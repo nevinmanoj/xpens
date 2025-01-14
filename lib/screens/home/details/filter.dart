@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 
 class FilterDetails extends StatefulWidget {
   final String filter;
   final Function(String) onFilterChanged;
-  const FilterDetails({super.key, required this.onFilterChanged, required this.filter});
+  const FilterDetails(
+      {super.key, required this.onFilterChanged, required this.filter});
   @override
   State<FilterDetails> createState() => _FilterDetailsState();
 }
