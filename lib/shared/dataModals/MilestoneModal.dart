@@ -12,9 +12,11 @@ class Milestone {
   Status currentStatus;
   String templateID;
   Period period;
+  bool isOrphan;
 
   Milestone(
       {required this.dateRange,
+      required this.isOrphan,
       required this.selfId,
       required this.title,
       required this.period,
@@ -35,6 +37,7 @@ class Milestone {
       'currentStatus': serializeStatus(currentStatus),
       'endVal': endVal,
       'currentVal': currentVal,
+      'isOrphan': isOrphan,
       'period': serializePeriod(period)
     };
   }
@@ -46,6 +49,7 @@ class Milestone {
       selfId: json.id,
       title: json['title'] as String,
       templateID: json['templateID'] as String,
+      isOrphan: json['isOrphan'] as bool,
       currentStatus: deserializeStatus(json['currentStatus']),
       currentVal: json['currentVal'] != null
           ? (json['currentVal'] as num).toDouble()

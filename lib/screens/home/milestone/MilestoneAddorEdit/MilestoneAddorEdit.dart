@@ -175,6 +175,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                           Milestone? ms;
                           if (widget.inputms != null) {
                             ms = Milestone(
+                                isOrphan: widget.inputms!.isOrphan,
                                 dateRange: widget.inputms!.dateRange,
                                 currentVal: curVal,
                                 endVal: endVal,

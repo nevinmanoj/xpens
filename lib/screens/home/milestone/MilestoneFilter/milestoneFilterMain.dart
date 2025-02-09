@@ -1,54 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:xpens/screens/home/milestone/MilestoneFilter/PeriodFilter.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/enums/Period.dart';
+
+import '../MilestoneGetx.dart';
 
 class MilestonesFilterMain extends StatefulWidget {
   final bool filterEnabled;
   final Function dissableFilter;
-  final Function setPeriodList;
-  final List periodList;
-  final Function clearFilter;
-  const MilestonesFilterMain(
-      {super.key,
-      required this.filterEnabled,
-      required this.dissableFilter,
-      required this.setPeriodList,
-      required this.periodList,
-      required this.clearFilter});
+
+  const MilestonesFilterMain({
+    super.key,
+    required this.filterEnabled,
+    required this.dissableFilter,
+  });
   @override
   State<MilestonesFilterMain> createState() => _MilestonesFilterMainState();
 }
 
 class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
-  late List periodList;
-
+  final controller = Get.put(MilestoneController());
   @override
-  void initState() {
-    periodList = widget.periodList;
-    super.initState();
-  }
-
-  void clearFilter() {
-    setState(() {
-      periodList = [...Period.values];
-    });
-    widget.clearFilter();
-  }
-
-  void modifyPeriodList(Period p) {
-    if (periodList.contains(p)) {
-      setState(() {
-        periodList.remove(p);
-      });
-      // periodList.remove(p);
-    } else {
-      setState(() {
-        periodList.add(p);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
@@ -87,10 +59,7 @@ class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
                   Padding(
                     padding: const EdgeInsets.only(top: 40),
                     child: ListView(children: [
-                      PeriodFilterAccordion(
-                        onChange: (p) => modifyPeriodList(p),
-                        selectedOptions: periodList,
-                      ),
+                      PeriodFilterAccordion(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -99,7 +68,7 @@ class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
                             height: ht * 0.05,
                             child: OutlinedButton(
                               // style: buttonDecoration,
-                              onPressed: () => clearFilter(),
+                              onPressed: () => controller.clearFilter(),
                               child: const Center(
                                   child: Text(
                                 "Clear",
@@ -117,7 +86,8 @@ class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
                             child: ElevatedButton(
                               style: buttonDecoration,
                               onPressed: () {
-                                widget.setPeriodList(periodList);
+                                controller
+                                    .setMainperiodList(controller.periodList);
                                 widget.dissableFilter();
                               },
                               child: const Center(

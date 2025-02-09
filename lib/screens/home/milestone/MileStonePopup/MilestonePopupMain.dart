@@ -58,6 +58,18 @@ class _MilestonePopupState extends State<MilestonePopup> {
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
+    DateTime today = DateTime.now();
+    bool prematureClosure = false;
+
+    if (widget.ms != null) {
+      prematureClosure = widget.ms!.currentStatus == Status.closed &&
+          today.isBefore(widget.ms!.dateRange.endDate);
+      if (widget.ms!.endVal != null && widget.ms!.currentVal != null) {
+        prematureClosure =
+            prematureClosure && widget.ms!.currentVal! <= widget.ms!.endVal!;
+      }
+    }
+
     var user = Provider.of<User?>(context);
     void addValueToTotal() async {
       if (widget.ms != null) {
@@ -72,9 +84,14 @@ class _MilestonePopupState extends State<MilestonePopup> {
       }
     }
 
-    void markasDone() async {
+    void markasDoneOrRedo() async {
       if (widget.ms != null) {
-        widget.ms!.currentStatus = Status.closed;
+        widget.ms!.currentStatus = prematureClosure
+            ? today.isBefore(widget.ms!.dateRange.startDate)
+                ? Status.upcoming
+                : Status.active
+            : Status.closed;
+
         await MilestoneDatabaseService(uid: user!.uid)
             .editMilestone(item: widget.ms!);
       }
@@ -87,14 +104,16 @@ class _MilestonePopupState extends State<MilestonePopup> {
           builder: (BuildContext context) {
             return ActionConfirm(
                 title: "Delete this milestone?",
-                msg:
-                    "Deleting this will delete active and upcomming milestones",
+                msg: widget.ms!.isOrphan
+                    ? ""
+                    : "Deleting this will delete ${widget.ms!.currentStatus == Status.active ? "active and " : ""}upcomming milestones",
                 cancel: () => Navigator.pop(context),
                 confirm: () async {
                   if (widget.ms != null) {
                     if (widget.ms!.currentStatus != Status.closed) {
                       await MilestoneDatabaseService(uid: user!.uid)
                           .deleteTemplateandCurrentMilestone(
+                        status: widget.ms!.currentStatus,
                         templateid: widget.ms!.templateID,
                       );
                     }
@@ -118,6 +137,7 @@ class _MilestonePopupState extends State<MilestonePopup> {
                           context: context,
                           builder: (context) {
                             return MilestoneChooseEdit(
+                              isOrphan: widget.ms!.isOrphan,
                               current: () {
                                 if (newms != null) {
                                   MilestoneDatabaseService(uid: user!.uid)
@@ -162,8 +182,7 @@ class _MilestonePopupState extends State<MilestonePopup> {
                     padding:
                         const EdgeInsets.only(top: 55, left: 20, right: 10),
                     child: ListView(children: [
-                      _height == target &&
-                              widget.ms!.currentStatus != Status.closed
+                      _height == target
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
@@ -248,11 +267,13 @@ class _MilestonePopupState extends State<MilestonePopup> {
                                           backgroundColor:
                                               MaterialStateProperty.all<Color>(
                                                   primaryAppColor)),
-                                      onPressed: markasDone,
-                                      child: const Center(
+                                      onPressed: markasDoneOrRedo,
+                                      child: Center(
                                           child: Text(
-                                        "Mark as done",
-                                        style: TextStyle(
+                                        prematureClosure
+                                            ? "Mark to Redo"
+                                            : "Mark as done",
+                                        style: const TextStyle(
                                             color: secondaryAppColor,
                                             fontSize: 15),
                                       )),

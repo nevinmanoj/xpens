@@ -74,21 +74,29 @@ class MilestoneDatabaseService {
         .delete();
   }
 
-  Future deleteTemplateandCurrentMilestone({required String templateid}) async {
+  Future deleteTemplateandCurrentMilestone(
+      {required String templateid, required Status status}) async {
     try {
       await FirebaseFirestore.instance
           .collection('$db/$uid/milestone-templates')
           .doc(templateid)
           .delete();
-      //get not closed ms of template
+      //get all ms of template
       final milestones = await FirebaseFirestore.instance
           .collection('$db/$uid/milestones')
           .where("templateID", isEqualTo: templateid)
-          .where("currentStatus", isNotEqualTo: "closed")
           .get();
 
       for (var ms in milestones.docs) {
-        deleteMilestone(selfID: ms.id);
+        if ((ms.data()["currentStatus"] == "closed") ||
+            (ms.data()["currentStatus"] == "active" &&
+                status == Status.upcoming)) {
+          Milestone item = Milestone.fromJson(ms);
+          item.isOrphan = true;
+          editMilestone(item: item);
+        } else {
+          deleteMilestone(selfID: ms.id);
+        }
       }
     } catch (e) {
       print(e);
@@ -108,6 +116,7 @@ class MilestoneDatabaseService {
             isNextPeriod: skipCurrent),
         title: template.title,
         endVal: template.endVal,
+        isOrphan: false,
         currentVal: template.endVal != null ? 0 : null,
         currentStatus: skipCurrent ? Status.upcoming : Status.active,
         templateID: templateID,
