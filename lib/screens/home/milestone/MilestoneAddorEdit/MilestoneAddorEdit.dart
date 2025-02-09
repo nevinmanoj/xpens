@@ -3,33 +3,29 @@ import 'package:xpens/screens/home/components/ItemInput/cost.dart';
 import 'package:xpens/screens/home/components/ItemInput/dropDown.dart';
 import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/utils/safeParse.dart';
 
 class MilestoneAddorEdit extends StatefulWidget {
-  final String title;
-  final double? curVal;
-  final Period period;
-  final double? endVal;
-  final bool skipFirst;
+  // final String title;
+  // final double? curVal;
+  // final Period period;
+  // final double? endVal;
+  // final bool skipFirst;
   final bool isAdd;
+  final Milestone? inputms;
 
   final Function(
-      {required String title,
-      required double? curVal,
-      required Period period,
-      required double? endVal,
-      required bool skipFirst,
+      {required Milestone? newms,
+      required MilestoneTemplate newmst,
       required BuildContext bc}) submit;
   const MilestoneAddorEdit(
       {super.key,
       required this.isAdd,
       required this.submit,
-      required this.title,
-      required this.curVal,
-      required this.period,
-      this.endVal,
-      required this.skipFirst});
+      required this.inputms});
 
   @override
   State<MilestoneAddorEdit> createState() => _MilestoneAddorEditState();
@@ -45,11 +41,19 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
 
   @override
   void initState() {
-    title = widget.title;
-    period = widget.period;
-    curVal = widget.curVal;
-    endVal = widget.endVal;
-    skipFirst = widget.skipFirst;
+    if (widget.inputms != null) {
+      title = widget.inputms!.title;
+      period = widget.inputms!.period;
+      curVal = widget.inputms!.currentVal;
+      endVal = widget.inputms!.endVal;
+      skipFirst = widget.inputms!.skipFirst;
+    } else {
+      title = '';
+      period = Period.daily;
+      skipFirst = false;
+      curVal = null;
+      endVal = null;
+    }
 
     super.initState();
   }
@@ -104,7 +108,11 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                           costs: curVal == null ? '' : curVal.toString(),
                           req: false,
                           onctrlchange: (TextEditingController t) {
-                            curVal = safeDoubleParse(t.text);
+                            if (t.text == '') {
+                              curVal = null;
+                            } else {
+                              curVal = safeDoubleParse(t.text);
+                            }
                           },
                         ),
                   widget.isAdd
@@ -118,7 +126,11 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                     costs: endVal == null ? '' : endVal.toString(),
                     req: false,
                     onctrlchange: (TextEditingController t) {
-                      endVal = safeDoubleParse(t.text);
+                      if (t.text == '') {
+                        endVal = null;
+                      } else {
+                        endVal = safeDoubleParse(t.text);
+                      }
                     },
                   ),
                   SizedBox(
@@ -150,14 +162,31 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () async {
+                        MilestoneTemplate mst = MilestoneTemplate(
+                            addedDate: DateTime.now(),
+                            title: title,
+                            templateId: widget.inputms != null
+                                ? widget.inputms!.templateID
+                                : "place_holder",
+                            period: period,
+                            skipFirst: skipFirst,
+                            endVal: endVal);
                         if (_msformKey.currentState!.validate()) {
+                          Milestone? ms;
+                          if (widget.inputms != null) {
+                            ms = Milestone(
+                                dateRange: widget.inputms!.dateRange,
+                                currentVal: curVal,
+                                endVal: endVal,
+                                selfId: widget.inputms!.selfId,
+                                title: title,
+                                period: widget.inputms!.period,
+                                templateID: widget.inputms!.templateID,
+                                currentStatus: widget.inputms!.currentStatus,
+                                skipFirst: skipFirst);
+                          }
                           await widget.submit(
-                              bc: context,
-                              title: title,
-                              curVal: curVal,
-                              period: period,
-                              endVal: endVal,
-                              skipFirst: skipFirst);
+                              bc: context, newms: ms, newmst: mst);
                         }
                       },
                       style: buttonDecoration,

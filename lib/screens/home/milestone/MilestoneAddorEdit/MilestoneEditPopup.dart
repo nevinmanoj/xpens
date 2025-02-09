@@ -14,7 +14,6 @@ class MilestoneChooseEdit extends StatelessWidget {
     double ht = MediaQuery.of(context).size.height;
     return Center(
         child: SizedBox(
-      height: ht * 0.4,
       width: wt * 0.9,
       child: AlertDialog(
           insetPadding: EdgeInsets.fromLTRB(
@@ -28,62 +27,70 @@ class MilestoneChooseEdit extends StatelessWidget {
             "Modify Current or All",
             style: TextStyle(fontWeight: FontWeight.bold),
           )),
-          content: Column(children: [
-            const Text(
-              "Only change current milestone (Current) or current and upcomming(All)",
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              height: ht * 0.04,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.23,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: secBtnDecoration,
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(fontSize: 16, color: primaryAppColor),
-                      )),
-                ),
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.23,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        // confirm();
-                      },
-                      style: buttonDecoration,
-                      child: const Text(
-                        'Current',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                ),
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.23,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        // confirm();
-                      },
-                      style: buttonDecoration,
-                      child: const Text(
-                        'All',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                ),
-              ],
-            ),
-          ])),
+          content: SizedBox(
+            height: 200,
+            child: Column(children: [
+              const Text(
+                "Only change current milestone (Current) or current and upcomming(All)",
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: ht * 0.04,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: ht * 0.06,
+                    width: wt * 0.23,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: secBtnDecoration,
+                        child: const Text(
+                          'Cancel',
+                          style:
+                              TextStyle(fontSize: 16, color: primaryAppColor),
+                        )),
+                  ),
+                  SizedBox(
+                    height: ht * 0.06,
+                    width: wt * 0.23,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          current();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        style: buttonDecoration,
+                        child: const Text(
+                          'Current',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        )),
+                  ),
+                  SizedBox(
+                    height: ht * 0.06,
+                    width: wt * 0.23,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          all();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                        style: buttonDecoration,
+                        child: const Text(
+                          'All',
+                          style: TextStyle(fontSize: 16, color: Colors.white),
+                        )),
+                  ),
+                ],
+              ),
+            ]),
+          )),
     ));
   }
 }

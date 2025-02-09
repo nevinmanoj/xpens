@@ -344,7 +344,8 @@ class UserInfoProvider with ChangeNotifier {
               //current time is past the period
               List ms = msdata.where((item) {
                 return (mst.id == item["templateID"] &&
-                    (item["currentStatus"] == "upcoming") &&
+                    ((item["currentStatus"] == "upcoming") ||
+                        (item["currentStatus"] == "closed")) &&
                     (nextDateRange.startDate.millisecondsSinceEpoch ==
                         item["startDate"]) &&
                     (nextDateRange.endDate.millisecondsSinceEpoch ==

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:xpens/screens/home/add/addMain.dart';
-import 'package:xpens/screens/home/milestone/MilestonesMain.dart';
+import 'package:xpens/screens/home/milestone/MilestoneMain.dart';
 
 import '../../shared/constants.dart';
 import 'details/detailsMain.dart';

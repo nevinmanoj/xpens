@@ -1,54 +1,82 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/milestone/MilestoneAddorEdit.dart';
+import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEdit.dart';
+import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
-import 'package:xpens/shared/dataModals/enums/Period.dart';
+import 'package:xpens/shared/dataModals/enums/Status.dart';
+import 'package:xpens/shared/utils/CapsFirst.dart';
 
 import '../../../services/milesstoneDatabase.dart';
 
 class MilestoneHeader extends StatelessWidget {
-  const MilestoneHeader({super.key});
+  final Function enableFilter;
+  const MilestoneHeader({super.key, required this.enableFilter});
 
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User?>(context);
-    return Row(
+    return Column(
       children: [
-        IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                      builder: (context) => MilestoneAddorEdit(
-                            submit: (
-                                {required String title,
-                                required double? curVal,
-                                required Period period,
-                                required double? endVal,
-                                required bool skipFirst,
-                                required BuildContext bc}) async {
-                              await MilestoneDatabaseService(uid: user!.uid)
-                                  .addMilestoneTemplate(
-                                item: MilestoneTemplate(
-                                    addedDate: DateTime.now(),
-                                    title: title,
-                                    templateId: 'place_holder',
-                                    period: period,
-                                    skipFirst: skipFirst,
-                                    endVal: endVal),
-                              );
-                              Navigator.pop(bc);
-                            },
-                            isAdd: true,
-                            curVal: null,
-                            title: '',
-                            period: Period.daily,
-                            skipFirst: false,
-                          )));
-            },
-            icon: const Icon(Icons.add))
+        Row(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: const Text(
+                "Milestones",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+              ),
+            ),
+            Spacer(),
+            IconButton(
+                onPressed: () => enableFilter(),
+                icon: const Icon(
+                  size: 25,
+                  Icons.filter_alt_outlined,
+                )),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MilestoneAddorEdit(
+                                submit: (
+                                    {required Milestone? newms,
+                                    required MilestoneTemplate newmst,
+                                    required BuildContext bc}) async {
+                                  await MilestoneDatabaseService(uid: user!.uid)
+                                      .addMilestoneTemplate(
+                                    item: newmst,
+                                  );
+                                  Navigator.pop(bc);
+                                },
+                                isAdd: true,
+                                inputms: null,
+                              )));
+                },
+                icon: const Icon(
+                  Icons.add,
+                  size: 25,
+                ))
+          ],
+        ),
+        SizedBox(
+          height: 50,
+          child: TabBar(
+            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorWeight: 3,
+            indicatorColor: secondaryAppColor,
+            labelColor: secondaryAppColor,
+            unselectedLabelColor: const Color(0xff778585),
+            tabs: Status.values
+                .map((e) => Tab(
+                      child: Text(capsFirst(serializeStatus(e))),
+                    ))
+                .toList(),
+          ),
+        )
       ],
     );
   }
