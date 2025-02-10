@@ -3,16 +3,16 @@ import 'dart:async';
 
 import '../../../shared/constants.dart';
 
-class StreakDetails extends StatefulWidget {
+class StreakBars extends StatefulWidget {
   final DateTime dateTime;
 
-  StreakDetails({required this.dateTime});
+  StreakBars({required this.dateTime});
 
   @override
-  _StreakDetailsState createState() => _StreakDetailsState();
+  _StreakBarsState createState() => _StreakBarsState();
 }
 
-class _StreakDetailsState extends State<StreakDetails> {
+class _StreakBarsState extends State<StreakBars> {
   late Timer _timer;
   late Duration _difference;
 

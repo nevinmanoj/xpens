@@ -1,3 +1,3 @@
 # xpens
 
-An expense tracking app done using flutter and firebase.
+A personel app with mix of features, flutter firebase

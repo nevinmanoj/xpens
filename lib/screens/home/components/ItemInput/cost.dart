@@ -5,14 +5,18 @@ class ItemQuantity extends StatefulWidget {
   // final Function(String) onCostChanged;
   final String costs;
   final Function(TextEditingController) onctrlchange;
+  final bool enabled;
   final req;
+  final String hint;
 
   const ItemQuantity(
       {super.key,
       // required this.onCostChanged,
       required this.costs,
       required this.req,
-      required this.onctrlchange});
+      required this.onctrlchange,
+      required this.enabled,
+      required this.hint});
 
   @override
   State<ItemQuantity> createState() => _ItemQuantityState();
@@ -24,7 +28,6 @@ class _ItemQuantityState extends State<ItemQuantity> {
   @override
   void initState() {
     costController = TextEditingController(text: widget.costs);
-    // TODO: implement initState
     super.initState();
   }
 
@@ -40,6 +43,7 @@ class _ItemQuantityState extends State<ItemQuantity> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: TextFormField(
+          enabled: widget.enabled,
           controller: costController,
           // initialValue: widget.costs,
           cursorColor: primaryAppColor,
@@ -49,13 +53,14 @@ class _ItemQuantityState extends State<ItemQuantity> {
             widget.onctrlchange(costController!);
           },
 
-          validator: (value) =>
-              value!.isEmpty && widget.req ? 'Cost must not be null' : null,
+          validator: (value) => value!.isEmpty && widget.req
+              ? '${widget.hint} must not be null'
+              : null,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             border: InputBorder.none,
             hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-            hintText: 'Cost',
+            hintText: widget.hint,
           ),
         ),
       ),

@@ -33,7 +33,7 @@ var addInputDecoration = BoxDecoration(
 var buttonDecoration = ButtonStyle(
     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
         RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(5),
     )),
     backgroundColor: MaterialStateProperty.all<Color>(primaryAppColor));
 var secBtnDecoration = ButtonStyle(

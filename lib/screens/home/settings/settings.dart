@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/items/itemList.dart';
 import 'package:xpens/screens/home/settings/defaults/defaultMain.dart';
 import 'package:xpens/screens/home/settings/points/PointsMain.dart';
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
 import 'Trash/TrashMain.dart';
-import 'billSplit/billSplitMain.dart';
+// import 'billSplit/billSplitMain.dart';
 import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
@@ -89,6 +90,14 @@ class SettingsScreen extends StatelessWidget {
         "onTap": () {
           Navigator.push(context,
               CupertinoPageRoute(builder: (context) => const Defaults()));
+        }
+      },
+      {
+        "icon": Icons.category,
+        "title": "Item List",
+        "onTap": () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const ItemList()));
         }
       },
     ];

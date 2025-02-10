@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../services/devServices.dart';
-
 FirebaseAuth _auth = FirebaseAuth.instance;
 User? user = _auth.currentUser;
 String selectYear = DateTime.now().year.toString();
@@ -101,13 +99,7 @@ class _InjectTestDataState extends State<InjectTestData> {
                                               backgroundColor:
                                                   MaterialStateProperty.all<
                                                       Color>(primaryAppColor)),
-                                          onPressed: () async {
-                                            await DevService().injectTestData(
-                                                year: selectYear,
-                                                month: selectMonth,
-                                                count:
-                                                    double.parse(selectCount));
-                                          },
+                                          onPressed: () async {},
                                           child: const Text('Inject data')),
                                     ],
                                   )
@@ -139,7 +131,8 @@ class _CountState extends State<Count> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -189,7 +182,8 @@ class _yearsState extends State<years> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -239,7 +233,8 @@ class _monthsState extends State<months> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),

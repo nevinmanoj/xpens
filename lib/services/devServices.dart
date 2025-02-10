@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,11 +6,24 @@ import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/services/milesstoneDatabase.dart';
+import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
+import 'package:xpens/shared/dataModals/enums/Period.dart';
 
 import '../shared/dataModals/AddItemModal.dart';
 
 class DevService {
+  String uid;
+  late DatabaseService mainDB;
+  late MilestoneDatabaseService milestoneDB;
+  DevService({required this.uid}) {
+    mainDB = DatabaseService(uid: uid);
+    milestoneDB = MilestoneDatabaseService(uid: uid);
+  }
+
   Future<void> modify() async {
     // print("check codebase");
     // getData();
@@ -28,11 +40,11 @@ class DevService {
     // querySnapshot.docs.forEach((document) async {
     //   updateDocumentsWithWordArray(document.id);
     // });
-    return null;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    addFieldToACollection(
-        collectionPath: "UserInfo", fieldName: "isTrash", fieldValue: false);
+
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // User? user = auth.currentUser;
+    // addFieldToACollection(
+    //     collectionPath: "UserInfo", fieldName: "isTrash", fieldValue: false);
   }
 
   Future<void> updateDocumentsWithWordArray(uid) async {
@@ -160,6 +172,35 @@ class DevService {
           itemName: itemName,
           time: formattedTime));
     }
+  }
+
+  Future injectTestDataMS() async {
+    milestoneDB.addMilestoneTemplate(
+        item: MilestoneTemplate(
+            templateId: "place_holder",
+            addedDate: DateTime.now(),
+            title: "ms 3",
+            period: Period.daily,
+            skipFirst: false,
+            endVal: 500));
+    // milestoneDB.addMilestoneTemplate(
+    //     item: MilestoneTemplate(
+    //         addedDate: DateTime.now(),
+    //         title: "ms 2",
+    //         period: Period.weekly,
+    //         skipFirst: true,
+    //         endVal: 200));
+  }
+
+  Future injectStreakData() async {
+    FirebaseFirestore.instance.collection("$db/$uid/streaks").add(Streak(
+            selectRed: false,
+            addedDate: DateTime.now().subtract(const Duration(days: 10)),
+            list: [],
+            selfId: "placeholder",
+            title: "test",
+            verb: 'lost')
+        .toJson());
   }
 
   void getData() async {
