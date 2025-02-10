@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/Streaks/StreakCalendar.dart';
-import 'package:xpens/screens/home/Streaks/StreakSettings.dart';
+import 'package:xpens/screens/home/Streaks/StreakSettings/StreakSettings.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/services/streakDatabase.dart';
 import 'package:xpens/shared/constants.dart';
@@ -63,6 +63,7 @@ class StreakBody extends StatelessWidget {
           ],
         ),
         StreakCalendar(
+          verb: ss.verb,
           selfId: ss.selfId,
           list: ss.list,
           addedDate: ss.addedDate,

@@ -8,19 +8,22 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:xpens/services/streakDatabase.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/utils/CapsFirst.dart';
 
 class StreakCalendar extends StatefulWidget {
   final List<DateTime> list;
   final DateTime addedDate;
   final String selfId;
   final bool selectRed;
+  final String verb;
 
   const StreakCalendar(
       {super.key,
       required this.list,
       required this.addedDate,
       required this.selfId,
-      required this.selectRed});
+      required this.selectRed,
+      required this.verb});
 
   @override
   State<StreakCalendar> createState() => _StreakCalendarState();
@@ -31,6 +34,7 @@ class _StreakCalendarState extends State<StreakCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    String verb = capsFirst(widget.verb);
     final user = Provider.of<User?>(context);
     void onDaySelected(DateTime selectedDate, DateTime selectedDate2) {
       DateTime dateOnly = DateTime(
@@ -44,7 +48,7 @@ class _StreakCalendarState extends State<StreakCalendar> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text(
-                  "${marked ? "Unmark" : "Mark"} ${DateFormat.yMMMd().format(selectedDate)}?"),
+                  "${marked ? "Unmark" : "Mark"} ${DateFormat.yMMMd().format(selectedDate)} as $verb ?"),
               actions: [
                 OutlinedButton(
                   onPressed: () => Navigator.pop(context),

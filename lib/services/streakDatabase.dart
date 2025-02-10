@@ -14,34 +14,15 @@ class StreakDatabaseService {
         .add(s.toJson());
   }
 
-  Future editStreak({required Streak s}) async {
-    await FirebaseFirestore.instance
-        .collection("$db/$uid/streaks")
-        .doc(s.selfId)
-        .set(s.toJson());
-  }
-
-  Future editColor({
-    required bool selectRed,
-    required String selfId,
-  }) async {
+  Future editStreakProperty(
+      {required String key,
+      required dynamic value,
+      required String selfId}) async {
     await FirebaseFirestore.instance
         .collection("$db/$uid/streaks")
         .doc(selfId)
         .update({
-      "selectRed": selectRed,
-    });
-  }
-
-  Future editTitle({
-    required String title,
-    required String selfId,
-  }) async {
-    await FirebaseFirestore.instance
-        .collection("$db/$uid/streaks")
-        .doc(selfId)
-        .update({
-      "title": title,
+      key: value,
     });
   }
 

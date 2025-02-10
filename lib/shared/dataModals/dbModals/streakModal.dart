@@ -4,12 +4,14 @@ class Streak {
   String title;
   String selfId;
   bool selectRed;
+  String verb;
   Streak({
     required this.addedDate,
     required this.selectRed,
     required this.list,
     required this.selfId,
     required this.title,
+    required this.verb,
   });
   // Convert to JSON (Serialization)
   Map<String, dynamic> toJson() {
@@ -17,6 +19,7 @@ class Streak {
       'list': list.map((e) => e.toString()).toList(),
       'addedDate': addedDate.toString(),
       'title': title,
+      'verb': verb,
       'selectRed': selectRed
     };
   }
@@ -24,6 +27,7 @@ class Streak {
   // Create from JSON (Deserialization)
   factory Streak.fromJson(json) {
     return Streak(
+      verb: json["verb"],
       selectRed: json['selectRed'],
       selfId: json.id,
       title: json['title'] as String,

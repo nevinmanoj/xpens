@@ -198,7 +198,8 @@ class DevService {
             addedDate: DateTime.now().subtract(const Duration(days: 10)),
             list: [],
             selfId: "placeholder",
-            title: "test")
+            title: "test",
+            verb: 'lost')
         .toJson());
   }
 

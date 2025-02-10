@@ -6,6 +6,7 @@ import 'package:xpens/services/streakDatabase.dart';
 
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
+import 'package:xpens/shared/utils/CapsFirst.dart';
 
 class StreakAdd extends StatefulWidget {
   const StreakAdd({super.key});
@@ -16,6 +17,7 @@ class StreakAdd extends StatefulWidget {
 
 class _StreakAddState extends State<StreakAdd> {
   String title = "";
+  String verb = "";
   bool selectRed = false;
   final _formKeyN = GlobalKey<FormState>();
   @override
@@ -29,60 +31,51 @@ class _StreakAddState extends State<StreakAdd> {
         content: SizedBox(
           height: 300,
           // width: wt * 0.8,
-          child: Column(
-            children: [
-              SizedBox(
-                width: wt,
-                child: Text('TITLE',
-                    style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKeyN,
+              child: Column(
                 children: [
-                  Form(
-                    key: _formKeyN,
-                    child: Container(
-                      padding: const EdgeInsets.only(left: 10),
-                      decoration: addInputDecoration,
-                      width: wt * 0.665,
-                      child: TextFormField(
-                          initialValue: title,
-                          validator: (value) =>
-                              value!.isEmpty ? 'Title cannot be empty' : null,
-                          keyboardType: TextInputType.name,
-                          textAlign: TextAlign.left,
-                          onChanged: (value) {
-                            title = value;
-                          },
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            constraints: BoxConstraints(maxWidth: 0.8 * wt),
-                          )),
-                    ),
+                  ...textBoxInput(
+                    onChange: (str) {
+                      title = str;
+                    },
+                    wt: wt,
+                    title: 'TITLE',
+                    value: title,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ...textBoxInput(
+                    onChange: (str) {
+                      title = str;
+                    },
+                    wt: wt,
+                    title: 'VERB',
+                    value: verb,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: wt,
+                    child: Text('MARKED DATE COLOR',
+                        style:
+                            TextStyle(color: Colors.grey[400], fontSize: 12)),
+                  ),
+                  DropDownItems(
+                    onValueChange: (val) {
+                      selectRed = val == "red";
+                    },
+                    valueList: const ["red", "green"],
+                    value: selectRed ? "red" : "green",
+                    heading: 'color',
+                    enabled: true,
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: wt,
-                child: Text('MARKED DATE COLOR',
-                    style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-              ),
-              DropDownItems(
-                onValueChange: (val) {
-                  selectRed = val == "red";
-                },
-                valueList: const ["red", "green"],
-                value: selectRed ? "red" : "green",
-                heading: 'color',
-                enabled: true,
-              ),
-            ],
+            ),
           ),
         ),
         actions: [
@@ -103,17 +96,53 @@ class _StreakAddState extends State<StreakAdd> {
                 if (_formKeyN.currentState!.validate()) {
                   StreakDatabaseService(uid: user!.uid).addStreak(
                       s: Streak(
+                          verb: verb,
                           addedDate: DateTime.now(),
                           selectRed: selectRed,
                           list: [],
                           selfId: "placeholder",
                           title: title));
+                  Navigator.pop(context);
                 }
-                Navigator.pop(context);
               },
               child: const Text("Add"))
         ],
       );
     });
   }
+}
+
+List<Widget> textBoxInput(
+    {required double wt,
+    required String title,
+    required Function(String) onChange,
+    required String value}) {
+  return [
+    SizedBox(
+      width: wt,
+      child:
+          Text(title, style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+    ),
+    const SizedBox(
+      height: 5,
+    ),
+    Container(
+      padding: const EdgeInsets.only(left: 10),
+      decoration: addInputDecoration,
+      width: wt * 0.665,
+      child: TextFormField(
+          initialValue: value,
+          validator: (value) =>
+              value!.isEmpty ? '$title cannot be empty' : null,
+          keyboardType: TextInputType.name,
+          textAlign: TextAlign.left,
+          onChanged: (v) {
+            onChange(v);
+          },
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            constraints: BoxConstraints(maxWidth: 0.8 * wt),
+          )),
+    ),
+  ];
 }

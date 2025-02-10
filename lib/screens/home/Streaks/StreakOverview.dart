@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
+import 'package:xpens/shared/utils/CapsFirst.dart';
 
 class StreakOverview extends StatefulWidget {
   final int s;
@@ -13,19 +14,22 @@ class StreakOverview extends StatefulWidget {
 }
 
 class _StreakOverviewState extends State<StreakOverview> {
-  String filter = "Marked";
-  List filterList = ["Marked", "Unmarked"];
+  bool markedBool = true;
   @override
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
     List streaks = Provider.of<UserInfoProvider>(context).streaks;
     Streak streak = Streak.fromJson(streaks[widget.s]);
+    String verb = capsFirst(streak.verb);
+    List filterList = [verb, "Not $verb"];
     List<bool> selectedfilter = [];
-    for (int i = 0; i < filterList.length; i++) {
-      selectedfilter.add(filter == filterList[i]);
+    if (markedBool) {
+      selectedfilter = [true, false];
+    } else {
+      selectedfilter = [false, true];
     }
-    bool isMarked = filter == "Marked";
+
     int totalDaysSinceStart =
         DateTime.now().difference(streak.addedDate).inDays + 1;
     int subTotalDaysSinceStart = streak.list.length;
@@ -41,11 +45,12 @@ class _StreakOverviewState extends State<StreakOverview> {
     int subTotalDaysthisYear =
         streak.list.where((e) => e.year == DateTime.now().year).length;
 
-    if (!isMarked) {
+    if (!markedBool) {
       subTotalDaysSinceStart = totalDaysSinceStart - subTotalDaysSinceStart;
       subTotalDaysthisYear = totalDaysthisYear - subTotalDaysthisYear;
       subTotalDaysthisMonth = totalDaysthisMonth - subTotalDaysthisMonth;
     }
+
     return Column(
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -53,7 +58,7 @@ class _StreakOverviewState extends State<StreakOverview> {
           direction: Axis.horizontal,
           onPressed: (int index) {
             setState(() {
-              filter = filterList[index];
+              markedBool = index == 0;
             });
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -93,10 +98,11 @@ class _StreakOverviewState extends State<StreakOverview> {
                 ),
               ),
               Text(
-                  "Total Marked since added date $subTotalDaysSinceStart/$totalDaysSinceStart"),
+                  "Total ${markedBool ? "" : "not"} $verb since added date $subTotalDaysSinceStart/$totalDaysSinceStart"),
               Text(
-                  "Marked this month $subTotalDaysthisMonth/$totalDaysthisMonth"),
-              Text("Marked this year $subTotalDaysthisYear/$totalDaysthisYear"),
+                  "${markedBool ? "" : "Not "}$verb this month $subTotalDaysthisMonth/$totalDaysthisMonth"),
+              Text(
+                  "${markedBool ? "" : "Not "}$verb this year $subTotalDaysthisYear/$totalDaysthisYear"),
             ],
           ),
         ),
