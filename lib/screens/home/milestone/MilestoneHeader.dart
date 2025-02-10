@@ -21,7 +21,7 @@ class MilestoneHeader extends StatelessWidget {
     required this.enableFilter,
     required this.filterApplied,
   });
-  final controller = Get.put(MilestoneController());
+  final controller = Get.put(MilestoneFilterController());
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<User?>(context);

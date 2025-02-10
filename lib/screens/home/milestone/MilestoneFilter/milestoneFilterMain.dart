@@ -19,7 +19,7 @@ class MilestonesFilterMain extends StatefulWidget {
 }
 
 class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
-  final controller = Get.put(MilestoneController());
+  final controller = Get.put(MilestoneFilterController());
   @override
   @override
   Widget build(BuildContext context) {

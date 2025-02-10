@@ -14,7 +14,7 @@ class PeriodFilterAccordion extends StatefulWidget {
 
 class _PeriodFilterAccordionState extends State<PeriodFilterAccordion> {
   bool isExpanded = false;
-  final controller = Get.put(MilestoneController());
+  final controller = Get.put(MilestoneFilterController());
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,7 +44,8 @@ class _PeriodFilterAccordionState extends State<PeriodFilterAccordion> {
                       ),
                     );
                   },
-                  body: GetBuilder<MilestoneController>(builder: (context) {
+                  body:
+                      GetBuilder<MilestoneFilterController>(builder: (context) {
                     return Column(
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

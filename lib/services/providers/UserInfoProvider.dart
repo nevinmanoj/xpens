@@ -249,7 +249,7 @@ class UserInfoProvider with ChangeNotifier {
             );
           }
         } catch (e) {
-          debugPrint(e.toString());
+          debugPrint("method: _checkMilestonesForAllTemplates $e");
         }
         msdata = await FirebaseFirestore.instance
             .collection("$db/${user!.uid}/milestones")
@@ -301,7 +301,7 @@ class UserInfoProvider with ChangeNotifier {
             }
           }
         } catch (e) {
-          debugPrint(e.toString());
+          debugPrint("method2: _checkMilestonesForAllTemplates $e");
         }
         //upcomming
         try {
@@ -351,6 +351,7 @@ class UserInfoProvider with ChangeNotifier {
                     (nextDateRange.endDate.millisecondsSinceEpoch ==
                         item["endDate"]));
               }).toList();
+
               if (ms.isEmpty) {
                 await MilestoneDatabaseService(uid: user!.uid).addMilestone(
                     template: MilestoneTemplate.fromJson(mst),
@@ -365,7 +366,7 @@ class UserInfoProvider with ChangeNotifier {
             }
           }
         } catch (e) {
-          debugPrint(e.toString());
+          debugPrint("method3: _checkMilestonesForAllTemplates $e");
         }
       }
       msurunning = false;

@@ -21,7 +21,8 @@ class MilestonesMain extends StatefulWidget {
 }
 
 class _MilestonesMainState extends State<MilestonesMain> {
-  final controller = Get.put(MilestoneController());
+  final controller = Get.put(MilestoneFilterController());
+  final popupController = Get.put(MilestonePopupController());
   Milestone? expandedMS;
 
   bool filterEnabled = false;
@@ -47,7 +48,7 @@ class _MilestonesMainState extends State<MilestonesMain> {
 
     double wt = MediaQuery.of(context).size.width;
 
-    return GetBuilder<MilestoneController>(builder: (context) {
+    return GetBuilder<MilestoneFilterController>(builder: (context) {
       bool filterApplied =
           !areSetsEqual(controller.mainPeriodList, [...Period.values]);
       return DefaultTabController(
@@ -57,7 +58,7 @@ class _MilestonesMainState extends State<MilestonesMain> {
             InkWell(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onTap: () => setState(() => expandedMS = null),
+              onTap: () => popupController.setMS(null),
               child: Container(
                 margin: const EdgeInsets.only(
                   top: 100,
@@ -75,20 +76,24 @@ class _MilestonesMainState extends State<MilestonesMain> {
                   return ListView.builder(
                       itemCount: newmslist.length,
                       itemBuilder: ((context, i) {
-                        return InkWell(
-                            onTap: (() {
-                              if (expandedMS == null ||
-                                  expandedMS?.selfId != newmslist[i].selfId) {
-                                setState(() => expandedMS = newmslist[i]);
-                              } else {
-                                setState(() => expandedMS = null);
-                              }
-                            }),
-                            child: MilestoneItem(
-                              ms: newmslist[i],
-                              isSelected:
-                                  expandedMS?.selfId == newmslist[i].selfId,
-                            ));
+                        return GetBuilder<MilestonePopupController>(
+                            builder: (context) {
+                          return InkWell(
+                              onTap: (() {
+                                if (popupController.ms == null ||
+                                    popupController.ms?.selfId !=
+                                        newmslist[i].selfId) {
+                                  popupController.setMS(newmslist[i]);
+                                } else {
+                                  popupController.setMS(null);
+                                }
+                              }),
+                              child: MilestoneItem(
+                                ms: newmslist[i],
+                                isSelected: popupController.ms?.selfId ==
+                                    newmslist[i].selfId,
+                              ));
+                        });
                       }));
                 }).toList()),
               ),
@@ -99,10 +104,7 @@ class _MilestonesMainState extends State<MilestonesMain> {
                   enableFilter: () => setFilterEnabled(true),
                   filterApplied: filterApplied,
                 )),
-            MilestonePopup(
-              clearMs: () => setState(() => expandedMS = null),
-              ms: expandedMS,
-            ),
+            MilestonePopup(),
             MilestonesFilterMain(
               filterEnabled: filterEnabled,
               dissableFilter: () => setFilterEnabled(false),

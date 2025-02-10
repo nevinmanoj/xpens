@@ -13,18 +13,50 @@ class Milestone {
   String templateID;
   Period period;
   bool isOrphan;
-
-  Milestone(
+  bool isPrematureClosure;
+  Milestone._(
       {required this.dateRange,
       required this.isOrphan,
       required this.selfId,
       required this.title,
       required this.period,
       required this.templateID,
+      required this.isPrematureClosure,
       this.currentVal,
       required this.currentStatus,
       required this.skipFirst,
       this.endVal});
+
+  factory Milestone(
+      {required dateRange,
+      required isOrphan,
+      required selfId,
+      required title,
+      required period,
+      required templateID,
+      currentVal,
+      required currentStatus,
+      required skipFirst,
+      endVal}) {
+    bool prematureClosure = currentStatus == Status.closed &&
+        DateTime.now().isBefore(dateRange.endDate);
+    if (endVal != null && currentVal != null) {
+      prematureClosure = prematureClosure && currentVal! <= endVal!;
+    }
+
+    return Milestone._(
+        currentVal: currentVal,
+        endVal: endVal,
+        currentStatus: currentStatus,
+        dateRange: dateRange,
+        isOrphan: isOrphan,
+        selfId: selfId,
+        title: title,
+        period: period,
+        templateID: templateID,
+        isPrematureClosure: prematureClosure,
+        skipFirst: skipFirst);
+  }
 
   // Convert to JSON (Serialization)
   Map<String, dynamic> toJson() {

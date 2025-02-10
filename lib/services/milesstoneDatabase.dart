@@ -99,7 +99,7 @@ class MilestoneDatabaseService {
         }
       }
     } catch (e) {
-      print(e);
+      print("method: deleteTemplateandCurrentMilestone $e");
     }
   }
 
@@ -117,7 +117,7 @@ class MilestoneDatabaseService {
         title: template.title,
         endVal: template.endVal,
         isOrphan: false,
-        currentVal: template.endVal != null ? 0 : null,
+        currentVal: template.endVal != null ? 0.0 : null,
         currentStatus: skipCurrent ? Status.upcoming : Status.active,
         templateID: templateID,
         skipFirst: template.skipFirst);

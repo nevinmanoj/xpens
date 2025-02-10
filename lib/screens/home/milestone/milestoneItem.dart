@@ -69,7 +69,7 @@ class MilestoneItem extends StatelessWidget {
                       color: Color.fromRGBO(101, 101, 101, 1)),
                 ),
               ),
-              ms.currentStatus != Status.closed || prematureClosure
+              ms.currentStatus == Status.active || prematureClosure
                   ? SizedBox(
                       height: ht * 0.04,
                       child: OutlinedButton(
