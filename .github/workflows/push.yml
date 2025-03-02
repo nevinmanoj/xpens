@@ -6,34 +6,34 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
     
-    permissions:
-      contents: read
+  #   permissions:
+  #     contents: read
     
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
-      - name: Decode Google Services JSON
-        run: |
-          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
-      - run: flutter pub get
-      - run: flutter build apk
+  #     - uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.19.0'
+  #         channel: 'stable'
+  #         cache: true
+  #     - name: Decode Google Services JSON
+  #       run: |
+  #         echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+  #     - run: flutter pub get
+  #     - run: flutter build apk
       
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-build
-          path: build/app/outputs/flutter-apk/
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: apk-build
+  #         path: build/app/outputs/flutter-apk/
 
   deploy:
-    needs: build
+    # needs: build
     runs-on: ubuntu-latest
     
     permissions:
@@ -45,18 +45,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-build
-          path: pages/xpens-site/public/
+      # - name: Download artifact
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: apk-build
+      #     path: pages/xpens-site/public/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Build page
         run: |
+          pwd
           cd pages/xpens-site/
+          pwd
           npm install
           npm run build
 
