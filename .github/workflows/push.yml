@@ -1,55 +1,69 @@
-
-name: release
+name: Flutter Build and Deploy APK
 
 on:
   push:
-    branches: [ "release" ]
-
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     permissions:
-      contents: write
+      contents: read
+    
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v1
+      - uses: subosito/flutter-action@v2
         with:
-          channel: "stable"
-          
-      - name: Read version information
-        id: read_version
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+      - name: Decode Google Services JSON
         run: |
-          echo "VERSION=$(cat pubspec.yaml | grep 'version:' | awk '{print $2}' | xargs)" >> $GITHUB_ENV
-
-        shell: bash
-
-      - run: flutter doctor -v
-
-      - name: Build APK
-        run: flutter build apk
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+      - run: flutter pub get
+      - run: flutter build apk
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Xpens ${{ env.VERSION }}
-          body: release version ${{ env.VERSION }}
-          draft: false
-          prerelease: false
+          name: apk-build
+          path: build/app/outputs/flutter-apk/
 
-      - name: Upload APK to Release
-        id: upload_apk
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    permissions:
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/apk/release/app-release.apk
-          asset_name: xpens${{ env.VERSION }}.apk
-          asset_content_type: application/vnd.android.package-archive
+          name: apk-build
+          path: public/apk
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Create index.html
+        run: |
+          mkdir -p public
+          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
