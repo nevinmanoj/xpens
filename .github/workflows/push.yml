@@ -2,7 +2,7 @@ name: Flutter Build and Deploy APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ,"whats-new"]
   workflow_dispatch:
 
 jobs:
@@ -49,20 +49,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: apk-build
-          path: public/apk
+          path: pages/xpens-site/public/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Create index.html
+      - name: Build page
         run: |
-          mkdir -p public
-          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
+          npm install
+          npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: pages/xpens-site/dist/
 
       - name: Deploy to GitHub Pages
         id: deployment
