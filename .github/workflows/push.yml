@@ -55,7 +55,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Build page
-        working-directory: pages/xpens-site/
+        working-directory: pages/xpens-site
         run: |
           npm install
           npm run build
