@@ -15,11 +15,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-app:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Decode Google Services JSON
+        run: |
+          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+      - run: flutter pub get
+
+      - run: flutter build apk
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-build
+          path: build/app/outputs/flutter-apk/
+
+  build-site:
+    needs: build-app
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        working-directory: ./pages/xpens-site
+        with:
+          name: apk-build
+          path: public/
       
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -42,7 +78,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-site
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
