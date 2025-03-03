@@ -72,11 +72,15 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+      - name: Create index.html
+        run: |
+          mkdir -p public
+          echo "<html><body><h2>Download APK</h2><p><a href='apk/app-release.apk'>Download Latest APK</a></p></body></html>" > public/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
