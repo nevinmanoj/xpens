@@ -1,6 +1,6 @@
 
 <template>
-   <h1>Hi all </h1>
+   <h1>Xpens </h1>
    <a href="app-release.apk">Download App</a>
 </template>
 
