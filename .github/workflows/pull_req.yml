@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-app:
+  build:
     runs-on: ubuntu-latest
     
     permissions:
@@ -25,34 +25,4 @@ jobs:
           echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
       - run: flutter pub get
       - run: flutter build apk
-            - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: apk-build
-          path: build/app/outputs/flutter-apk/
-
-  build-site:
-    needs: build-app
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: apk-build
-          path: ./pages/xpens-site/public/
-      
-      - name: Setup Node
-        uses: actions/setup-node@v4
-      
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./pages/xpens-site
-      
-      - name: Build
-        run: npm run build
-        working-directory: ./pages/xpens-site
-
 
