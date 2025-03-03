@@ -45,3 +45,8 @@ app.*.map.json
 
 # Firebase config
 **/google-services.json
+
+#pages
+**/node_modules/
+**/dist
+pnpm-lock.yaml

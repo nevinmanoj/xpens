@@ -1,9 +1,18 @@
-name: Flutter Build for pull request
+name: Deploy to GitHub Pages
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build-app:
@@ -20,12 +29,15 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
           cache: true
+
       - name: Decode Google Services JSON
         run: |
           echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
       - run: flutter pub get
+
       - run: flutter build apk
-            - name: Upload artifact
+
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: apk-build
@@ -54,5 +66,19 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ./pages/xpens-site
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./pages/xpens-site/dist
 
-
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-site
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
