@@ -15,15 +15,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.19.0'
-          channel: 'stable'
-          cache: true
+      # - uses: subosito/flutter-action@v2
+      #   with:
+      #     flutter-version: '3.19.0'
+      #     channel: 'stable'
+      #     cache: true
 
-      - name: Decode Google Services JSON
-        run: |
-          echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+      # - name: Decode Google Services JSON
+      #   run: |
+      #     echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
       # - run: flutter pub get
 
       # - run: flutter build apk
@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: production-files
-          path: ./pages/xpens-site/dist
+          path: pages/xpens-site/dist
 
   deploy:
     needs: build
