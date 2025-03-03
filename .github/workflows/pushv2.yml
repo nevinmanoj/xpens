@@ -52,10 +52,9 @@ jobs:
 
       - name: Download artifact
         uses: actions/download-artifact@v4
-        working-directory: ./pages/xpens-site
         with:
           name: apk-build
-          path: public/
+          path: ./pages/xpens-site/public/
       
       - name: Setup Node
         uses: actions/setup-node@v4
