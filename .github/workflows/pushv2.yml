@@ -2,9 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-      - 'pages/xpens-site/**'  # Only trigger when changes happen in this directory
+    branches: [ "whats-new" ]
   workflow_dispatch:
 
 permissions:
