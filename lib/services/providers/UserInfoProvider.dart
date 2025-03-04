@@ -11,6 +11,8 @@ import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
 import 'package:xpens/shared/dataModals/subModals/PeriodDates.dart';
 import 'package:xpens/shared/utils/getDateTimesFromPeriod.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UserInfoProvider with ChangeNotifier {
   User? user;
@@ -34,6 +36,11 @@ class UserInfoProvider with ChangeNotifier {
   List _milestoneTemplatesDocs = [];
   List _milestoneDocs = [];
   List _streakDocs = [];
+  dynamic _latestVersionData;
+  final String _currentVersion = "1.0.1";
+  bool _updateAvailable = false;
+  bool updatenotificationshown = false;
+
   //TODO: input and handle this to firebase
   String milestoneSyncDate = "";
 
@@ -52,6 +59,9 @@ class UserInfoProvider with ChangeNotifier {
   List get milestones => _milestoneDocs;
   List get milestoneTemplates => _milestoneTemplatesDocs;
   List get streaks => _streakDocs;
+  dynamic get latestVersionData => _latestVersionData;
+  String get currentVersion => _currentVersion;
+  bool get updateAvailable => _updateAvailable;
 
   bool msrunning = false;
   bool msurunning = false;
@@ -78,6 +88,7 @@ class UserInfoProvider with ChangeNotifier {
     // _checkActiveOrClosedMilestonesExistForAllTemplates();
     getmstandcheckforms();
     getStreaks();
+    checkForUpdate();
 
     // _addUpcomingMilestonesForAllTemplates();
   }
@@ -399,6 +410,25 @@ class UserInfoProvider with ChangeNotifier {
       } catch (e) {
         print(e.toString());
       }
+    }
+  }
+
+  Future checkForUpdate() async {
+    // https://nevinmanoj.github.io/xpens/version.json
+    try {
+      final response = await http
+          .get(Uri.parse("https://nevinmanoj.github.io/xpens/version.json"));
+
+      if (response.statusCode == 200) {
+        _latestVersionData = jsonDecode(response.body);
+        _updateAvailable =
+            _currentVersion != _latestVersionData["currentVersion"];
+        notifyListeners();
+      } else {
+        throw Exception("Failed to load JSON");
+      }
+    } catch (error) {
+      print("Error: $error");
     }
   }
 }

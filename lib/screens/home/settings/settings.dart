@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/settings/items/itemList.dart';
 import 'package:xpens/screens/home/settings/defaults/defaultMain.dart';
 import 'package:xpens/screens/home/settings/points/PointsMain.dart';
+import 'package:xpens/screens/home/settings/update/UpdateMain.dart';
 import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
@@ -74,6 +75,14 @@ class SettingsScreen extends StatelessWidget {
         "onTap": () {
           Navigator.push(context,
               CupertinoPageRoute(builder: (context) => const TrashMain()));
+        }
+      },
+      {
+        "icon": Icons.downloading,
+        "title": "Update",
+        "onTap": () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const UpdateMain()));
         }
       },
       // {
