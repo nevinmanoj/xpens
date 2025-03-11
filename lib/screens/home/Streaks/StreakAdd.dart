@@ -49,7 +49,7 @@ class _StreakAddState extends State<StreakAdd> {
                   ),
                   ...textBoxInput(
                     onChange: (str) {
-                      title = str;
+                      verb = str;
                     },
                     wt: wt,
                     title: 'VERB',
