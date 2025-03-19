@@ -33,8 +33,11 @@ jobs:
       - name: Decode Google Services JSON
         run: |
           echo "${{ secrets.FIREBASE }}" | base64 --decode > android/app/google-services.json    
+
       - run: flutter pub get
-      - run: flutter build apk
+
+      - run: flutter build apk --release
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
