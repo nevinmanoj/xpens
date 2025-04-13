@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:xpens/screens/home/details/calendar/calendarExpanded.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/utils/formatCost.dart';
 
 class CalendarDisp extends StatefulWidget {
   final Map<DateTime, double> testmap;
@@ -84,6 +85,7 @@ class _CalendarDispState extends State<CalendarDisp> {
       calendarBuilders: CalendarBuilders(
         markerBuilder: (context, day, events) {
           final value = widget.testmap[DateTime(day.year, day.month, day.day)];
+
           if (value != null) {
             return Center(
               child: Container(
@@ -91,7 +93,7 @@ class _CalendarDispState extends State<CalendarDisp> {
                 margin: const EdgeInsets.only(top: 50),
                 child: Text(
                   textAlign: TextAlign.center,
-                  '₹ $value',
+                  '₹ ${formatDouble(value)}',
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,

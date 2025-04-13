@@ -19,55 +19,39 @@ class _ItemsSearchWidgetState extends State<ItemsSearchWidget> {
 
     return Stack(
       children: [
-        Column(
-          children: [
-            Container(
-              height: ht * 0.055,
-              color: primaryAppColor,
-            ),
-            Container(),
-          ],
-        ),
-        Positioned(
-          child: Row(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(wt * 0.05, ht * 0.02, 0, wt * 0.05),
-                height: ht * 0.065,
-                width: wt * 0.9,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: const Color.fromARGB(255, 167, 167, 167)),
-                  borderRadius: BorderRadius.circular(10),
-                  // color: Colors.grey[200]?.withOpacity(0.6),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color:
-                          const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-                  child: TextFormField(
-                    initialValue: widget.searchKey,
-                    onChanged: (value) {
-                      widget.changeSearchKey(value);
-                    },
-                    // initialValue: showClear ? filter['query'] : "",
-                    cursorColor: primaryAppColor,
-                    cursorWidth: 1,
-                    keyboardType: TextInputType.name,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                      hintText: 'Search Item Name',
-                    ),
-                  ),
-                ),
+        Container(
+          margin: EdgeInsets.fromLTRB(wt * 0.05, ht * 0.02, 0, wt * 0.05),
+          height: ht * 0.065,
+          width: wt * 0.9,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color.fromARGB(255, 167, 167, 167)),
+            borderRadius: BorderRadius.circular(10),
+            // color: Colors.grey[200]?.withOpacity(0.6),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
+            child: TextFormField(
+              initialValue: widget.searchKey,
+              onChanged: (value) {
+                widget.changeSearchKey(value);
+              },
+              // initialValue: showClear ? filter['query'] : "",
+              cursorColor: primaryAppColor,
+              cursorWidth: 1,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
+                hintText: 'Search Item Name',
+              ),
+            ),
           ),
         ),
       ],

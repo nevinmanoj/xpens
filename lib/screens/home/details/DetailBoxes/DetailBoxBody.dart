@@ -9,7 +9,8 @@ class DetailBoxBody extends StatelessWidget {
   final double sum;
   final Function() toggleShowAll;
   const DetailBoxBody(
-      {super.key, required this.heading,
+      {super.key,
+      required this.heading,
       required this.showAll,
       required this.sortedList,
       required this.sum,
@@ -37,14 +38,29 @@ class DetailBoxBody extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   heading,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  "TOTAL:  ${sum.toInt().toString()} ₹ ",
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "TOTAL",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                          color: Color.fromARGB(255, 153, 153, 153)),
+                    ),
+                    Text(
+                      "${sum.toInt().toString()} ₹ ",
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -62,7 +78,7 @@ class DetailBoxBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Text(
-                  "${sortedList[i].key}:   ${sortedList[i].value.toInt()} ₹",
+                  "${sortedList[i].key}   ${sortedList[i].value.toInt()} ₹",
                   style: const TextStyle(fontSize: 16),
                 ),
               ),

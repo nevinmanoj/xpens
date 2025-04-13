@@ -8,6 +8,7 @@ import 'package:xpens/screens/home/details/calendar/addFromCalendar.dart';
 import 'package:xpens/screens/home/listx/listStream/deleteExpense.dart';
 import 'package:xpens/screens/home/listx/listStream/editMain.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/utils/formatCost.dart';
 
 import '../../../../services/providers/UserInfoProvider.dart';
 
@@ -111,7 +112,7 @@ Widget buildItem(
       SizedBox(
           width: 90,
           child: Text(
-            "₹ ${data['cost'].toString()}",
+            "₹ ${formatDouble(data['cost'])}",
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           )),
@@ -163,7 +164,7 @@ Widget buildLastRow(double cost) {
           width: 90,
           child: Text(
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            "₹ $cost",
+            "₹ ${formatDouble(cost)}",
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
           )),

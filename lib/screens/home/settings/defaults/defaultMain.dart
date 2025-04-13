@@ -55,36 +55,38 @@ class _DefaultsState extends State<Defaults> {
                         "Default ${capsFirst(userInfo.defaults[i].id)} View"),
                   ),
                   body: Center(
-                    child: ItemInputs(
-                        optionDefault: null,
-                        isData: false,
-                        itemName:
-                            notNullReturnValue("itemName", userInfo.items[0]),
-                        costS: notNullReturnValue("cost", ""),
-                        group: notNullReturnValue("group", "none"),
-                        date: userInfo.defaults[i]["date"] == null
-                            ? null
-                            : DateTime.parse(
-                                userInfo.defaults[i]["date"].toString()),
-                        location: userInfo.defaults[i]["location"],
-                        remarks: "",
-                        time: TimeOfDay(
-                            hour: int.parse(
-                                userInfo.defaults[i]["time"].split(":")[0]),
-                            minute: int.parse(
-                                userInfo.defaults[i]["time"].split(":")[1])),
-                        buttonLabel: "Save",
-                        buttonfunc: (ExpenseDefault I) async {
-                          bool res = await DatabaseService(uid: user!.uid)
-                              .updateDefaults(
-                                  type: userInfo.defaults[i].id, I: I);
-                          String msg = res ? "successfully" : "failed";
+                    child: SingleChildScrollView(
+                      child: ItemInputs(
+                          optionDefault: null,
+                          isData: false,
+                          itemName:
+                              notNullReturnValue("itemName", userInfo.items[0]),
+                          costS: notNullReturnValue("cost", ""),
+                          group: notNullReturnValue("group", "none"),
+                          date: userInfo.defaults[i]["date"] == null
+                              ? null
+                              : DateTime.parse(
+                                  userInfo.defaults[i]["date"].toString()),
+                          location: userInfo.defaults[i]["location"],
+                          remarks: "",
+                          time: TimeOfDay(
+                              hour: int.parse(
+                                  userInfo.defaults[i]["time"].split(":")[0]),
+                              minute: int.parse(
+                                  userInfo.defaults[i]["time"].split(":")[1])),
+                          buttonLabel: "Save",
+                          buttonfunc: (ExpenseDefault I) async {
+                            bool res = await DatabaseService(uid: user!.uid)
+                                .updateDefaults(
+                                    type: userInfo.defaults[i].id, I: I);
+                            String msg = res ? "successfully" : "failed";
 
-                          showToast(
-                              context: context,
-                              msg:
-                                  " ${capsFirst(userInfo.defaults[i].id)} Default view modified $msg");
-                        }),
+                            showToast(
+                                context: context,
+                                msg:
+                                    " ${capsFirst(userInfo.defaults[i].id)} Default view modified $msg");
+                          }),
+                    ),
                   ),
                 );
               })),

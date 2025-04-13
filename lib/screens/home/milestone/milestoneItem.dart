@@ -106,12 +106,14 @@ class MilestoneItem extends StatelessWidget {
                       width: wt,
                     ),
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                           color: secondaryAppColor,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
-                          )),
+                          borderRadius: ms.currentStatus != Status.closed
+                              ? const BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                )
+                              : null),
                       height: 5,
                       width: barWidth,
                     ),

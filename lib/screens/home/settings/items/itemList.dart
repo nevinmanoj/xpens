@@ -40,9 +40,10 @@ class _ItemListState extends State<ItemList> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryAppColor,
-        title: const Text("Item List"),
-      ),
+          backgroundColor: primaryAppColor,
+          elevation: 0,
+          title: const Text("Item List"),
+          scrolledUnderElevation: 0),
       body: Stack(
         children: [
           ListView.builder(

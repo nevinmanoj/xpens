@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:xpens/shared/utils/formatCost.dart';
 import '../../../../shared/constants.dart';
 import 'deleteExpense.dart';
 import 'editMain.dart';
@@ -117,7 +118,7 @@ Widget itemWidget(
             SizedBox(
                 width: 100,
                 child: Text(
-                  "₹ ${item['cost'].toString()}",
+                  "₹ ${formatDouble(item['cost'])}",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                   style: const TextStyle(fontSize: 18),
