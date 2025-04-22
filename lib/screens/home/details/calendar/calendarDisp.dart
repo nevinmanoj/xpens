@@ -45,6 +45,7 @@ class _CalendarDispState extends State<CalendarDisp> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      startingDayOfWeek: StartingDayOfWeek.monday,
       rowHeight: 90,
       lastDay: DateTime.now().add(const Duration(days: 30)),
       firstDay: DateTime(2022),

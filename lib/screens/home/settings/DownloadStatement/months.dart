@@ -22,7 +22,8 @@ class _MonthState extends State<Month> {
             color: Colors.grey[200]?.withOpacity(0.6),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -36,7 +37,8 @@ class _MonthState extends State<Month> {
               onChanged: (val) {
                 widget.setVal(val!);
               },
-              items: monthList.map<DropdownMenuItem<String>>((value) {
+              items:
+                  ["All", ...monthList].map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),

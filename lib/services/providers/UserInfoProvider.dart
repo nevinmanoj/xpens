@@ -273,7 +273,7 @@ class UserInfoProvider with ChangeNotifier {
             DateRange firstDateRange = getDateTimesFromPeriod(
                 date: DateTime.fromMillisecondsSinceEpoch(mst["addedDate"]),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: false);
+                offset: 0);
             if (mst["skipFirst"] &&
                 (today > firstDateRange.startDate.millisecondsSinceEpoch) &&
                 (today <= firstDateRange.endDate.millisecondsSinceEpoch)) {
@@ -320,11 +320,11 @@ class UserInfoProvider with ChangeNotifier {
             DateRange currentDateRange = getDateTimesFromPeriod(
                 date: DateTime.now(),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: false);
+                offset: 0);
             DateRange nextDateRange = getDateTimesFromPeriod(
                 date: DateTime.now(),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: true);
+                offset: 1);
             //for { quarter, halfYear, year } before 7 days,
             //for { monthly } before 4 days
             //for { weekly } before 2 days
