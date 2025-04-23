@@ -1,5 +1,6 @@
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
+import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
 import 'package:xpens/shared/dataModals/subModals/PeriodDates.dart';
 
 class Milestone {
@@ -14,6 +15,8 @@ class Milestone {
   Period period;
   bool isOrphan;
   bool isPrematureClosure;
+  int idCount;
+  List<MilestoneValue> values;
   Milestone._(
       {required this.dateRange,
       required this.isOrphan,
@@ -25,6 +28,8 @@ class Milestone {
       this.currentVal,
       required this.currentStatus,
       required this.skipFirst,
+      required this.values,
+      required this.idCount,
       this.endVal});
 
   factory Milestone(
@@ -37,6 +42,8 @@ class Milestone {
       currentVal,
       required currentStatus,
       required skipFirst,
+      required List<MilestoneValue> values,
+      required idCount,
       endVal}) {
     bool prematureClosure = currentStatus == Status.closed &&
         DateTime.now().isBefore(dateRange.endDate);
@@ -55,7 +62,9 @@ class Milestone {
         period: period,
         templateID: templateID,
         isPrematureClosure: prematureClosure,
-        skipFirst: skipFirst);
+        skipFirst: skipFirst,
+        values: values,
+        idCount: idCount);
   }
 
   // Convert to JSON (Serialization)
@@ -70,7 +79,9 @@ class Milestone {
       'endVal': endVal,
       'currentVal': currentVal,
       'isOrphan': isOrphan,
-      'period': serializePeriod(period)
+      'period': serializePeriod(period),
+      'values': values.map((e) => e.toJson()),
+      'idCount': idCount
     };
   }
 
@@ -92,6 +103,10 @@ class Milestone {
           endDate: DateTime.fromMillisecondsSinceEpoch(json['endDate']),
           startDate: DateTime.fromMillisecondsSinceEpoch(json['startDate'])),
       skipFirst: json['skipFirst'],
+      values: (json["values"] as List)
+          .map((e) => MilestoneValue.fromJson(e))
+          .toList(),
+      idCount: json["idCount"],
     );
   }
 }

@@ -12,6 +12,8 @@ import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
+import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
+import 'package:xpens/shared/utils/safeParse.dart';
 
 import '../shared/dataModals/AddItemModal.dart';
 
@@ -51,20 +53,25 @@ class DevService {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // final User? user = _auth.currentUser;
     final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('UserInfo/$uid/list');
+        FirebaseFirestore.instance.collection('UserInfo/$uid/milestones');
 
     final QuerySnapshot querySnapshot = await collectionRef.get();
 
     for (final QueryDocumentSnapshot document in querySnapshot.docs) {
       var data = document.data() as Map;
-      String itemName = data['itemName'];
-
-      // Split the itemName into an array of words
-      final List<String> words =
-          itemName.split(' ').map((word) => word.toLowerCase()).toList();
-
+      print(data["currentVal"]);
       // Update the document with the 'words' array
-      collectionRef.doc(document.id).update({'tags': words});
+      collectionRef.doc(document.id).update({
+        'idCount': 1,
+        'values': [
+          MilestoneValue(
+                  date: DateTime.fromMillisecondsSinceEpoch(data["startDate"])
+                      .add(Duration(minutes: 2)),
+                  id: 1.toString(),
+                  value: safeDoubleParse(data["currentVal"].toString()))
+              .toJson()
+        ]
+      });
     }
 
     print('Updated documents with word arrays.');

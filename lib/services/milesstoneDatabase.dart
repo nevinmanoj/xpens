@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
+import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
 import 'package:xpens/shared/utils/getDateTimesFromPeriod.dart';
 
 class MilestoneDatabaseService {
@@ -18,7 +19,17 @@ class MilestoneDatabaseService {
 
   Future editMilestone({required Milestone item}) async {
     // check if we need to move to complete
+
+    if (item.currentVal == null && item.endVal != null) {
+      item.currentVal = 0;
+    }
+
     if (item.currentVal != null && item.endVal != null) {
+      double sum = 0;
+      for (MilestoneValue value in item.values) {
+        sum += value.value;
+      }
+      item.currentVal = sum;
       if (item.currentVal! >= item.endVal!) {
         item.currentStatus = Status.closed;
       }
@@ -113,14 +124,16 @@ class MilestoneDatabaseService {
         dateRange: getDateTimesFromPeriod(
             p: template.period,
             date: DateTime.now(),
-            isNextPeriod: skipCurrent),
+            offset: skipCurrent ? 1 : 0),
         title: template.title,
         endVal: template.endVal,
         isOrphan: false,
         currentVal: template.endVal != null ? 0.0 : null,
         currentStatus: skipCurrent ? Status.upcoming : Status.active,
         templateID: templateID,
-        skipFirst: template.skipFirst);
+        skipFirst: template.skipFirst,
+        values: <MilestoneValue>[],
+        idCount: 0);
     await FirebaseFirestore.instance
         .collection('$db/$uid/milestones')
         .doc()

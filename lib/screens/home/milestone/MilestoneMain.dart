@@ -8,7 +8,7 @@ import 'package:xpens/screens/home/milestone/MilestoneHeader.dart';
 import 'package:xpens/screens/home/milestone/milestoneItem.dart';
 import 'package:xpens/screens/home/milestone/msFilterFunction.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';

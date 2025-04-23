@@ -7,15 +7,16 @@ import 'package:get/get.dart';
 
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ActionConfirm.dart';
-import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEdit.dart';
+import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEditMain.dart';
 import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneEditPopup.dart';
+import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneValueAddorEdit.dart';
 import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
-import 'package:xpens/shared/utils/safeParse.dart';
 
+import '../../../../shared/dataModals/subModals/MilestoneValue.dart';
 import '../MilestoneGetx.dart';
 
 class MilestonePopup extends StatefulWidget {
@@ -31,50 +32,34 @@ class _MilestonePopupState extends State<MilestonePopup> {
   final popupController = Get.put(MilestonePopupController());
   double _height = 0;
   double target = 100;
-  FocusNode? newnode = FocusNode();
-
-  void toggleAdd() {
-    popupController.setshowadd(!popupController.showAdd);
-    if (popupController.showAdd) {
-      newnode!.requestFocus();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MilestonePopupController>(builder: (ctx) {
       double wt = MediaQuery.of(context).size.width;
       double ht = MediaQuery.of(context).size.height;
-      DateTime today = DateTime.now();
 
       var user = Provider.of<User?>(context);
-      void addValueToTotal() async {
-        if (popupController.ms != null) {
-          double initval = 0;
-          if (popupController.ms!.currentVal != null) {
-            initval = popupController.ms!.currentVal!;
-          }
-          popupController.ms!.currentVal =
-              initval + safeDoubleParse(popupController.newval);
-          await MilestoneDatabaseService(uid: user!.uid)
-              .editMilestone(item: popupController.ms!);
-          popupController.setMS(null);
-        }
-      }
+      void toggleAdd() {
+        showDialog(
+            context: context,
+            builder: ((context) => MilestoneValueAddorEdit(
+                  msv: MilestoneValue(
+                      date: DateTime.now(), id: "place_holder", value: 0.0),
+                  submit: (MilestoneValue newmv) {
+                    if (popupController.ms != null) {
+                      newmv.id = (popupController.ms!.idCount + 1).toString();
+                      popupController.ms!.values.add(newmv);
+                      popupController.ms!.idCount += 1;
 
-      void markasDoneOrRedo() async {
-        if (popupController.ms != null) {
-          popupController.ms!.currentStatus =
-              popupController.ms!.isPrematureClosure
-                  ? today.isBefore(popupController.ms!.dateRange.startDate)
-                      ? Status.upcoming
-                      : Status.active
-                  : Status.closed;
-
-          await MilestoneDatabaseService(uid: user!.uid)
-              .editMilestone(item: popupController.ms!);
-        }
-        popupController.setMS(null);
+                      MilestoneDatabaseService(uid: user!.uid)
+                          .editMilestone(item: popupController.ms!);
+                      popupController.setMS(null);
+                    }
+                    Navigator.pop(context);
+                  },
+                  isAdd: true,
+                )));
       }
 
       Future popDeletebox() {
@@ -98,6 +83,7 @@ class _MilestonePopupState extends State<MilestonePopup> {
                       }
                     }
                     Navigator.pop(context);
+
                     popupController.setMS(null);
                   });
             });
@@ -107,7 +93,7 @@ class _MilestonePopupState extends State<MilestonePopup> {
         Navigator.push(
             context,
             CupertinoPageRoute(
-                builder: (context) => MilestoneAddorEdit(
+                builder: (context) => MilestoneAddorEditMain(
                       submit: (
                           {required Milestone? newms,
                           required MilestoneTemplate newmst,
@@ -165,43 +151,6 @@ class _MilestonePopupState extends State<MilestonePopup> {
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  if (popupController.showAdd &&
-                                      popupController.ms!.endVal != null) ...[
-                                    Container(
-                                      height: 35,
-                                      width: wt * 0.54,
-                                      padding: const EdgeInsets.only(left: 5),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color:
-                                            const Color.fromARGB(255, 0, 0, 0),
-                                        border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 255, 255, 255)),
-                                      ),
-                                      child: TextField(
-                                        textAlignVertical:
-                                            TextAlignVertical.center,
-                                        focusNode: newnode,
-                                        cursorColor: secondaryAppColor,
-                                        keyboardType: TextInputType.number,
-                                        cursorWidth: 1,
-                                        decoration: const InputDecoration(
-                                            hintStyle: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 136, 136, 136),
-                                                fontSize: 12),
-                                            hintText:
-                                                "Enter number to add to total",
-                                            border: InputBorder.none),
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                        onChanged: (value) =>
-                                            popupController.setnewval(value),
-                                      ),
-                                    ),
-                                    const Spacer()
-                                  ],
                                   if (popupController.ms!.endVal != null &&
                                       popupController.ms!.currentStatus !=
                                           Status.upcoming)
@@ -223,47 +172,11 @@ class _MilestonePopupState extends State<MilestonePopup> {
                                                 BorderRadius.circular(5),
                                           )),
                                         ),
-                                        onPressed: popupController.showAdd
-                                            ? addValueToTotal
-                                            : toggleAdd,
-                                        child: Center(
+                                        onPressed: toggleAdd,
+                                        child: const Center(
                                             child: Text(
-                                          popupController.showAdd
-                                              ? "Add to Total"
-                                              : "Add Value",
-                                          style: const TextStyle(
-                                              color: secondaryAppColor,
-                                              fontSize: 15),
-                                        )),
-                                      ),
-                                    ),
-                                  if (!popupController.showAdd &&
-                                      (popupController.ms!.currentStatus ==
-                                              Status.active ||
-                                          popupController
-                                              .ms!.isPrematureClosure))
-                                    SizedBox(
-                                      // margin: const EdgeInsets.only(right: 10),
-                                      width: wt * 0.35,
-                                      height: ht * 0.045,
-                                      child: OutlinedButton(
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            )),
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(primaryAppColor)),
-                                        onPressed: markasDoneOrRedo,
-                                        child: Center(
-                                            child: Text(
-                                          popupController.ms!.isPrematureClosure
-                                              ? "Mark to Redo"
-                                              : "Mark as done",
-                                          style: const TextStyle(
+                                          "Add Value",
+                                          style: TextStyle(
                                               color: secondaryAppColor,
                                               fontSize: 15),
                                         )),
@@ -280,21 +193,18 @@ class _MilestonePopupState extends State<MilestonePopup> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           getIconButtons(
-                            f: popupController.showAdd
-                                ? toggleAdd
-                                : () => popupController.setMS(null),
+                            f: () => popupController.setMS(null),
                             i: Icons.arrow_back,
                           ),
                           SizedBox(
                             // color: Colors.amber,
-                            width: wt * 0.6,
+                            width: wt * 0.45,
                             child: Text(popupController.ms!.title,
                                 style: const TextStyle(color: Colors.white),
                                 overflow: TextOverflow.ellipsis),
                           ),
-                          if (!popupController.showAdd &&
-                              popupController.ms!.currentStatus !=
-                                  Status.closed) ...[
+                          if (popupController.ms!.currentStatus !=
+                              Status.closed) ...[
                             const Spacer(),
                             getIconButtons(
                               f: popDeletebox,

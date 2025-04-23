@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
 
 class MilestoneItem extends StatelessWidget {

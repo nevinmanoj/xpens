@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEdit.dart';
+import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEditMain.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
 import 'package:xpens/shared/utils/CapsFirst.dart';
@@ -56,7 +56,7 @@ class MilestoneHeader extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MilestoneAddorEdit(
+                          builder: (context) => MilestoneAddorEditMain(
                                 submit: (
                                     {required Milestone? newms,
                                     required MilestoneTemplate newmst,
