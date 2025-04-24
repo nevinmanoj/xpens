@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ItemInput/cost.dart';
 import 'package:xpens/screens/home/components/ItemInput/dropDown.dart';
+import 'package:xpens/screens/home/components/ItemInput/group.dart';
 import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
@@ -10,11 +13,6 @@ import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
 import 'package:xpens/shared/utils/safeParse.dart';
 
 class MilestoneAddorEdit extends StatefulWidget {
-  // final String title;
-  // final double? curVal;
-  // final Period period;
-  // final double? endVal;
-  // final bool skipFirst;
   final bool isAdd;
   final Milestone? inputms;
 
@@ -39,6 +37,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
   late double? endVal;
   late bool skipFirst;
   late double? curVal;
+  String? group;
 
   @override
   void initState() {
@@ -48,6 +47,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
       curVal = widget.inputms!.currentVal;
       endVal = widget.inputms!.endVal;
       skipFirst = widget.inputms!.skipFirst;
+      group = widget.inputms!.group;
     } else {
       title = '';
       period = Period.daily;
@@ -63,6 +63,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
+    List msdocs = Provider.of<UserInfoProvider>(context).milestones;
 
     return Form(
       key: _msformKey,
@@ -131,7 +132,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                   },
                 ),
                 SizedBox(
-                  height: ht * 0.13,
+                  // height: ht * 0.13,
                   width: wt * 0.8,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -154,6 +155,14 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                     ],
                   ),
                 ),
+                ItemGroup(
+                  avoidValue: null,
+                  docs: msdocs,
+                  itemGroup: group,
+                  onGroupChange: (g) {
+                    group = g;
+                  },
+                ),
                 SizedBox(
                   width: 150,
                   height: 50,
@@ -166,6 +175,7 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                               ? widget.inputms!.templateID
                               : "place_holder",
                           period: period,
+                          group: group,
                           skipFirst: skipFirst,
                           endVal: endVal);
                       if (_msformKey.currentState!.validate()) {
@@ -182,8 +192,9 @@ class _MilestoneAddorEditState extends State<MilestoneAddorEdit> {
                               templateID: widget.inputms!.templateID,
                               currentStatus: widget.inputms!.currentStatus,
                               skipFirst: skipFirst,
-                              values: <MilestoneValue>[],
-                              idCount: 0);
+                              values: widget.inputms!.values,
+                              idCount: widget.inputms!.idCount,
+                              group: group);
                         }
                         await widget.submit(
                             bc: context, newms: ms, newmst: mst);

@@ -3,6 +3,7 @@ import 'package:xpens/screens/home/milestone/MilestoneAddorEdit/MilestoneAddorEd
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/enums/Status.dart';
 
 import 'MilestoneListValues.dart';
 
@@ -27,8 +28,10 @@ class MilestoneAddorEditMain extends StatefulWidget {
 class _MilestoneAddorEditMainState extends State<MilestoneAddorEditMain> {
   @override
   Widget build(BuildContext context) {
+    bool needSecondTab =
+        widget.inputms != null && widget.inputms!.values.isNotEmpty;
     return DefaultTabController(
-      length: 2,
+      length: needSecondTab ? 2 : 1,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: primaryAppColor,
@@ -41,7 +44,7 @@ class _MilestoneAddorEditMainState extends State<MilestoneAddorEditMain> {
                   indicatorColor: secondaryAppColor,
                   labelColor: secondaryAppColor,
                   unselectedLabelColor: const Color(0xff778585),
-                  tabs: ["Template", "Values"]
+                  tabs: ["Template", if (needSecondTab) "Values"]
                       .map((e) => Tab(
                             child: Text(e),
                           ))
@@ -58,11 +61,10 @@ class _MilestoneAddorEditMainState extends State<MilestoneAddorEditMain> {
                 widget.submit(newmst: newmst, newms: newms, bc: context),
             inputms: widget.inputms,
           ),
-          widget.inputms != null
-              ? MilestoneListValues(
-                  ms: widget.inputms!,
-                )
-              : Container()
+          if (needSecondTab)
+            MilestoneListValues(
+              ms: widget.inputms!,
+            )
         ]),
       ),
     );

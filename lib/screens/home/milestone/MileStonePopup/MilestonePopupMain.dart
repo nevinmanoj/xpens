@@ -203,18 +203,18 @@ class _MilestonePopupState extends State<MilestonePopup> {
                                 style: const TextStyle(color: Colors.white),
                                 overflow: TextOverflow.ellipsis),
                           ),
+                          const Spacer(),
                           if (popupController.ms!.currentStatus !=
                               Status.closed) ...[
-                            const Spacer(),
                             getIconButtons(
                               f: popDeletebox,
                               i: Icons.delete,
                             ),
-                            getIconButtons(
-                              f: editms,
-                              i: Icons.edit,
-                            ),
-                          ]
+                          ],
+                          getIconButtons(
+                            f: editms,
+                            i: Icons.edit,
+                          ),
                         ],
                       ),
                   ],

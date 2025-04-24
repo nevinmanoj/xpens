@@ -9,11 +9,13 @@ class InputAutoFill extends StatefulWidget {
       required this.value,
       required this.docs,
       required this.onValueChange,
-      required this.tag});
+      required this.tag,
+      this.avoidValue});
   final Function(String) onValueChange;
   final String value;
   final String tag;
   final List docs;
+  final String? avoidValue;
 
   @override
   State<InputAutoFill> createState() => _InputAutoFillState();
@@ -29,7 +31,7 @@ class _InputAutoFillState extends State<InputAutoFill> {
     Set<String> uniqueGroupNames = {};
 
     for (var item in list) {
-      if (item[widget.tag] != "none") {
+      if (item[widget.tag] != widget.avoidValue) {
         uniqueGroupNames.add(item[widget.tag]);
       }
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:xpens/screens/home/milestone/MilestoneFilter/GroupFilter.dart';
 import 'package:xpens/screens/home/milestone/MilestoneFilter/PeriodFilter.dart';
-import 'package:xpens/shared/constants.dart';
 
 import '../MilestoneGetx.dart';
 
@@ -60,6 +60,7 @@ class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
                     padding: const EdgeInsets.only(top: 40),
                     child: ListView(children: [
                       PeriodFilterAccordion(),
+                      GroupFilterAccordion(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -74,27 +75,6 @@ class _MilestonesFilterMainState extends State<MilestonesFilterMain> {
                                 "Clear",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 17),
-                              )),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                            width: wt * 0.3,
-                            height: ht * 0.05,
-                            child: ElevatedButton(
-                              style: buttonDecoration,
-                              onPressed: () {
-                                controller
-                                    .setMainperiodList(controller.periodList);
-                                widget.dissableFilter();
-                              },
-                              child: const Center(
-                                  child: Text(
-                                "Apply",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 17),
                               )),
                             ),
                           ),

@@ -50,7 +50,8 @@ class _MilestonesMainState extends State<MilestonesMain> {
 
     return GetBuilder<MilestoneFilterController>(builder: (context) {
       bool filterApplied =
-          !areSetsEqual(controller.mainPeriodList, [...Period.values]);
+          !areSetsEqual(controller.periodList, [...Period.values]) ||
+              !areSetsEqual(controller.groups, []);
       return DefaultTabController(
         length: 3,
         child: Stack(
@@ -69,8 +70,9 @@ class _MilestonesMainState extends State<MilestonesMain> {
                 child: TabBarView(
                     children: Status.values.map((sts) {
                   List<Milestone> newmslist = applyMSFilter(
+                      groups: controller.groups,
                       data: mslist,
-                      periodList: controller.mainPeriodList,
+                      periodList: controller.periodList,
                       currentStatus: sts,
                       templates: mstList);
                   return ListView.builder(

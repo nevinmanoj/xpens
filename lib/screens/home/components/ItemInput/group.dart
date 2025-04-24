@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../services/providers/UserInfoProvider.dart';
 import '../../../../shared/constants.dart';
 import 'inputAutofill.dart';
 
@@ -10,9 +8,13 @@ class ItemGroup extends StatefulWidget {
     super.key,
     required this.itemGroup,
     required this.onGroupChange,
+    required this.docs,
+    required this.avoidValue,
   });
-  final Function(String) onGroupChange;
-  final String itemGroup;
+  final Function(String?) onGroupChange;
+  final String? itemGroup;
+  final List docs;
+  final String? avoidValue;
 
   @override
   State<ItemGroup> createState() => _ItemGroupState();
@@ -25,20 +27,19 @@ class _ItemGroupState extends State<ItemGroup> {
   @override
   void initState() {
     // addToGroup = widget.addToGroup;
-    addToGroup = widget.itemGroup != "none";
+    addToGroup = widget.itemGroup != widget.avoidValue;
 
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant ItemGroup oldWidget) {
-    addToGroup = widget.itemGroup != "none";
+    addToGroup = widget.itemGroup != widget.avoidValue;
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     return Column(
       children: [
@@ -55,7 +56,7 @@ class _ItemGroupState extends State<ItemGroup> {
                 onChanged: (bool? value) {
                   try {
                     if (!value!) {
-                      widget.onGroupChange("none");
+                      widget.onGroupChange(widget.avoidValue);
                     } else {
                       widget.onGroupChange("");
                     }
@@ -73,38 +74,12 @@ class _ItemGroupState extends State<ItemGroup> {
         addToGroup
             ? InputAutoFill(
                 onValueChange: widget.onGroupChange,
-                value: widget.itemGroup,
+                value: widget.itemGroup ?? '',
                 tag: "group",
-                docs: userInfo.docs,
+                docs: widget.docs,
+                avoidValue: widget.avoidValue,
               )
             : Container(),
-        // addToGroup
-        //     ? Container(
-        //         height: 50,
-        //         width: 300,
-        //         decoration: addInputDecoration,
-        //         child: Padding(
-        //           padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-        //           child: TextFormField(
-        //             initialValue:
-        //                 widget.itemGroup == "none" ? "" : widget.itemGroup,
-        //             onChanged: (value) {
-        //               print("hcnaging grp val");
-        //               widget.onGroupChange(value);
-        //             },
-        //             validator: (value) => value!.isEmpty
-        //                 ? ' Group Tag Name cannot be empty'
-        //                 : null,
-        //             keyboardType: TextInputType.name,
-        //             decoration: InputDecoration(
-        //               border: InputBorder.none,
-        //               hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-        //               hintText: 'Group Tag Name',
-        //             ),
-        //           ),
-        //         ),
-        //       )
-        //     : Container(),
       ],
     );
   }

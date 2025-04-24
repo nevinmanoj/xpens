@@ -52,29 +52,17 @@ class DevService {
   Future<void> updateDocumentsWithWordArray(uid) async {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // final User? user = _auth.currentUser;
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('UserInfo/$uid/milestones');
+    final CollectionReference collectionRef = FirebaseFirestore.instance
+        .collection('UserInfo/$uid/milestone-templates');
 
     final QuerySnapshot querySnapshot = await collectionRef.get();
 
     for (final QueryDocumentSnapshot document in querySnapshot.docs) {
-      var data = document.data() as Map;
-      print(data["currentVal"]);
       // Update the document with the 'words' array
-      collectionRef.doc(document.id).update({
-        'idCount': 1,
-        'values': [
-          MilestoneValue(
-                  date: DateTime.fromMillisecondsSinceEpoch(data["startDate"])
-                      .add(Duration(minutes: 2)),
-                  id: 1.toString(),
-                  value: safeDoubleParse(data["currentVal"].toString()))
-              .toJson()
-        ]
-      });
+      collectionRef.doc(document.id).update({'group': null});
     }
 
-    print('Updated documents with word arrays.');
+    print('Updated documents');
   }
 
   Future<void> addFieldToACollection(
@@ -184,6 +172,7 @@ class DevService {
   Future injectTestDataMS() async {
     milestoneDB.addMilestoneTemplate(
         item: MilestoneTemplate(
+            group: null,
             templateId: "place_holder",
             addedDate: DateTime.now(),
             title: "ms 3",

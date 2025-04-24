@@ -50,12 +50,11 @@ class MilestoneDatabaseService {
         .get()
         .then((value) => value.docs);
     for (var ms in msdata) {
+      print(ms.id);
       Milestone msobj = Milestone.fromJson(ms);
       msobj.title = template.title;
       msobj.endVal = template.endVal;
-      if (msobj.selfId == item.selfId) {
-        msobj.currentVal = item.currentVal;
-      }
+      msobj.group = template.group;
       editMilestone(item: msobj);
     }
   }
@@ -119,6 +118,7 @@ class MilestoneDatabaseService {
       required bool skipCurrent,
       required String templateID}) async {
     Milestone ms = Milestone(
+        group: template.group,
         period: template.period,
         selfId: "Place holder",
         dateRange: getDateTimesFromPeriod(

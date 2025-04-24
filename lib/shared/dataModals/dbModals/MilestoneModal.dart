@@ -17,6 +17,7 @@ class Milestone {
   bool isPrematureClosure;
   int idCount;
   List<MilestoneValue> values;
+  String? group;
   Milestone._(
       {required this.dateRange,
       required this.isOrphan,
@@ -30,6 +31,7 @@ class Milestone {
       required this.skipFirst,
       required this.values,
       required this.idCount,
+      this.group,
       this.endVal});
 
   factory Milestone(
@@ -44,6 +46,7 @@ class Milestone {
       required skipFirst,
       required List<MilestoneValue> values,
       required idCount,
+      group,
       endVal}) {
     bool prematureClosure = currentStatus == Status.closed &&
         DateTime.now().isBefore(dateRange.endDate);
@@ -52,19 +55,21 @@ class Milestone {
     }
 
     return Milestone._(
-        currentVal: currentVal,
-        endVal: endVal,
-        currentStatus: currentStatus,
-        dateRange: dateRange,
-        isOrphan: isOrphan,
-        selfId: selfId,
-        title: title,
-        period: period,
-        templateID: templateID,
-        isPrematureClosure: prematureClosure,
-        skipFirst: skipFirst,
-        values: values,
-        idCount: idCount);
+      currentVal: currentVal,
+      endVal: endVal,
+      currentStatus: currentStatus,
+      dateRange: dateRange,
+      isOrphan: isOrphan,
+      selfId: selfId,
+      title: title,
+      period: period,
+      templateID: templateID,
+      isPrematureClosure: prematureClosure,
+      skipFirst: skipFirst,
+      values: values,
+      idCount: idCount,
+      group: group,
+    );
   }
 
   // Convert to JSON (Serialization)
@@ -81,7 +86,8 @@ class Milestone {
       'isOrphan': isOrphan,
       'period': serializePeriod(period),
       'values': values.map((e) => e.toJson()),
-      'idCount': idCount
+      'idCount': idCount,
+      'group': group,
     };
   }
 
@@ -107,6 +113,7 @@ class Milestone {
           .map((e) => MilestoneValue.fromJson(e))
           .toList(),
       idCount: json["idCount"],
+      group: json['group'],
     );
   }
 }
