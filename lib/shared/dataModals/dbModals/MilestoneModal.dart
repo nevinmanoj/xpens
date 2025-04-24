@@ -75,7 +75,7 @@ class Milestone {
   // Convert to JSON (Serialization)
   Map<String, dynamic> toJson() {
     return {
-      'title': title,
+      'title': title.trim(),
       'skipFirst': skipFirst,
       'templateID': templateID,
       'startDate': dateRange.startDate.millisecondsSinceEpoch,
@@ -87,7 +87,7 @@ class Milestone {
       'period': serializePeriod(period),
       'values': values.map((e) => e.toJson()),
       'idCount': idCount,
-      'group': group,
+      'group': group?.trim(),
     };
   }
 

@@ -89,6 +89,21 @@ class _MilestonePopupState extends State<MilestonePopup> {
             });
       }
 
+      void markasDoneOrRedo() async {
+        if (popupController.ms != null) {
+          popupController.ms!.currentStatus = popupController
+                  .ms!.isPrematureClosure
+              ? DateTime.now().isBefore(popupController.ms!.dateRange.startDate)
+                  ? Status.upcoming
+                  : Status.active
+              : Status.closed;
+
+          await MilestoneDatabaseService(uid: user!.uid)
+              .editMilestone(item: popupController.ms!);
+        }
+        popupController.setMS(null);
+      }
+
       void editms() {
         Navigator.push(
             context,
@@ -177,6 +192,36 @@ class _MilestonePopupState extends State<MilestonePopup> {
                                             child: Text(
                                           "Add Value",
                                           style: TextStyle(
+                                              color: secondaryAppColor,
+                                              fontSize: 15),
+                                        )),
+                                      ),
+                                    ),
+                                  if ((popupController.ms!.currentStatus ==
+                                          Status.active ||
+                                      popupController.ms!.isPrematureClosure))
+                                    SizedBox(
+                                      // margin: const EdgeInsets.only(right: 10),
+                                      width: wt * 0.35,
+                                      height: ht * 0.045,
+                                      child: OutlinedButton(
+                                        style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            )),
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(primaryAppColor)),
+                                        onPressed: markasDoneOrRedo,
+                                        child: Center(
+                                            child: Text(
+                                          popupController.ms!.isPrematureClosure
+                                              ? "Mark to Redo"
+                                              : "Mark as done",
+                                          style: const TextStyle(
                                               color: secondaryAppColor,
                                               fontSize: 15),
                                         )),

@@ -27,7 +27,7 @@ class MilestoneTemplate {
       'period': serializePeriod(period),
       'endVal': endVal,
       'skipFirst': skipFirst,
-      'group': group
+      'group': group?.trim()
     };
   }
 
