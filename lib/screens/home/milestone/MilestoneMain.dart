@@ -8,7 +8,7 @@ import 'package:xpens/screens/home/milestone/MilestoneHeader.dart';
 import 'package:xpens/screens/home/milestone/milestoneItem.dart';
 import 'package:xpens/screens/home/milestone/msFilterFunction.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
@@ -50,7 +50,8 @@ class _MilestonesMainState extends State<MilestonesMain> {
 
     return GetBuilder<MilestoneFilterController>(builder: (context) {
       bool filterApplied =
-          !areSetsEqual(controller.mainPeriodList, [...Period.values]);
+          !areSetsEqual(controller.periodList, [...Period.values]) ||
+              !areSetsEqual(controller.groups, []);
       return DefaultTabController(
         length: 3,
         child: Stack(
@@ -69,8 +70,9 @@ class _MilestonesMainState extends State<MilestonesMain> {
                 child: TabBarView(
                     children: Status.values.map((sts) {
                   List<Milestone> newmslist = applyMSFilter(
+                      groups: controller.groups,
                       data: mslist,
-                      periodList: controller.mainPeriodList,
+                      periodList: controller.periodList,
                       currentStatus: sts,
                       templates: mstList);
                   return ListView.builder(

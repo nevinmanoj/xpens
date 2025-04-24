@@ -1,6 +1,9 @@
 String formatDouble(double value) {
-  if (value == value.roundToDouble()) {
-    return value.toInt().toString();
-  }
-  return value.toStringAsFixed(2).toString();
+  // Convert to string with 2 decimal places
+  String str = value.toStringAsFixed(2);
+
+  // Remove trailing zeros and possibly the decimal point
+  str = str.replaceFirst(RegExp(r'\.?0*$'), '');
+
+  return str;
 }

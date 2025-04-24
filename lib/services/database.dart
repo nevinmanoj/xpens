@@ -75,7 +75,7 @@ class DatabaseService {
           .set({
         "tags": tags,
         "isTrash": false,
-        "group": I.group,
+        "group": I.group.trim(),
         "month": month,
         "year": year,
         "day": day,
@@ -114,7 +114,7 @@ class DatabaseService {
     try {
       await FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).set({
         "tags": tags,
-        "group": I.group,
+        "group": I.group.trim(),
         "month": month,
         "isOther": I.isOther,
         "year": year,
@@ -302,7 +302,7 @@ class DatabaseService {
           .collection('$db/$uid/defaults')
           .doc(type)
           .set({
-        "group": I.group,
+        "group": I.group?.trim(),
         "cost": I.cost,
         "remarks": I.remarks,
         "date": I.date?.toString(),

@@ -1,4 +1,4 @@
 {
-  "currentVersion": "1.0.4",
-  "bio": "minor ui updates"
+  "currentVersion": "2.0.0",
+  "bio": "- Groups property for Milestones \n- Graph for details page \n- Values breakdown in Milestone"
 }

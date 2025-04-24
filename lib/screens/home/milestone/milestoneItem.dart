@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
 
 class MilestoneItem extends StatelessWidget {
@@ -32,14 +33,6 @@ class MilestoneItem extends StatelessWidget {
     } else if (!noVal) {
       barWidth = 0;
     }
-    void markasDoneRedo() async {
-      ms.currentStatus = prematureClosure
-          ? today.isBefore(ms.dateRange.startDate)
-              ? Status.upcoming
-              : Status.active
-          : Status.closed;
-      await MilestoneDatabaseService(uid: user!.uid).editMilestone(item: ms);
-    }
 
     return Container(
       decoration: BoxDecoration(
@@ -58,7 +51,6 @@ class MilestoneItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                // color: Colors.amber,
                 width: wt * 0.7,
                 height: ht * 0.04,
                 child: Text(
@@ -69,17 +61,25 @@ class MilestoneItem extends StatelessWidget {
                       color: Color.fromRGBO(101, 101, 101, 1)),
                 ),
               ),
-              ms.currentStatus == Status.active || prematureClosure
-                  ? SizedBox(
-                      height: ht * 0.04,
-                      child: OutlinedButton(
-                        // style: buttonDecoration,
-                        onPressed: () => markasDoneRedo(),
-                        child: Text(
-                          prematureClosure ? "Redo" : "Done",
-                          style: const TextStyle(color: secondaryAppColor),
-                        ),
-                      ))
+              ms.group != null
+                  ? ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: wt * 0.2 - 8),
+                      child: IntrinsicWidth(
+                        child: Container(
+                            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                color: Colors.grey.withOpacity(0.3),
+                              ),
+                            ),
+                            // height: ht * 0.04,
+                            child: Text(
+                              ms.group!,
+                              overflow: TextOverflow.ellipsis,
+                            )),
+                      ),
+                    )
                   : Container(),
             ],
           ),

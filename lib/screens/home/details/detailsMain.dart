@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/details/DetailBoxes/PerDay.dart';
 
 import 'package:xpens/screens/home/details/calendar/calendarDisp.dart';
+import 'package:xpens/screens/home/details/detailGraph.dart';
 import 'package:xpens/screens/home/details/filter.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
@@ -87,6 +88,9 @@ class _DetailsState extends State<Details> {
                   ),
                   CalendarDisp(
                     testmap: testMap,
+                  ),
+                  DetailGraph(
+                    data: list,
                   ),
                   PerDay(data: list, date: DateTime.now(), heading: "Today"),
                   PerDay(

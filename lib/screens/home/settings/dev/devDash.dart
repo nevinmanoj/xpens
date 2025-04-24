@@ -53,9 +53,9 @@ class _DevDashState extends State<DevDash> {
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
-              DevService(uid: user!.uid).injectStreakData();
+              DevService(uid: user!.uid).updateDocumentsWithWordArray(user.uid);
             },
-            child: Text("Add streak data")),
+            child: Text("modify")),
       ])),
     );
   }

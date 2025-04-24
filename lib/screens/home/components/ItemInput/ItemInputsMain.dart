@@ -72,9 +72,9 @@ class _ItemInputsState extends State<ItemInputs> {
     });
   }
 
-  void updateGroup(String newgrp) {
+  void updateGroup(String? newgrp) {
     setState(() {
-      group = newgrp;
+      group = newgrp ?? 'none';
     });
     print("changed group to: $newgrp");
   }
@@ -119,6 +119,8 @@ class _ItemInputsState extends State<ItemInputs> {
   @override
   Widget build(BuildContext context) {
     List allItems = Provider.of<UserInfoProvider>(context).items;
+    List docs = Provider.of<UserInfoProvider>(context).docs;
+
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
     return InkWell(
@@ -197,6 +199,8 @@ class _ItemInputsState extends State<ItemInputs> {
                 ),
               ),
               ItemGroup(
+                avoidValue: "none",
+                docs: docs,
                 itemGroup: group,
                 onGroupChange: updateGroup,
               ),

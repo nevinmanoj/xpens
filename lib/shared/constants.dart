@@ -58,7 +58,6 @@ List<String> filterList = [
 ];
 
 const monthList = [
-  "All",
   "Jan",
   "Feb",
   "Mar",
@@ -72,3 +71,5 @@ const monthList = [
   "Nov",
   "Dec"
 ];
+
+const weekList = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"];

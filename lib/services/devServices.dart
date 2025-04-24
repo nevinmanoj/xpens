@@ -12,6 +12,8 @@ import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
+import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
+import 'package:xpens/shared/utils/safeParse.dart';
 
 import '../shared/dataModals/AddItemModal.dart';
 
@@ -50,24 +52,17 @@ class DevService {
   Future<void> updateDocumentsWithWordArray(uid) async {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // final User? user = _auth.currentUser;
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('UserInfo/$uid/list');
+    final CollectionReference collectionRef = FirebaseFirestore.instance
+        .collection('UserInfo/$uid/milestone-templates');
 
     final QuerySnapshot querySnapshot = await collectionRef.get();
 
     for (final QueryDocumentSnapshot document in querySnapshot.docs) {
-      var data = document.data() as Map;
-      String itemName = data['itemName'];
-
-      // Split the itemName into an array of words
-      final List<String> words =
-          itemName.split(' ').map((word) => word.toLowerCase()).toList();
-
       // Update the document with the 'words' array
-      collectionRef.doc(document.id).update({'tags': words});
+      collectionRef.doc(document.id).update({'group': null});
     }
 
-    print('Updated documents with word arrays.');
+    print('Updated documents');
   }
 
   Future<void> addFieldToACollection(
@@ -177,6 +172,7 @@ class DevService {
   Future injectTestDataMS() async {
     milestoneDB.addMilestoneTemplate(
         item: MilestoneTemplate(
+            group: null,
             templateId: "place_holder",
             addedDate: DateTime.now(),
             title: "ms 3",

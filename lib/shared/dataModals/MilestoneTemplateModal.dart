@@ -8,6 +8,7 @@ class MilestoneTemplate {
   Period period;
   double? endVal;
   bool skipFirst;
+  String? group;
 
   MilestoneTemplate(
       {required this.addedDate,
@@ -15,7 +16,8 @@ class MilestoneTemplate {
       required this.templateId,
       required this.period,
       required this.skipFirst,
-      required this.endVal});
+      required this.endVal,
+      this.group});
 
   // Convert to JSON (Serialization)
   Map<String, dynamic> toJson() {
@@ -25,19 +27,20 @@ class MilestoneTemplate {
       'period': serializePeriod(period),
       'endVal': endVal,
       'skipFirst': skipFirst,
+      'group': group?.trim()
     };
   }
 
   // Create from JSON (Deserialization)
   factory MilestoneTemplate.fromJson(json) {
     return MilestoneTemplate(
-      title: json['title'] as String,
-      addedDate: DateTime.fromMillisecondsSinceEpoch(json['addedDate']),
-      period: Period.values.firstWhere((e) => e.name == json['period']),
-      endVal:
-          json['endVal'] != null ? (json['endVal'] as num).toDouble() : null,
-      skipFirst: json['skipFirst'] as bool,
-      templateId: json.id,
-    );
+        title: json['title'] as String,
+        addedDate: DateTime.fromMillisecondsSinceEpoch(json['addedDate']),
+        period: Period.values.firstWhere((e) => e.name == json['period']),
+        endVal:
+            json['endVal'] != null ? (json['endVal'] as num).toDouble() : null,
+        skipFirst: json['skipFirst'] as bool,
+        templateId: json.id,
+        group: json['group']);
   }
 }

@@ -46,7 +46,7 @@ class DetailBoxBody extends StatelessWidget {
                       fontSize: 22, fontWeight: FontWeight.bold),
                 ),
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     const Text(
                       "TOTAL",
@@ -56,7 +56,7 @@ class DetailBoxBody extends StatelessWidget {
                           color: Color.fromARGB(255, 153, 153, 153)),
                     ),
                     Text(
-                      "${sum.toInt().toString()} ₹ ",
+                      "${sum.toInt().toString()} ₹",
                       style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),

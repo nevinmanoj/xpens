@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/MilestoneModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/MilestoneModal.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/enums/Status.dart';
@@ -37,7 +37,7 @@ class UserInfoProvider with ChangeNotifier {
   List _milestoneDocs = [];
   List _streakDocs = [];
   dynamic _latestVersionData;
-  final String _currentVersion = "1.0.4";
+  final String _currentVersion = "2.0.0";
   bool _updateAvailable = false;
   bool updatenotificationshown = false;
 
@@ -273,7 +273,7 @@ class UserInfoProvider with ChangeNotifier {
             DateRange firstDateRange = getDateTimesFromPeriod(
                 date: DateTime.fromMillisecondsSinceEpoch(mst["addedDate"]),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: false);
+                offset: 0);
             if (mst["skipFirst"] &&
                 (today > firstDateRange.startDate.millisecondsSinceEpoch) &&
                 (today <= firstDateRange.endDate.millisecondsSinceEpoch)) {
@@ -320,11 +320,11 @@ class UserInfoProvider with ChangeNotifier {
             DateRange currentDateRange = getDateTimesFromPeriod(
                 date: DateTime.now(),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: false);
+                offset: 0);
             DateRange nextDateRange = getDateTimesFromPeriod(
                 date: DateTime.now(),
                 p: deserializePeriod(mst["period"]),
-                isNextPeriod: true);
+                offset: 1);
             //for { quarter, halfYear, year } before 7 days,
             //for { monthly } before 4 days
             //for { weekly } before 2 days
