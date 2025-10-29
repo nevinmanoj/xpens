@@ -66,8 +66,19 @@ class DatabaseService {
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
     String formattedTime = DateFormat('HH:mm')
         .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
-    final List<String> tags =
-        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
+    final List<String> tags = I.itemName
+        .split(' ')
+        .map((word) => word.toLowerCase())
+        .toSet()
+        .toList();
+    List<String> remarkTags = [];
+    if (I.remarks != null) {
+      remarkTags = I.remarks!
+          .split(' ')
+          .map((word) => word.toLowerCase())
+          .toSet()
+          .toList();
+    }
     try {
       await FirebaseFirestore.instance
           .collection('$db/$uid/list')
@@ -85,6 +96,7 @@ class DatabaseService {
         "date": I.date.toString(),
         "time": formattedTime,
         "location": I.location,
+        "remarkTags": remarkTags,
         "itemName":
             I.itemName.substring(0, 1).toUpperCase() + I.itemName.substring(1)
       }, SetOptions(merge: true));
@@ -109,8 +121,19 @@ class DatabaseService {
         .format(DateTime(0, 0, 0, I.time.hour, I.time.minute));
     I.date = DateTime(
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
-    final List<String> tags =
-        I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
+    final List<String> tags = I.itemName
+        .split(' ')
+        .map((word) => word.toLowerCase())
+        .toSet()
+        .toList();
+    List<String> remarkTags = [];
+    if (I.remarks != null) {
+      remarkTags = I.remarks!
+          .split(' ')
+          .map((word) => word.toLowerCase())
+          .toSet()
+          .toList();
+    }
     try {
       await FirebaseFirestore.instance.collection('$db/$uid/list').doc(id).set({
         "tags": tags,
@@ -124,7 +147,8 @@ class DatabaseService {
         "date": I.date.toString(),
         "time": formattedTime,
         "itemName": I.itemName,
-        "location": I.location
+        "location": I.location,
+        "remarkTags": remarkTags
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());

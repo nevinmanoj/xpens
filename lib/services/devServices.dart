@@ -52,18 +52,43 @@ class DevService {
   Future<void> updateDocumentsWithWordArray(uid) async {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // final User? user = _auth.currentUser;
-    final CollectionReference collectionRef = FirebaseFirestore.instance
-        .collection('UserInfo/$uid/milestone-templates');
+    final CollectionReference collectionRef =
+        FirebaseFirestore.instance.collection('UserInfo/$uid/list');
+    var count = 1;
 
     final QuerySnapshot querySnapshot = await collectionRef.get();
-
+    print("total count ${querySnapshot.docs.length}");
     for (final QueryDocumentSnapshot document in querySnapshot.docs) {
+      print("updating document $count/${querySnapshot.docs.length}");
+      count += 1;
+      var data = document.data() as Map;
+      String itemName = data['remarks'];
+
+      // Split the itemName into an array of words
+      final List<String> words =
+          itemName.split(' ').map((word) => word.toLowerCase()).toList();
+
       // Update the document with the 'words' array
-      collectionRef.doc(document.id).update({'group': null});
+      // collectionRef.doc(document.id).update({'remarkTags': words});
     }
 
-    print('Updated documents');
+    print('Updated documents with word arrays.');
   }
+  // Future<void> updateDocumentsWithWordArray(uid) async {
+  //   // final FirebaseAuth _auth = FirebaseAuth.instance;
+  //   // final User? user = _auth.currentUser;
+  //   final CollectionReference collectionRef = FirebaseFirestore.instance
+  //       .collection('UserInfo/$uid/milestone-templates');
+
+  //   final QuerySnapshot querySnapshot = await collectionRef.get();
+
+  //   for (final QueryDocumentSnapshot document in querySnapshot.docs) {
+  //     // Update the document with the 'words' array
+  //     collectionRef.doc(document.id).update({'group': null});
+  //   }
+
+  //   print('Updated documents');
+  // }
 
   Future<void> addFieldToACollection(
       {required collectionPath,
