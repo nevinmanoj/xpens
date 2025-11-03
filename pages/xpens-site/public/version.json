@@ -1,4 +1,4 @@
 {
-  "currentVersion": "2.0.0",
-  "bio": "- Groups property for Milestones \n- Graph for details page \n- Values breakdown in Milestone"
+  "currentVersion": "2.1.0",
+  "bio": "- Search using remarks \n - autocomplete for remarks"
 }
