@@ -9,7 +9,8 @@ class CardName extends StatefulWidget {
   final Function(String) onNameChange;
   final String itemName;
 
-  const CardName({super.key, required this.onNameChange, required this.itemName});
+  const CardName(
+      {super.key, required this.onNameChange, required this.itemName});
 
   @override
   State<CardName> createState() => _CardNameState();
@@ -59,6 +60,7 @@ class _CardNameState extends State<CardName> {
                 value: widget.itemName == "Other" ? "" : widget.itemName,
                 onValueChange: widget.onNameChange,
                 tag: "cardName",
+                isNullable: false,
               )
             // ? Container(
             //     height: ht * 0.13,

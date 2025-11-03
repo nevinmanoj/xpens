@@ -39,6 +39,7 @@ class _ItemNameState extends State<ItemName> {
                 value: widget.itemName == "Other" ? "" : widget.itemName,
                 onValueChange: widget.onNameChange,
                 tag: "itemName",
+                isNullable: false,
               )
             : Container(),
       ],

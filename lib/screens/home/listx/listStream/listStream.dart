@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import 'ListItem.dart';
-import 'filterFunction.dart';
+import '../../../../shared/utils/filterFunction.dart';
 
 class StreamBodyState extends StatefulWidget {
   final filter;

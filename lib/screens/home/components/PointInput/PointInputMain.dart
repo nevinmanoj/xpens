@@ -120,6 +120,7 @@ class _PointInputMainState extends State<PointInputMain> {
                 docs: userInfo.pointDocs,
                 tag: 'itemName',
                 value: itemName,
+                isNullable: false,
               ),
               ItemQuantity(
                 hint: "Points",

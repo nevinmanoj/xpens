@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xpens/screens/home/listx/search/listSearchPopup.dart';
 
 import '../../../../shared/constants.dart';
 
@@ -13,6 +14,7 @@ class ListSearchMain extends StatefulWidget {
 
 class _ListSearchMainState extends State<ListSearchMain> {
   var filter;
+  var filterType = "itemName";
   bool showClear = false;
   TextEditingController ctrl = TextEditingController();
   @override
@@ -26,10 +28,24 @@ class _ListSearchMainState extends State<ListSearchMain> {
     super.initState();
   }
 
+  void onFilterTypeChange(String? val) {
+    print(val);
+    if (val == null) return;
+    setState(() {
+      filterType = val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
+    String hintText = "Search Expenses";
+    if (filterType == "itemName") {
+      hintText = "Search Expenses by Item Name";
+    } else if (filterType == "remarks") {
+      hintText = "Search Expenses by Remark";
+    }
     return Stack(
       children: [
         Column(
@@ -60,7 +76,8 @@ class _ListSearchMainState extends State<ListSearchMain> {
 
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
+                color:
+                    const Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
               ),
             ],
           ),
@@ -83,10 +100,24 @@ class _ListSearchMainState extends State<ListSearchMain> {
                           updateFilter("");
                           ctrl.clear();
                         })
-                    : null,
+                    : IconButton(
+                        icon: const Icon(Icons.filter_list),
+                        color: Colors.black.withOpacity(0.5),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (ctx) {
+                                return ListSearchPopup(
+                                  selectedOption: filterType,
+                                  onValueChange: (val) {
+                                    onFilterTypeChange(val);
+                                  },
+                                );
+                              });
+                        }),
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-                hintText: 'Search Expenses',
+                hintText: hintText,
               ),
             ),
           ),
@@ -96,14 +127,8 @@ class _ListSearchMainState extends State<ListSearchMain> {
   }
 
   void updateFilter(String value) {
-    final List<String> tags = value
-        .split(' ')
-        .where((word) => word.isNotEmpty)
-        .map((word) => word.toLowerCase())
-        .toList();
-
-    filter['search'] = tags;
     filter['query'] = value;
+    filter['queryType'] = filterType;
 
     setState(() {
       showClear = filter['query'].length != 0;

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:xpens/shared/utils/filterFunction.dart';
 import '../../../../shared/constants.dart';
 
 class InputAutoFill extends StatefulWidget {
@@ -10,12 +11,14 @@ class InputAutoFill extends StatefulWidget {
       required this.docs,
       required this.onValueChange,
       required this.tag,
+      required this.isNullable,
       this.avoidValue});
   final Function(String) onValueChange;
   final String value;
   final String tag;
   final List docs;
   final String? avoidValue;
+  final bool isNullable;
 
   @override
   State<InputAutoFill> createState() => _InputAutoFillState();
@@ -28,15 +31,6 @@ class _InputAutoFillState extends State<InputAutoFill> {
 
     List list = widget.docs;
 
-    Set<String> uniqueGroupNames = {};
-
-    for (var item in list) {
-      if (item[widget.tag] != widget.avoidValue) {
-        uniqueGroupNames.add(item[widget.tag]);
-      }
-    }
-    List<String> kOptions = uniqueGroupNames.toList();
-
     return Container(
       padding: const EdgeInsets.all(20),
       child: Autocomplete<String>(
@@ -46,11 +40,24 @@ class _InputAutoFillState extends State<InputAutoFill> {
               TextPosition(offset: widget.value.length),
             )),
         optionsBuilder: (TextEditingValue textEditingValue) {
-          return kOptions
-              .where((county) => county
-                  .toLowerCase()
-                  .startsWith(textEditingValue.text.toLowerCase()))
-              .toList();
+          var filter = {};
+          var value = textEditingValue.text.toLowerCase();
+          if (value == "") {
+            return const Iterable<String>.empty();
+          }
+
+          filter['query'] = value;
+          filter['queryType'] = widget.tag;
+          Set<String> uniqueNames = {};
+          var newList = applyFilter(data: list, filter: filter).toList();
+          for (var item in newList) {
+            if (item[widget.tag] != widget.avoidValue) {
+              uniqueNames.add(item[widget.tag]);
+            }
+          }
+          List<String> kOptions = uniqueNames.toList();
+
+          return kOptions;
         },
         displayStringForOption: (option) => option,
         fieldViewBuilder: (BuildContext context,
@@ -62,8 +69,10 @@ class _InputAutoFillState extends State<InputAutoFill> {
             width: wt * 0.8,
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: TextFormField(
-              validator: (value) =>
-                  value!.isEmpty ? ' ${widget.tag} cannot be empty' : null,
+              validator: widget.isNullable
+                  ? null
+                  : (value) =>
+                      value!.isEmpty ? ' ${widget.tag} cannot be empty' : null,
               onChanged: (value) {
                 widget.onValueChange(value);
               },

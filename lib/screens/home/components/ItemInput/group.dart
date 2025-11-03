@@ -78,6 +78,7 @@ class _ItemGroupState extends State<ItemGroup> {
                 tag: "group",
                 docs: widget.docs,
                 avoidValue: widget.avoidValue,
+                isNullable: false,
               )
             : Container(),
       ],

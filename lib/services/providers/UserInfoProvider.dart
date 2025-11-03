@@ -37,7 +37,7 @@ class UserInfoProvider with ChangeNotifier {
   List _milestoneDocs = [];
   List _streakDocs = [];
   dynamic _latestVersionData;
-  final String _currentVersion = "2.0.0";
+  final String _currentVersion = "2.1.0";
   bool _updateAvailable = false;
   bool updatenotificationshown = false;
 

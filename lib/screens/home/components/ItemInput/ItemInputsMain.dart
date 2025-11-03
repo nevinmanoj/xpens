@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ItemInput/calendar.dart';
 import 'package:xpens/screens/home/components/ItemInput/cost.dart';
+import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
 import 'package:xpens/screens/home/components/ItemInput/itemName.dart';
 import 'package:xpens/screens/home/components/ItemInput/location.dart';
 import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
@@ -50,9 +51,10 @@ class _ItemInputsState extends State<ItemInputs> {
   TimeOfDay time = TimeOfDay.now();
   String location = locationList[0];
   String group = "";
+  String remarks = "";
   final _formKey = GlobalKey<FormState>();
   TextEditingController costController = TextEditingController();
-  TextEditingController remarksController = TextEditingController();
+  // TextEditingController remarksController = TextEditingController();
   @override
   void initState() {
     date = widget.date;
@@ -61,8 +63,8 @@ class _ItemInputsState extends State<ItemInputs> {
     location = widget.location;
     group = widget.group;
     costController = TextEditingController(text: widget.costS);
-
-    remarksController = TextEditingController(text: widget.remarks);
+    remarks = widget.remarks;
+    // remarksController = TextEditingController(text: widget.remarks);
     super.initState();
   }
 
@@ -97,9 +99,14 @@ class _ItemInputsState extends State<ItemInputs> {
     });
   }
 
-  void updateRemarkctrl(newcontroller) {
+  // void updateRemarkctrl(String newRemarks) {
+  //   setState(() {
+  //     remarks = newRemarks;
+  //   });
+  // }
+  void onRemarksChanged(String newRemarks) {
     setState(() {
-      remarksController = newcontroller;
+      remarks = newRemarks;
     });
   }
 
@@ -116,6 +123,7 @@ class _ItemInputsState extends State<ItemInputs> {
   }
 
   bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     List allItems = Provider.of<UserInfoProvider>(context).items;
@@ -150,13 +158,21 @@ class _ItemInputsState extends State<ItemInputs> {
               const SizedBox(
                 height: 15,
               ),
-              ItemRemark(
-                required: false,
-                // onRemarkChanged: updateRemarks,
-                hint: "Remarks",
-                onctrlchange: updateRemarkctrl,
-                remarks: remarksController.text,
+              InputAutoFill(
+                docs: docs,
+                value: remarks,
+                onValueChange: onRemarksChanged,
+                tag: "remarks",
+                isNullable: true,
               ),
+              // ItemRemark(
+              //   required: false,
+              //   // onRemarkChanged: updateRemarks,
+              //   hint: "Remarks",
+              //   // onctrlchange: updateRemarkctrl,
+
+              //   remarks: remarks, onValueChange: onRemarksChanged,
+              // ),
               const SizedBox(
                 height: 15,
               ),
@@ -244,7 +260,7 @@ class _ItemInputsState extends State<ItemInputs> {
                                       (!allItems.contains(itemName.trim())) ||
                                           itemName == "Other",
                                   location: location,
-                                  remarks: remarksController.text.trim(),
+                                  remarks: remarks.trim(),
                                   cost: cost,
                                   date: date!,
                                   itemName: itemName.trim(),
@@ -259,14 +275,14 @@ class _ItemInputsState extends State<ItemInputs> {
                                 itemName: itemName.trim(),
                                 time: time,
                                 group: group,
-                                remarks: remarksController.text.trim(),
+                                remarks: remarks.trim(),
                               );
                               widget.buttonfunc(I);
                             }
 
                             FocusManager.instance.primaryFocus?.unfocus();
                             costController.clear();
-                            remarksController.clear();
+                            // remarksController.clear();
 
                             if (widget.isData) {
                               if (widget.optionDefault == null) {
@@ -276,6 +292,7 @@ class _ItemInputsState extends State<ItemInputs> {
                                   time = TimeOfDay.now();
                                   location = locationList[0];
                                   group = "none";
+                                  remarks = "";
                                 });
                               } else {
                                 setState(() {
@@ -290,8 +307,7 @@ class _ItemInputsState extends State<ItemInputs> {
                                       "date", DateTime.now()));
                                   location = notNullReturnValue(
                                       "location", locationList[0]);
-                                  remarksController.text =
-                                      notNullReturnValue("remarks", "");
+                                  remarks = notNullReturnValue("remarks", "");
 
                                   time = TimeOfDay(
                                       hour: int.parse(notNullReturnValue(

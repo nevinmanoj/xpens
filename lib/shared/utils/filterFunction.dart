@@ -26,12 +26,23 @@ List applyFilter({required data, required filter}) {
       });
     }
   }
-  if (filter['query'] != null) {
-    var data1 = filterDataLocally1(data, "tags", filter['search']);
-    if (data1.isEmpty) {
-      var data2 = filterDataLocally2(data, filter['query']);
+  if (filter['query'] != null && filter['queryType'] != null) {
+    List data1 = [];
+    String value = filter['query'];
+    if (filter["queryType"] == "itemName" || filter["queryType"] == "remark") {
+      final List<String> tags = value
+          .split(' ')
+          .where((word) => word.isNotEmpty)
+          .map((word) => word.toLowerCase())
+          .toList();
+      data1 = filterDataLocally1(data,
+          filter['queryType'] == "itemName" ? "tags" : "remarkTags", tags);
+    }
 
-      data = data2;
+    if (data1.length < 5) {
+      List data2 = filterDataLocally2(data, value, filter['queryType']);
+
+      data = [...data1, ...data2];
     } else {
       data = data1;
     }
@@ -62,10 +73,10 @@ List filterDataLocally1(List data, String fieldName, List<dynamic> values) {
   return filteredData;
 }
 
-List filterDataLocally2(List data, String query) {
+List filterDataLocally2(List data, String query, String fieldName) {
   List filteredData = [];
   for (int i = 0; i < data.length; i++) {
-    if (data[i]['itemName'].toLowerCase().contains(query.toLowerCase())) {
+    if (data[i][fieldName].toLowerCase().contains(query.toLowerCase())) {
       filteredData.add(data[i]);
     }
   }
