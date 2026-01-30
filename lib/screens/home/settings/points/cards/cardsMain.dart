@@ -27,7 +27,7 @@ class _CardsMainState extends State<CardsMain> {
     UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
     List<double> sums = [];
     List<PointSource> cards =
-        userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
+        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
     for (var card in cards) {
       sums.add(calcCardpoints(
           start: null,

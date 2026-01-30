@@ -24,7 +24,7 @@ class _ListPointsBodyState extends State<ListPointsBody> {
         break;
       case "Other":
         list = list
-            .where((item) => !listData.cardss
+            .where((item) => !listData.cards
                 .map((e) => e['name'])
                 .toList()
                 .contains(item['cardName']))

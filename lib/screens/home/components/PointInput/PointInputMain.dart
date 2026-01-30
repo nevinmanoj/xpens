@@ -100,7 +100,7 @@ class _PointInputMainState extends State<PointInputMain> {
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfoProvider>(context);
     List<PointSource> cards =
-        userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
+        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
     double wt = MediaQuery.of(context).size.width;
 
     bool unknownCard = true;

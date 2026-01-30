@@ -22,7 +22,6 @@ class UserInfoProvider with ChangeNotifier {
   String option = inputTypes[0];
 
   List _defaults = [];
-  // List _cards = ["Other"];
   List _myArray = ["Other"];
   String _userName = "";
   String _phno = "";
@@ -48,7 +47,6 @@ class UserInfoProvider with ChangeNotifier {
   List get eTrash => _eTrash;
   List get defaults => _defaults;
   List get pTrash => _pTrash;
-  // List get cards => _cards;
   bool get isDev => _dev;
   List get docs => _docs;
   List get pointDocs => _pointDocs;
@@ -60,7 +58,7 @@ class UserInfoProvider with ChangeNotifier {
   List get milestones => _milestoneDocs;
   List get milestoneTemplates => _milestoneTemplatesDocs;
   List get streaks => _streakDocs;
-  List get cardss => _cardDocs;
+  List get cards => _cardDocs;
 
   dynamic get latestVersionData => _latestVersionData;
   String get currentVersion => _currentVersion;

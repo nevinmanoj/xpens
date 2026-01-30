@@ -21,7 +21,7 @@ class _CardNameState extends State<CardName> {
     var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
-    List cards = userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
+    List cards = userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
     return Column(
       children: [
         Container(
@@ -35,7 +35,7 @@ class _CardNameState extends State<CardName> {
                 "Category of Item",
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
               ),
-              onChanged: userInfo.cardss.isEmpty
+              onChanged: userInfo.cards.isEmpty
                   ? null
                   : (value) {
                       widget.onNameChange(value!);

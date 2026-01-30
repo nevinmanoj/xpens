@@ -31,7 +31,7 @@ class _AddXState extends State<AddX> {
     List allItems = userInfo.items;
     List defaults = userInfo.defaults;
     List<PointSource> cards =
-        userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
+        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
     String option = userInfo.option;
     var optionDefault = defaults
         .firstWhereOrNull((element) => element["type"] == option.toLowerCase());

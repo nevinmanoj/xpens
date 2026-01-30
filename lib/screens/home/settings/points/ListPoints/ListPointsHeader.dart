@@ -17,7 +17,7 @@ class _ListPointsHeaderState extends State<ListPointsHeader> {
   @override
   Widget build(BuildContext context) {
     var userInfo = Provider.of<UserInfoProvider>(context);
-    List allItems = userInfo.cardss.map((e) => e['name']).toList();
+    List allItems = userInfo.cards.map((e) => e['name']).toList();
     return Container(
       color: Colors.white,
       child: Container(
