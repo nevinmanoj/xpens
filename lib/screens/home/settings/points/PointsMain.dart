@@ -34,22 +34,6 @@ class _PointsMainState extends State<PointsMain> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "List",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                      SizedBox(
-                        width: wt * 0.02,
-                      ),
-                      const Icon(Icons.list)
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
                         "Cards",
                         style: TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w800),
@@ -61,30 +45,30 @@ class _PointsMainState extends State<PointsMain> {
                     ],
                   ),
                 ),
-                // Tab(
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       Text(
-                //         "Cards",
-                //         style: TextStyle(
-                //             fontSize: 14, fontWeight: FontWeight.w800),
-                //       ),
-                //       SizedBox(
-                //         width: wt * 0.02,
-                //       ),
-                //       Icon(Icons.credit_card)
-                //     ],
-                //   ),
-                // ),
+                Tab(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "List",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w800),
+                      ),
+                      SizedBox(
+                        width: wt * 0.02,
+                      ),
+                      const Icon(Icons.list)
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
           body: const TabBarView(
             physics: BouncingScrollPhysics(),
             children: [
-              ListPointsMain(),
               CardsMain(),
+              ListPointsMain(),
             ],
           ),
         ));

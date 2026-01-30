@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/add/welcome.dart';
 import 'package:xpens/screens/home/components/ItemInput/ItemInputsMain.dart';
+import 'package:xpens/screens/home/settings/points/PointsMain.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
@@ -28,7 +30,8 @@ class _AddXState extends State<AddX> {
     var userInfo = Provider.of<UserInfoProvider>(context);
     List allItems = userInfo.items;
     List defaults = userInfo.defaults;
-    List cards = userInfo.cards;
+    List<PointSource> cards =
+        userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
     String option = userInfo.option;
     var optionDefault = defaults
         .firstWhereOrNull((element) => element["type"] == option.toLowerCase());
@@ -86,16 +89,49 @@ class _AddXState extends State<AddX> {
                               .split(":")[1])),
                   buttonLabel: "Add",
                   buttonfunc: addItem)
-              : PointInputMain(
-                  cardName: cards[0],
-                  costS: "",
-                  group: "none",
-                  date: DateTime.now(),
-                  location: locationList[0],
-                  itemName: "",
-                  time: TimeOfDay.now(),
-                  buttonLabel: "Add",
-                  buttonfunc: addPointSpent)
+              : (cards.isEmpty
+                  ? Column(
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(20, ht * 0.2, 20, 0),
+                            child: Text(
+                                "No Cards added yet. Please add a card in settings to proceed.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500)),
+                          ),
+                        ),
+                        SizedBox(
+                          height: ht * 0.03,
+                        ),
+                        ElevatedButton(
+                            style: buttonDecoration,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PointsMain()));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                              child: Text("Go to Cards",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16)),
+                            )),
+                      ],
+                    )
+                  : PointInputMain(
+                      cardName: cards[0].name,
+                      sourceId: cards[0].selfId,
+                      costS: "",
+                      group: "none",
+                      date: DateTime.now(),
+                      location: locationList[0],
+                      itemName: "",
+                      time: TimeOfDay.now(),
+                      buttonLabel: "Add",
+                      buttonfunc: addPointSpent))
         ],
       ),
     );

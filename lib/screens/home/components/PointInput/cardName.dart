@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
-
-import '../ItemInput/inputAutofill.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 
 class CardName extends StatefulWidget {
   final Function(String) onNameChange;
@@ -22,7 +21,7 @@ class _CardNameState extends State<CardName> {
     var userInfo = Provider.of<UserInfoProvider>(context);
     double wt = MediaQuery.of(context).size.width;
     // double ht = MediaQuery.of(context).size.width;
-    List allItems = userInfo.cards;
+    List cards = userInfo.cardss.map((e) => PointSource.fromJson(e)).toList();
     return Column(
       children: [
         Container(
@@ -31,63 +30,26 @@ class _CardNameState extends State<CardName> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
             child: DropdownButtonFormField<String>(
-              value: allItems.contains(widget.itemName)
-                  ? widget.itemName
-                  : "Other",
-              validator: (value) =>
-                  value!.isEmpty ? ' Must select a category for item' : null,
               decoration: const InputDecoration(border: InputBorder.none),
               hint: Text(
                 "Category of Item",
                 style: TextStyle(color: Colors.grey.withOpacity(0.8)),
               ),
-              onChanged: (value) {
-                widget.onNameChange(value!);
-              },
-              items: allItems.map<DropdownMenuItem<String>>((value) {
+              onChanged: userInfo.cardss.isEmpty
+                  ? null
+                  : (value) {
+                      widget.onNameChange(value!);
+                    },
+              value: widget.itemName,
+              items: cards.map<DropdownMenuItem<String>>((value) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: value.selfId,
+                  child: Text(value.name),
                 );
               }).toList(),
             ),
           ),
         ),
-        const SizedBox(height: 10),
-        (widget.itemName == "Other" || !allItems.contains(widget.itemName))
-            ? InputAutoFill(
-                docs: userInfo.pointDocs,
-                value: widget.itemName == "Other" ? "" : widget.itemName,
-                onValueChange: widget.onNameChange,
-                tag: "cardName",
-                isNullable: false,
-              )
-            // ? Container(
-            //     height: ht * 0.13,
-            //     width: wt * 0.8,
-            //     decoration: addInputDecoration,
-            //     child: Padding(
-            //       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-            //       child: TextFormField(
-            //         cursorColor: primaryAppColor,
-            //         cursorWidth: 1,
-            //         initialValue:
-            //             widget.itemName == "Other" ? "" : widget.itemName,
-            //         onChanged: (value) {
-            //           widget.onNameChange(value);
-            //         },
-            //         validator: (value) =>
-            //             value!.isEmpty ? ' Name cannot be empty' : null,
-            //         keyboardType: TextInputType.name,
-            //         decoration: InputDecoration(
-            //           border: InputBorder.none,
-            //           hintStyle: TextStyle(color: Colors.grey.withOpacity(0.8)),
-            //           hintText: 'Item Name',
-            //         ),
-            //       ),
-            //     ),
-            //   )
-            : Container(),
       ],
     );
   }

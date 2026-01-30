@@ -52,25 +52,39 @@ class DevService {
   Future<void> updateDocumentsWithWordArray(uid) async {
     // final FirebaseAuth _auth = FirebaseAuth.instance;
     // final User? user = _auth.currentUser;
-    final CollectionReference collectionRef =
-        FirebaseFirestore.instance.collection('UserInfo/$uid/list');
+    final CollectionReference collectionRef = FirebaseFirestore.instance
+        .collection('UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list');
     var count = 1;
+    final DocumentReferencedocRef = FirebaseFirestore.instance.doc(
+        'UserInfo/zWxHz89t7qc1KhfSOhhicSTyyJI3/list/2025-11-01 20:43:51.866586');
+    // final QuerySnapshot querySnapshot = await collectionRef
+    //     .where("year", isEqualTo: "2025")
+    //     .where("month", isEqualTo: "Nov")
+    //     .where("day", isEqualTo: "1")
+    //     .get();
+    // print("total sub count ${querySnapshot.docs.length}");
+    // for (final QueryDocumentSnapshot document in querySnapshot.docs) {
+    //   // print("updating document $count/${querySnapshot.docs.length}");
+    //   count += 1;
+    //   // var data = document.data() as Map;
+    //   // String itemName = data['remarks'];
 
-    final QuerySnapshot querySnapshot = await collectionRef.get();
-    print("total count ${querySnapshot.docs.length}");
-    for (final QueryDocumentSnapshot document in querySnapshot.docs) {
-      print("updating document $count/${querySnapshot.docs.length}");
-      count += 1;
-      var data = document.data() as Map;
-      String itemName = data['remarks'];
+    //   // // Split the itemName into an array of words
+    //   // final List<String> words =
+    //   //     itemName.split(' ').map((word) => word.toLowerCase()).toList();
+    //   // print(document.data());
 
-      // Split the itemName into an array of words
-      final List<String> words =
-          itemName.split(' ').map((word) => word.toLowerCase()).toList();
-
-      // Update the document with the 'words' array
-      // collectionRef.doc(document.id).update({'remarkTags': words});
-    }
+    //   // Update the document with the 'words' array
+    //   // collectionRef.doc(document.id).update({'remarkTags': words});
+    // }
+    DocumentReferencedocRef.get().then((DocumentSnapshot snapshot) {
+      if (snapshot.exists) {
+        var data = snapshot.data() as Map;
+        print(data);
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
 
     print('Updated documents with word arrays.');
   }

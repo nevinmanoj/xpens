@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/dataModals/AddItemModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 import '../shared/dataModals/AddPointModal.dart';
 
@@ -174,7 +175,8 @@ class DatabaseService {
           .collection('$db/$uid/points')
           .doc(key)
           .set({
-        "cardName": I.card,
+        "cardName": I.cardName,
+        "sourceId": I.sourceId,
         "isTrash": false,
         "tags": tags,
         "month": month,
@@ -194,9 +196,9 @@ class DatabaseService {
     return true;
   }
 
-  Future deletePointSpent(String id) async {
-    FirebaseFirestore.instance.collection('$db/$uid/points').doc(id).delete();
-  }
+  // Future deletePointSpent(String id) async {
+  //   FirebaseFirestore.instance.collection('$db/$uid/points').doc(id).delete();
+  // }
 
   Future<bool> editPointsSpent(
       {required AddPoint I, required String id}) async {
@@ -215,6 +217,7 @@ class DatabaseService {
           .collection('$db/$uid/points')
           .doc(id)
           .set({
+        "cardName": I.cardName,
         "tags": tags,
         "month": month,
         "year": year,
@@ -223,7 +226,7 @@ class DatabaseService {
         "date": I.date.toString(),
         "time": formattedTime,
         "itemName": I.itemName,
-        "cardName": I.card
+        "sourceId": I.sourceId
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());
@@ -341,5 +344,46 @@ class DatabaseService {
     }
 
     return true;
+  }
+
+  Future<bool> addPointSource(PointSource p) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('$db/$uid/point-source')
+          .doc()
+          .set({
+        ...p.toJson(),
+        "isTrash": false,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<bool> updatePointSource(PointSource p) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('$db/$uid/point-source')
+          .doc(p.selfId)
+          .set({
+        ...p.toJson(),
+        "isTrash": false,
+      }, SetOptions(merge: true));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+
+    return true;
+  }
+
+  Future deletePointSource(String id) async {
+    FirebaseFirestore.instance
+        .collection('$db/$uid/point-source')
+        .doc(id)
+        .delete();
   }
 }
