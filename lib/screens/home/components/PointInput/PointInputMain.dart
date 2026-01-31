@@ -7,11 +7,13 @@ import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 
 import '../../../../shared/dataModals/AddPointModal.dart';
 import 'cardName.dart';
 
 class PointInputMain extends StatefulWidget {
+  final String sourceId;
   final String cardName;
   final DateTime date;
   final TimeOfDay time;
@@ -25,19 +27,21 @@ class PointInputMain extends StatefulWidget {
   const PointInputMain(
       {super.key,
       required this.group,
-      required this.cardName,
       required this.costS,
       required this.date,
       required this.location,
       required this.itemName,
       required this.time,
       required this.buttonLabel,
-      required this.buttonfunc});
+      required this.buttonfunc,
+      required this.cardName,
+      required this.sourceId});
   @override
   State<PointInputMain> createState() => _PointInputMainState();
 }
 
 class _PointInputMainState extends State<PointInputMain> {
+  String sourceId = "";
   String cardName = "";
   DateTime? date = DateTime.now();
   TimeOfDay time = TimeOfDay.now();
@@ -52,6 +56,7 @@ class _PointInputMainState extends State<PointInputMain> {
     date = widget.date;
 
     time = widget.time;
+    sourceId = widget.sourceId;
     cardName = widget.cardName;
     location = widget.location;
     group = widget.group;
@@ -60,9 +65,9 @@ class _PointInputMainState extends State<PointInputMain> {
     super.initState();
   }
 
-  void updateCardName(String newName) {
+  void updatesourceId(String sourceId) {
     setState(() {
-      cardName = newName;
+      sourceId = sourceId;
     });
   }
 
@@ -93,10 +98,18 @@ class _PointInputMainState extends State<PointInputMain> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    print(itemName);
     var userInfo = Provider.of<UserInfoProvider>(context);
-    List cards = userInfo.cards;
+    List<PointSource> cards =
+        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
     double wt = MediaQuery.of(context).size.width;
+
+    bool unknownCard = true;
+    for (var card in cards) {
+      if (card.selfId == sourceId) {
+        unknownCard = false;
+        break;
+      }
+    }
     // double ht = MediaQuery.of(context).size.width;
     return InkWell(
       splashColor: Colors.transparent,
@@ -111,10 +124,21 @@ class _PointInputMainState extends State<PointInputMain> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CardName(
-                onNameChange: updateCardName,
-                itemName: cardName,
-              ),
+              unknownCard
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        "Warning: The selected card is no longer available.",
+                        style: TextStyle(
+                            color: Colors.red[700],
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  : CardName(
+                      onNameChange: updatesourceId,
+                      itemName: sourceId,
+                    ),
+
               InputAutoFill(
                 onValueChange: updateItemName,
                 docs: userInfo.pointDocs,
@@ -180,7 +204,12 @@ class _PointInputMainState extends State<PointInputMain> {
                             // cost = double.parse(costS);
                             double cost = double.parse(costController.text);
                             widget.buttonfunc(AddPoint(
-                                card: cardName,
+                                cardName: cards
+                                    .firstWhere(
+                                      (e) => e.selfId == sourceId,
+                                    )
+                                    .name,
+                                sourceId: sourceId,
                                 time: time,
                                 date: date!,
                                 point: cost,
@@ -190,7 +219,7 @@ class _PointInputMainState extends State<PointInputMain> {
                             costController.clear();
 
                             setState(() {
-                              cardName = cards[0];
+                              sourceId = cards[0].selfId;
                               date = DateTime.now();
                               time = TimeOfDay.now();
                               loading = false;

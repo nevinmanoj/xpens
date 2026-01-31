@@ -22,7 +22,6 @@ class UserInfoProvider with ChangeNotifier {
   String option = inputTypes[0];
 
   List _defaults = [];
-  List _cards = ["Other"];
   List _myArray = ["Other"];
   String _userName = "";
   String _phno = "";
@@ -36,8 +35,9 @@ class UserInfoProvider with ChangeNotifier {
   List _milestoneTemplatesDocs = [];
   List _milestoneDocs = [];
   List _streakDocs = [];
+  List _cardDocs = [];
   dynamic _latestVersionData;
-  final String _currentVersion = "2.1.0";
+  final String _currentVersion = "3.0.0";
   bool _updateAvailable = false;
   bool updatenotificationshown = false;
 
@@ -47,7 +47,6 @@ class UserInfoProvider with ChangeNotifier {
   List get eTrash => _eTrash;
   List get defaults => _defaults;
   List get pTrash => _pTrash;
-  List get cards => _cards;
   bool get isDev => _dev;
   List get docs => _docs;
   List get pointDocs => _pointDocs;
@@ -59,6 +58,8 @@ class UserInfoProvider with ChangeNotifier {
   List get milestones => _milestoneDocs;
   List get milestoneTemplates => _milestoneTemplatesDocs;
   List get streaks => _streakDocs;
+  List get cards => _cardDocs;
+
   dynamic get latestVersionData => _latestVersionData;
   String get currentVersion => _currentVersion;
   bool get updateAvailable => _updateAvailable;
@@ -87,8 +88,9 @@ class UserInfoProvider with ChangeNotifier {
     // _addUpcomingMilestonesForAllTemplates();
     // _checkActiveOrClosedMilestonesExistForAllTemplates();
     getmstandcheckforms();
-    getStreaks();
+    _fetchStreaks();
     checkForUpdate();
+    _fetchCards();
 
     // _addUpcomingMilestonesForAllTemplates();
   }
@@ -104,9 +106,9 @@ class UserInfoProvider with ChangeNotifier {
             _userName = snapshot.data()!['Name'];
             _phno = snapshot.data()!['PhoneNumber'];
             _dev = snapshot.data()!['isDev'];
-            _cards = List.from(snapshot.data()!['cards']);
-            _cards.remove("Other");
-            _cards.add("Other");
+            // _cards = List.from(snapshot.data()!['cards']);
+            // _cards.remove("Other");
+            // _cards.add("Other");
             _myArray.remove("Other");
             _myArray.add("Other");
             if (snapshot.data()!['streakDate'] != "") {
@@ -120,7 +122,7 @@ class UserInfoProvider with ChangeNotifier {
             _userName = "";
             _myArray = ["Other"];
             _phno = "";
-            _cards = ["Other"];
+            // _cards = ["Other"];
             _streakDate = null;
             _highestStreak = 0;
           }
@@ -397,7 +399,7 @@ class UserInfoProvider with ChangeNotifier {
     await _checkMilestonesForAllTemplates(msdata: ms, mstdata: mst);
   }
 
-  Future getStreaks() async {
+  Future _fetchStreaks() async {
     if (user != null) {
       try {
         final colRef =
@@ -429,6 +431,22 @@ class UserInfoProvider with ChangeNotifier {
       }
     } catch (error) {
       print("Error: $error");
+    }
+  }
+
+  Future _fetchCards() async {
+    if (user != null) {
+      try {
+        final colRef = FirebaseFirestore.instance
+            .collection("$db/${user!.uid}/point-source");
+        colRef.snapshots().listen((event) {
+          _cardDocs = event.docs;
+
+          notifyListeners();
+        });
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 }

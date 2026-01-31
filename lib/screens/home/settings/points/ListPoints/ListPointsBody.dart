@@ -24,7 +24,10 @@ class _ListPointsBodyState extends State<ListPointsBody> {
         break;
       case "Other":
         list = list
-            .where((item) => !listData.cards.contains(item['cardName']))
+            .where((item) => !listData.cards
+                .map((e) => e['name'])
+                .toList()
+                .contains(item['cardName']))
             .toList();
         break;
       default:
@@ -68,7 +71,8 @@ class _ListPointsBodyState extends State<ListPointsBody> {
                 padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
                 child: Text(
                   iDate,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
             ),

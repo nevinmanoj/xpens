@@ -43,6 +43,7 @@ class _EditPointItemState extends State<EditPointItem> {
         body: Center(
           child: SingleChildScrollView(
             child: PointInputMain(
+                sourceId: widget.item['sourceId'],
                 cardName: widget.item['cardName'],
                 costS: widget.item['points'].toString(),
                 group: "none",

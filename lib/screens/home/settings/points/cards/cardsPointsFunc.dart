@@ -2,12 +2,12 @@
 
 double calcCardpoints(
     {required DateTime? start,
-    required DateTime end,
+    required DateTime? end,
     required var data,
-    required String card}) {
-  var filteredData = data.where((element) => element['cardName'] == card);
+    required String sourceId}) {
+  var filteredData = data.where((element) => element['sourceId'] == sourceId);
   double sum = 0;
-  if (start != null) {
+  if (start != null && end != null) {
     //limited points
     filteredData = filteredData.where((doc) =>
         DateTime.parse(doc['date']).isAfter(start) &&

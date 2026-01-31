@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/points/cards/AddCard.dart';
 import 'package:xpens/screens/home/settings/points/cards/cardsPointsFunc.dart';
 import 'package:xpens/services/database.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
 
 import '../../../components/ActionConfirm.dart';
-import '../../../components/addItem.dart';
-import 'cardsExpanded.dart';
+import 'cardsEdit.dart';
 
 class CardsMain extends StatefulWidget {
   const CardsMain({super.key});
@@ -25,117 +26,109 @@ class _CardsMainState extends State<CardsMain> {
 
     UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
     List<double> sums = [];
-    for (var card in userInfo.cards) {
-      if (card != "Other") {
-        sums.add(calcCardpoints(
-            start: null,
-            end: DateTime.now(),
-            data: userInfo.pointDocs,
-            card: card));
-      }
+    List<PointSource> cards =
+        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
+    for (var card in cards) {
+      sums.add(calcCardpoints(
+          start: null,
+          end: null,
+          data: userInfo.pointDocs,
+          sourceId: card.selfId));
     }
     User? user = Provider.of<User?>(context);
     return Stack(
       children: [
         ListView.builder(
             physics: const BouncingScrollPhysics(),
-            itemCount: userInfo.cards.length,
+            itemCount: cards.length,
             itemBuilder: (BuildContext context, int i) {
-              return userInfo.cards[i] == "Other"
-                  ? Container()
-                  : InkWell(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            builder: (_) {
-                              return ExpandCard(
-                                card: userInfo.cards[i],
-                                sum: sums[i],
-                              );
-                            });
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            wt * 0.05, ht * 0.01, wt * 0.05, 0),
-                        child: Container(
-                            padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: const [
-                                BoxShadow(
-                                    blurRadius: 1,
-                                    color: Colors.grey,
-                                    offset: Offset(0.0, 2))
-                              ],
-                              color: Colors.white,
-                            ),
-                            width: wt,
-                            height: ht * 0.075,
-                            child: Row(
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      userInfo.cards[i],
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                    Text(
-                                      "${sums[i].toInt().toString()} points spent",
-                                      style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Color.fromARGB(
-                                              255, 143, 134, 134)),
-                                    ),
-                                  ],
-                                ),
-                                const Spacer(),
-                                IconButton(
-
-                                    // onPressed:null,
-                                    onPressed: () async {
-                                      await showDialog(
-                                          context: context,
-                                          builder: (_) {
-                                            return ActionConfirm(
-                                              cancel: () {
-                                                Navigator.pop(context);
-                                              },
-                                              confirm: () async {
-                                                await DatabaseService(
-                                                        uid: user!.uid)
-                                                    .updateCardsArray(
-                                                  add: false,
-                                                  card: userInfo.cards[i],
-                                                );
-                                                Navigator.pop(context);
-                                              },
-                                              title: "Delete Card",
-                                              msg:
-                                                  "Press Confirm to delete ${userInfo.cards[i]}  from the List.",
-                                            );
-                                          });
-                                      FocusManager.instance.primaryFocus!
-                                          .unfocus();
-                                    },
-                                    icon: const Icon(Icons.delete))
-                              ],
-                            )),
+              double pointsPerRupee;
+              double points = cards[i].points;
+              double rupees = cards[i].rupees;
+              if (rupees == 0) {
+                pointsPerRupee = 0;
+              } else {
+                pointsPerRupee = points / rupees;
+              }
+              return InkWell(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return CardEdit(
+                          card: cards[i],
+                          sum: sums[i],
+                        );
+                      });
+                },
+                child: Padding(
+                  padding:
+                      EdgeInsets.fromLTRB(wt * 0.05, ht * 0.01, wt * 0.05, 0),
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: const [
+                          BoxShadow(
+                              blurRadius: 1,
+                              color: Colors.grey,
+                              offset: Offset(0.0, 2))
+                        ],
+                        color: Colors.white,
                       ),
-                    );
+                      width: wt,
+                      height: ht * 0.075,
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                cards[i].name,
+                                style: const TextStyle(fontSize: 18),
+                              ),
+                              Text(
+                                "${sums[i].toInt().toString()} points spent ≈ ${(sums[i] ~/ pointsPerRupee).toInt().toString()} ₹",
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromARGB(255, 143, 134, 134)),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          IconButton(
+
+                              // onPressed:null,
+                              onPressed: () async {
+                                await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return ActionConfirm(
+                                        cancel: () {
+                                          Navigator.pop(context);
+                                        },
+                                        confirm: () async {
+                                          await DatabaseService(uid: user!.uid)
+                                              .deletePointSource(
+                                                  cards[i].selfId);
+
+                                          Navigator.pop(context);
+                                        },
+                                        title: "Delete Card",
+                                        msg:
+                                            "Press Confirm to delete ${cards[i].name}  from the List.",
+                                      );
+                                    });
+                                FocusManager.instance.primaryFocus!.unfocus();
+                              },
+                              icon: const Icon(Icons.delete))
+                        ],
+                      )),
+                ),
+              );
             }),
-        AddItemWidget(
-          icon: Icons.add_card,
-          btnPostionBottom: 10,
-          postionBottom: 0,
-          btnPositionRight: 10,
-          addFunc: (val) async {
-            await DatabaseService(uid: user!.uid)
-                .updateCardsArray(add: true, card: val);
-          },
-          tag: 'card',
-        )
+        const AddCard()
       ],
     );
   }

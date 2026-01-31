@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:xpens/services/providers/UserInfoProvider.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 
 import '../../../../../shared/constants.dart';
 import 'ListPointExpanded.dart';
