@@ -35,7 +35,7 @@ class _BillSplitMainState extends State<BillSplitMain> {
                           borderRadius: BorderRadius.circular(10)),
                       padding: EdgeInsets.fromLTRB(wt * 0.02, 0, wt * 0.02, 0),
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         "Discard",
                         style: TextStyle(
                             fontSize: 20,

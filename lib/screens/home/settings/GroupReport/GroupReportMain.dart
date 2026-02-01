@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:xpens/screens/home/settings/GroupReport/GroupList/GroupListMain.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 
@@ -8,7 +10,9 @@ import 'GroupInput/GroupInput.dart';
 import 'GroupSummary.dart';
 
 class GroupReportMain extends StatefulWidget {
-  const GroupReportMain({super.key});
+  const GroupReportMain({
+    super.key,
+  });
 
   @override
   State<GroupReportMain> createState() => _GroupReportMainState();
@@ -33,11 +37,24 @@ class _GroupReportMainState extends State<GroupReportMain> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: primaryAppColor,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (context) => GroupListMain(
+                              setGroup: setGroup,
+                            )));
+              },
+              icon: const Icon(Icons.list))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             GroupInput(
+              group: group,
               setGroup: setGroup,
             ),
             GroupSummary(

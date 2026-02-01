@@ -10,6 +10,7 @@ import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
+import 'package:xpens/shared/dataModals/dbModals/card.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';
@@ -255,5 +256,51 @@ class DevService {
     // for (var item in data) {
     //   print(item["cost"]);
     // }
+  }
+
+  Future createPointSource() async {
+    // String user = "zWxHz89t7qc1KhfSOhhicSTyyJI3";
+    // final docRef = FirebaseFirestore.instance.collection(db).doc(user);
+    // docRef.get().then((DocumentSnapshot snapshot) {
+    //   if (snapshot.exists) {
+    //     var data = snapshot.data() as Map;
+    //     List<String> cards = List.from(data['cards']);
+
+    //     cards.forEach((element) {
+    //       DatabaseService(uid: user).addPointSource(PointSource(
+    //           name: element, rupees: 1, points: 1, selfId: "place_holder"));
+    //     });
+    //     // DatabaseService(uid: user).addPointSource(PointSource(name: name, rupees: 1, points: 1, selfId: "place_holder"));
+    //   }
+    // });
+  }
+  void updatePointsWithSourceIds() async {
+    //   String user = "zWxHz89t7qc1KhfSOhhicSTyyJI3";
+    //   Map<String, String> cardNametosourceId = {};
+    //   final sourcecolRef =
+    //       FirebaseFirestore.instance.collection("$db/$user/point-source");
+    //   await sourcecolRef.get().then((QuerySnapshot snapshot) {
+    //     snapshot.docs.forEach((document) async {
+    //       var data = document.data() as Map;
+    //       String name = data['name'];
+    //       String sourceId = document.id;
+    //       cardNametosourceId[name] = sourceId;
+    //       print("mapped $name to $sourceId");
+    //     });
+    //     print("completed mapping , starting update");
+    //   });
+    //   print(cardNametosourceId);
+    //   final colRef = FirebaseFirestore.instance.collection("$db/$user/points");
+    //   colRef.get().then((QuerySnapshot snapshot) {
+    //     snapshot.docs.forEach((document) async {
+    //       var data = document.data() as Map;
+    //       String cardName = data['cardName'];
+    //       print("$cardName:${document.id}");
+    //       // print("updating document ${document.id} with source name $sourceName");
+    //       var sourceId = cardNametosourceId[cardName];
+    //       // print("found source id $sourceId");
+    //       await colRef.doc(document.id).update({'sourceId': sourceId});
+    //     });
+    //   });
   }
 }
