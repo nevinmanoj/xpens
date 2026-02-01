@@ -53,7 +53,7 @@ class _DevDashState extends State<DevDash> {
         ElevatedButton(
             style: buttonDecoration,
             onPressed: () async {
-              DevService(uid: user!.uid).updateDocumentsWithWordArray(user.uid);
+              DevService(uid: user!.uid).updatePointsWithSourceIds();
             },
             child: Text("modify")),
       ])),

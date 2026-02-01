@@ -92,7 +92,7 @@ class _MyWidgetState extends State<CardEdit> {
     return Center(
         child: SizedBox(
       width: wt * 0.95,
-      height: ht * 0.5,
+      height: 400,
       child: AlertDialog(
           insetPadding: EdgeInsets.fromLTRB(
             0,

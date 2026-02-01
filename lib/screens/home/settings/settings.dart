@@ -65,7 +65,7 @@ class SettingsScreen extends StatelessWidget {
       },
       {
         "icon": Icons.star_rate,
-        "title": "Credit Points Usage",
+        "title": "Points Usage",
         "onTap": () => Navigator.push(context,
             CupertinoPageRoute(builder: (context) => const PointsMain())),
       },
