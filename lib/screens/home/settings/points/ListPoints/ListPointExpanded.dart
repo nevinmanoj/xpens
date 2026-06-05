@@ -1,7 +1,9 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:xpens/services/database.dart';
 import 'package:xpens/shared/utils/toast.dart';
@@ -25,6 +27,7 @@ class ExpandPointItem extends StatefulWidget {
 class _MyWidgetState extends State<ExpandPointItem> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
     return Center(

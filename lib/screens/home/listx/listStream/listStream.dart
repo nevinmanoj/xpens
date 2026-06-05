@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
+import 'package:xpens/shared/utils/formatCost.dart';
 
 import 'ListItem.dart';
 import '../../../../shared/utils/filterFunction.dart';
@@ -27,19 +28,16 @@ class _StreamBodyStateState extends State<StreamBodyState> {
 
     list = applyFilter(data: list, filter: widget.filter);
     Map groupedList = {};
+    Map<String, double> dateSum = {};
     for (var item in list) {
-      if (groupedList[DateFormat.yMMMd()
-              .format(DateTime.parse(item['date']))
-              .toString()] ==
-          null) {
-        groupedList[DateFormat.yMMMd()
-            .format(DateTime.parse(item['date']))
-            .toString()] = [item];
+      String dateStr =
+          DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
+      if (groupedList[dateStr] == null) {
+        groupedList[dateStr] = [item];
+        dateSum[dateStr] = item['cost'];
       } else {
-        groupedList[DateFormat.yMMMd()
-                .format(DateTime.parse(item['date']))
-                .toString()]
-            .add(item);
+        groupedList[dateStr].add(item);
+        dateSum[dateStr] = (dateSum[dateStr]! + item['cost']);
       }
     }
     return ListView.builder(
@@ -55,17 +53,37 @@ class _StreamBodyStateState extends State<StreamBodyState> {
           children: [
             Container(
               width: wt,
+              height: 35,
               color: const Color.fromARGB(255, 232, 232, 232),
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-                child: Text(
-                  iDate,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      iDate,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    SizedBox(
+                        width: 100,
+                        child: Text(
+                          "₹ ${formatDouble(dateSum[iDate] ?? 0).toString()}",
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        )),
+                  ],
                 ),
               ),
             ),
             for (var item in groupedList[iDate])
-              itemWidget(context: context, iDate: iDate, item: item)
+              itemWidget(
+                context: context,
+                iDate: iDate,
+                item: item,
+              )
           ],
         );
       },

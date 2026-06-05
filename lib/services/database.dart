@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/dataModals/AddItemModal.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 import '../shared/dataModals/AddPointModal.dart';
 

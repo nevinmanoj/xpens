@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,7 @@ import 'package:xpens/screens/home/settings/dev/injectData.dart';
 import 'package:xpens/screens/home/settings/points/cards/cardsPointsFunc.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 
 import '../../../../../shared/constants.dart';
 
@@ -86,6 +87,7 @@ class _MyWidgetState extends State<CardEdit> {
   @override
   Widget build(BuildContext context) {
     UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
+    final user = Provider.of<User?>(context);
     double wt = MediaQuery.of(context).size.width;
     double ht = MediaQuery.of(context).size.height;
 

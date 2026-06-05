@@ -7,7 +7,7 @@ import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
 import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 
 import '../../../../shared/dataModals/AddPointModal.dart';
 import 'cardName.dart';

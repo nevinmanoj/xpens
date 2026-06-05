@@ -1,11 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:xpens/shared/constants.dart';
 import 'package:intl/intl.dart';
 
-FirebaseAuth _auth = FirebaseAuth.instance;
-User? user = _auth.currentUser;
 String selectYear = DateTime.now().year.toString();
 String selectMonth = DateFormat.MMM().format(DateTime.now()).toString();
 

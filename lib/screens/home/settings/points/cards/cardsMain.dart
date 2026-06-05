@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/settings/points/cards/AddCard.dart';
 import 'package:xpens/screens/home/settings/points/cards/cardsPointsFunc.dart';
 import 'package:xpens/services/database.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
 

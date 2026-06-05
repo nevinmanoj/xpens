@@ -10,7 +10,7 @@ import 'package:xpens/services/milesstoneDatabase.dart';
 import 'package:xpens/shared/Db.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/MilestoneTemplateModal.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 import 'package:xpens/shared/dataModals/dbModals/streakModal.dart';
 import 'package:xpens/shared/dataModals/enums/Period.dart';
 import 'package:xpens/shared/dataModals/subModals/MilestoneValue.dart';

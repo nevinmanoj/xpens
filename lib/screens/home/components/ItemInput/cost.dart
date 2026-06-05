@@ -8,6 +8,7 @@ class ItemQuantity extends StatefulWidget {
   final bool enabled;
   final req;
   final String hint;
+  final String? Function(String?)? validator;
 
   const ItemQuantity(
       {super.key,
@@ -16,7 +17,8 @@ class ItemQuantity extends StatefulWidget {
       required this.req,
       required this.onctrlchange,
       required this.enabled,
-      required this.hint});
+      required this.hint,
+      this.validator});
 
   @override
   State<ItemQuantity> createState() => _ItemQuantityState();
@@ -29,6 +31,12 @@ class _ItemQuantityState extends State<ItemQuantity> {
   void initState() {
     costController = TextEditingController(text: widget.costs);
     super.initState();
+  }
+
+  String? defaultValidator(String? value) {
+    return value!.isEmpty && widget.req
+        ? '${widget.hint} must not be null'
+        : null;
   }
 
   @override
@@ -53,9 +61,12 @@ class _ItemQuantityState extends State<ItemQuantity> {
             widget.onctrlchange(costController!);
           },
 
-          validator: (value) => value!.isEmpty && widget.req
-              ? '${widget.hint} must not be null'
-              : null,
+          validator: (value) {
+            if (widget.validator != null) {
+              return widget.validator!(value);
+            }
+            return defaultValidator(value);
+          },
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
             border: InputBorder.none,
