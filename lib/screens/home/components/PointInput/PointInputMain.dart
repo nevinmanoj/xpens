@@ -65,9 +65,9 @@ class _PointInputMainState extends State<PointInputMain> {
     super.initState();
   }
 
-  void updatesourceId(String sourceId) {
+  void updatesourceId(String newsourceId) {
     setState(() {
-      sourceId = sourceId;
+      sourceId = newsourceId;
     });
   }
 
