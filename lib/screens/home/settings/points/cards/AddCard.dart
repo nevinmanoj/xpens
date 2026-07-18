@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/components/ItemInput/cost.dart';
 import 'package:xpens/screens/home/settings/dev/injectData.dart';
 import 'package:xpens/services/database.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:xpens/shared/dataModals/dbModals/pointSource.dart';
 
 class AddCard extends StatefulWidget {
   const AddCard({
@@ -56,6 +58,7 @@ class _AddCardState extends State<AddCard> {
   Widget build(BuildContext context) {
     double ht = MediaQuery.of(context).size.height;
     double wt = MediaQuery.of(context).size.width;
+    final user = Provider.of<User?>(context);
     double pointsPerRupee;
     double points = getControllerValueasDouble(pointController);
     double rupees = getControllerValueasDouble(rupeeController);
