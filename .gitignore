@@ -50,3 +50,6 @@ app.*.map.json
 **/node_modules/
 **/dist
 pnpm-lock.yaml
+
+# Real receipt photos used to write parser tests (may contain personal info)
+/test/fixtures/receipts/

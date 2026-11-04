@@ -11,7 +11,7 @@ import '../../../services/auth.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import '../../../shared/constants.dart';
 import 'Trash/TrashMain.dart';
-// import 'billSplit/billSplitMain.dart';
+import 'billSplit/billSplitMain.dart';
 import 'dev/devDash.dart';
 import 'DownloadStatement/DownloadStatementMain.dart';
 import 'GroupReport/GroupReportMain.dart';
@@ -85,14 +85,14 @@ class SettingsScreen extends StatelessWidget {
               CupertinoPageRoute(builder: (context) => const UpdateMain()));
         }
       },
-      // {
-      //   "icon": IonIcons.receipt,
-      //   "title": "Bill Split",
-      //   "onTap": () {
-      //     Navigator.push(context,
-      //         CupertinoPageRoute(builder: (context) => const BillSplitMain()));
-      //   }
-      // },
+      {
+        "icon": IonIcons.receipt,
+        "title": "Bill Split",
+        "onTap": () {
+          Navigator.push(context,
+              CupertinoPageRoute(builder: (context) => const BillSplitMain()));
+        }
+      },
       {
         "icon": Icons.tune,
         "title": "Defaults",

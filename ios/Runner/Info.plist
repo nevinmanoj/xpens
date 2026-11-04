@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Take a photo of a receipt to split the bill.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pick a receipt photo to split the bill.</string>
 </dict>
 </plist>
