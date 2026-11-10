@@ -37,7 +37,7 @@ class UserInfoProvider with ChangeNotifier {
   List _streakDocs = [];
   List _cardDocs = [];
   dynamic _latestVersionData;
-  final String _currentVersion = "3.3.0";
+  final String _currentVersion = "4.0.0";
   bool _updateAvailable = false;
   bool updatenotificationshown = false;
 
