@@ -14,21 +14,9 @@ Context: xpens is a personal app, so these features are tailored to my own habit
   Parse my bank and card transaction SMS into draft expenses, then confirm or edit each one with a swipe.
   This is the biggest reduction in manual entry possible on Android.
 
-- **Receipt photo on expenses**
-  Receipt OCR now lives in Bill Split (scan → review → split). Still to do: attach the receipt image to an expense, and an optional "parse with AI" fallback for receipts ML Kit reads badly.
-  This is handy for group expenses I need to reconcile later.
-
-- **IOU tracker**
-  Keep a simple ledger of money I've lent or borrowed per person, linked to expenses and groups.
-  Bill Split's per-person totals could feed straight into it.
-
 - **Subscription tracker**
   Keep a dedicated view of active subscriptions with their renewal dates, monthly and yearly cost, and a "still using?" prompt.
   This helps me spot subscriptions I've forgotten about.
-
-- **Credit card points optimiser**
-  Using my card earn rates from Points, suggest which card to use for each item or group, and track point expiry.
-  This builds on the existing point-source data.
 
 - **Savings goals**
   Set goals such as a trip or a gadget, tag contributions toward them, and show progress on the Analyze tab.
@@ -61,7 +49,3 @@ Context: xpens is a personal app, so these features are tailored to my own habit
 - **Web dashboard**
   A Flutter web build of the Analyze and List screens lets me review, bulk edit and fix data on my laptop.
   It reuses the same Firestore backend.
-
-- **Biometric app lock**
-  Require a fingerprint unlock before the app opens.
-  This keeps my finances private if someone else is using my phone.

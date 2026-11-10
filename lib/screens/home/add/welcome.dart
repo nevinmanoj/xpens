@@ -1,87 +1,84 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:xpens/screens/home/Streaks/StreaksMain.dart';
+import 'package:xpens/screens/home/listx/listStream/listStream.dart'
+    show formatRupee, costOf;
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 
 import '../../../shared/constants.dart';
 
-class Welcome extends StatefulWidget {
+/// Black header on the Add tab: greeting, Expense/Points switch, and
+/// what has been spent today and this month.
+class Welcome extends StatelessWidget {
   const Welcome({super.key});
 
   @override
-  State<Welcome> createState() => _WelcomeState();
-}
-
-class _WelcomeState extends State<Welcome> {
-  List<PopupMenuEntry<String>> options =
-      inputTypes.map((e) => getwidget(e)).toList();
-  // List<PopupMenuEntry<String>> options = [
-  //   getwidget("Expense"),
-  //   getwidget("Points")
-  // ];
-  String selecteditem = "Expense";
-  @override
   Widget build(BuildContext context) {
-    // var userInfo = Provider.of<UserInfoProvider>(context);
-    var userInfo = context.watch<UserInfoProvider>();
-    // final user = Provider.of<User?>(context);
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
+    final userInfo = context.watch<UserInfoProvider>();
+    final firstName = userInfo.userName.trim().split(" ").first;
+    final now = DateTime.now();
+
+    double today = 0, month = 0;
+    for (final item in userInfo.docs) {
+      final d = DateTime.tryParse(item['date'] ?? "");
+      if (d == null || d.year != now.year || d.month != now.month) continue;
+      month += costOf(item);
+      if (d.day == now.day) today += costOf(item);
+    }
+
     return Container(
-      padding: EdgeInsets.fromLTRB(wt * 0.03, ht * 0.009, 0, 0),
-      width: wt,
-      height: ht * 0.11,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      color: primaryAppColor,
+      padding: const EdgeInsets.fromLTRB(20, 16, 16, 18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
             children: [
-              Text(
-                'Welcome',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              InkWell(
-                enableFeedback: false,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const StreakPage())),
-                child: Text(
-                  userInfo.userName,
-                  style: TextStyle(fontSize: 25),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => const StreakPage())),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        firstName.isEmpty ? "Hi" : "Hi, $firstName",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        DateFormat("EEEE, d MMMM").format(now),
+                        style: const TextStyle(
+                            color: Colors.white60, fontSize: 13),
+                      ),
+                    ],
+                  ),
                 ),
-              )
+              ),
+              _ModeSwitch(
+                value: userInfo.option,
+                onChanged: userInfo.setOption,
+              ),
             ],
           ),
-          PopupMenuButton<String>(
-            child: Container(
-              alignment: Alignment.center,
-              height: ht * 0.07,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFFCCCCCC).withOpacity(0.5), //color of shadow
-                  ),
-                ],
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    topLeft: Radius.circular(40)),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              _Stat(label: "Today", value: formatRupee(today)),
+              Container(
+                width: 1,
+                height: 30,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                color: Colors.white24,
               ),
-              width: wt * 0.45,
-              child: ListTile(
-                leading: Icon(geticon(userInfo.option)),
-                title: Text(userInfo.option),
-              ),
-            ),
-            onSelected: (value) {
-              userInfo.setOption(value);
-            },
-            itemBuilder: (BuildContext context) => options,
+              _Stat(label: "This month", value: formatRupee(month)),
+            ],
           ),
         ],
       ),
@@ -89,25 +86,80 @@ class _WelcomeState extends State<Welcome> {
   }
 }
 
-PopupMenuItem<String> getwidget(value) {
-  return PopupMenuItem<String>(
-    value: '$value',
-    child: ListTile(
-      leading: Icon(geticon(value)),
-      title: Text('$value'),
-    ),
-  );
+class _Stat extends StatelessWidget {
+  final String label;
+  final String value;
+  const _Stat({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(color: Colors.white60, fontSize: 12)),
+        const SizedBox(height: 2),
+        Text(value,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
 }
 
-IconData geticon(value) {
-  switch (value) {
-    case "Expense":
-      return Icons.currency_rupee;
+/// Segmented Expense / Points switch.
+class _ModeSwitch extends StatelessWidget {
+  final String value;
+  final ValueChanged<String> onChanged;
+  const _ModeSwitch({required this.value, required this.onChanged});
 
-    case "Points":
-      return Icons.star;
-
-    default:
-      return Icons.currency_rupee;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final type in inputTypes)
+            GestureDetector(
+              onTap: () => onChanged(type),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                decoration: BoxDecoration(
+                  color: type == value ? secondaryAppColor : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      type == "Points" ? Icons.star_outline : Icons.currency_rupee,
+                      size: 15,
+                      color: type == value ? Colors.black : Colors.white70,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      type,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: type == value ? Colors.black : Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

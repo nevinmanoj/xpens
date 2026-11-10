@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/components/ItemInput/calendar.dart';
-import 'package:xpens/screens/home/components/ItemInput/cost.dart';
-import 'package:xpens/screens/home/components/ItemInput/inputAutofill.dart';
-import 'package:xpens/screens/home/components/ItemInput/itemName.dart';
-import 'package:xpens/screens/home/components/ItemInput/location.dart';
-import 'package:xpens/screens/home/components/ItemInput/remarks.dart';
-import 'package:xpens/screens/home/components/ItemInput/time.dart';
 import 'package:xpens/services/providers/UserInfoProvider.dart';
 import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/dbModals/expenseDefault.dart';
 
 import '../../../../shared/dataModals/AddItemModal.dart';
-import '../../../../shared/utils/toast.dart';
-import 'group.dart';
+import 'formFields.dart';
 
+/// Expense form used by Add, Edit, Add-from-calendar, bill split and
+/// Defaults. With [isData] false it edits a default view (cost and date
+/// optional) and passes an [ExpenseDefault] instead of an [AddItem].
 class ItemInputs extends StatefulWidget {
   final bool isData;
   final String itemName;
@@ -46,299 +41,154 @@ class ItemInputs extends StatefulWidget {
 }
 
 class _ItemInputsState extends State<ItemInputs> {
-  String itemName = "";
-  DateTime? date = DateTime.now();
-  TimeOfDay time = TimeOfDay.now();
-  String location = locationList[0];
-  String group = "";
-  String remarks = "";
   final _formKey = GlobalKey<FormState>();
-  TextEditingController costController = TextEditingController();
-  // TextEditingController remarksController = TextEditingController();
-  @override
-  void initState() {
-    date = widget.date;
-    time = widget.time;
-    itemName = widget.itemName;
-    location = widget.location;
-    group = widget.group;
-    costController = TextEditingController(text: widget.costS);
-    remarks = widget.remarks;
-    // remarksController = TextEditingController(text: widget.remarks);
-    super.initState();
-  }
+  late final TextEditingController _cost =
+      TextEditingController(text: widget.costS);
 
-  void updateLocation(String newlocation) {
-    setState(() {
-      location = newlocation;
-    });
-  }
-
-  void updateGroup(String? newgrp) {
-    setState(() {
-      group = newgrp ?? 'none';
-    });
-    print("changed group to: $newgrp");
-  }
-
-  void updateItemName(String newName) {
-    setState(() {
-      itemName = newName;
-    });
-  }
-
-  void updateDate(DateTime? newDate) {
-    setState(() {
-      date = newDate;
-    });
-  }
-
-  void updatecostctrl(newcontroller) {
-    setState(() {
-      costController = newcontroller;
-    });
-  }
-
-  // void updateRemarkctrl(String newRemarks) {
-  //   setState(() {
-  //     remarks = newRemarks;
-  //   });
-  // }
-  void onRemarksChanged(String newRemarks) {
-    setState(() {
-      remarks = newRemarks;
-    });
-  }
-
-  void updateTIme(TimeOfDay newTime) {
-    setState(() {
-      time = newTime;
-    });
-  }
-
-  String notNullReturnValue(key, defaultValue) {
-    return widget.optionDefault == null || widget.optionDefault[key] == null
-        ? defaultValue.toString()
-        : widget.optionDefault[key].toString();
-  }
-
+  late String itemName = widget.itemName;
+  late DateTime? date = widget.date;
+  late TimeOfDay time = widget.time;
+  late String location = widget.location;
+  late String group = widget.group;
+  late String remarks = widget.remarks;
   bool loading = false;
+
+  /// Bumped after each add so text fields rebuild with the reset values.
+  int _generation = 0;
+
+  @override
+  void dispose() {
+    _cost.dispose();
+    super.dispose();
+  }
+
+  String _default(String key, Object fallback) {
+    final d = widget.optionDefault;
+    return d == null || d[key] == null ? fallback.toString() : d[key].toString();
+  }
+
+  TimeOfDay _parseTime(String hhmm) {
+    final parts = hhmm.split(":");
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
+
+  void _resetAfterAdd(List allItems) {
+    final now = TimeOfDay.now();
+    _cost.text = _default("cost", "");
+    itemName = _default("itemName", allItems[0]);
+    group = _default("group", "none");
+    location = _default("location", locationList[0]);
+    remarks = _default("remarks", "");
+    date = DateTime.parse(_default("date", DateTime.now()));
+    time = _parseTime(_default("time", "${now.hour}:${now.minute}"));
+    _generation++;
+  }
+
+  void _submit(List allItems) {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => loading = true);
+    final cost = double.tryParse(_cost.text.trim());
+
+    if (widget.isData) {
+      widget.buttonfunc(AddItem(
+          group: group,
+          isOther: !allItems.contains(itemName.trim()) || itemName == "Other",
+          location: location,
+          remarks: remarks.trim(),
+          cost: cost!,
+          date: date!,
+          itemName: itemName.trim(),
+          time: time));
+    } else {
+      widget.buttonfunc(ExpenseDefault(
+        location: location,
+        date: date,
+        cost: cost,
+        itemName: itemName.trim(),
+        time: time,
+        group: group,
+        remarks: remarks.trim(),
+      ));
+    }
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      if (widget.isData) _resetAfterAdd(allItems);
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List allItems = Provider.of<UserInfoProvider>(context).items;
-    List docs = Provider.of<UserInfoProvider>(context).docs;
+    final userInfo = Provider.of<UserInfoProvider>(context);
+    final List allItems = userInfo.items;
+    final List docs = userInfo.docs;
+    const gap = SizedBox(height: 22);
 
-    double wt = MediaQuery.of(context).size.width;
-    // double ht = MediaQuery.of(context).size.width;
-    return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
-      focusColor: Colors.transparent,
-      hoverColor: Colors.transparent,
-      enableFeedback: false,
-      onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Location(
-                location: location,
-                onLocationChanged: updateLocation,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              ItemName(
-                onNameChange: updateItemName,
-                itemName: itemName,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              InputAutoFill(
-                docs: docs,
-                value: remarks,
-                onValueChange: onRemarksChanged,
-                tag: "remarks",
-                isNullable: true,
-              ),
-              // ItemRemark(
-              //   required: false,
-              //   // onRemarkChanged: updateRemarks,
-              //   hint: "Remarks",
-              //   // onctrlchange: updateRemarkctrl,
-
-              //   remarks: remarks, onValueChange: onRemarksChanged,
-              // ),
-              const SizedBox(
-                height: 15,
-              ),
-              ItemQuantity(
-                hint: "Cost",
-                enabled: true,
-                req: widget.isData,
-                // onCostChanged: updateCost,
-                costs: costController.text,
-                onctrlchange: updatecostctrl,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              // Date(),
-              const SizedBox(
-                height: 15,
-              ),
-
-              SizedBox(
-                // height: ht * 0.13,
-                width: wt * 0.8,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Calendar(
-                      isData: widget.isData,
-                      dateToDisplay: date,
-                      onDateChanged: (DateTime? newId) {
-                        updateDate(newId);
-                      },
-                    ),
-                    Clock(
-                      selectTime: time,
-                      onTimeChanged: (TimeOfDay newId) {
-                        updateTIme(newId);
-                      },
-                    ),
-                  ],
+        key: _formKey,
+        child: KeyedSubtree(
+          key: ValueKey(_generation),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FieldLabel(widget.isData ? "Amount" : "Amount (optional)"),
+                AmountField(
+                    controller: _cost, isRequired: widget.isData, prefix: "₹"),
+                gap,
+                const FieldLabel("Category"),
+                CategoryPicker(
+                  items: allItems,
+                  value: itemName,
+                  docs: docs,
+                  onChanged: (v) => setState(() => itemName = v),
                 ),
-              ),
-              ItemGroup(
-                avoidValue: "none",
-                docs: docs,
-                itemGroup: group,
-                onGroupChange: updateGroup,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-
-              SizedBox(
-                width: 150,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: loading
-                      ? null
-                      : () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              loading = true;
-                            });
-
-                            double cost = 0;
-                            bool costConvFailed = false;
-                            try {
-                              cost = double.parse(costController.text);
-                            } catch (e) {
-                              costConvFailed = true;
-                              if (widget.isData) {
-                                showToast(
-                                    context: context,
-                                    msg: "Invalid value for cost");
-                                costController.clear();
-                                setState(() {
-                                  loading = false;
-                                });
-                                return;
-                              }
-                            }
-                            if (widget.isData) {
-                              AddItem I = AddItem(
-                                  group: group,
-                                  isOther:
-                                      (!allItems.contains(itemName.trim())) ||
-                                          itemName == "Other",
-                                  location: location,
-                                  remarks: remarks.trim(),
-                                  cost: cost,
-                                  date: date!,
-                                  itemName: itemName.trim(),
-                                  time: time);
-
-                              widget.buttonfunc(I);
-                            } else {
-                              ExpenseDefault I = ExpenseDefault(
-                                location: location,
-                                date: date,
-                                cost: costConvFailed ? null : cost,
-                                itemName: itemName.trim(),
-                                time: time,
-                                group: group,
-                                remarks: remarks.trim(),
-                              );
-                              widget.buttonfunc(I);
-                            }
-
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            costController.clear();
-                            // remarksController.clear();
-
-                            if (widget.isData) {
-                              if (widget.optionDefault == null) {
-                                setState(() {
-                                  itemName = allItems[0];
-                                  date = DateTime.now();
-                                  time = TimeOfDay.now();
-                                  location = locationList[0];
-                                  group = "none";
-                                  remarks = "";
-                                });
-                              } else {
-                                setState(() {
-                                  itemName = notNullReturnValue(
-                                      "itemName", allItems[0]);
-
-                                  group = notNullReturnValue("group", "none");
-
-                                  costController.text =
-                                      notNullReturnValue("cost", "");
-                                  date = DateTime.parse(notNullReturnValue(
-                                      "date", DateTime.now()));
-                                  location = notNullReturnValue(
-                                      "location", locationList[0]);
-                                  remarks = notNullReturnValue("remarks", "");
-
-                                  time = TimeOfDay(
-                                      hour: int.parse(notNullReturnValue(
-                                              "time", TimeOfDay.now())
-                                          .split(":")[0]),
-                                      minute: int.parse(notNullReturnValue(
-                                              "time", TimeOfDay.now())
-                                          .split(":")[1]));
-                                });
-                              }
-                            }
-                            setState(() {
-                              loading = false;
-                            });
-                          }
-                        },
-                  style: buttonDecoration,
-                  child: Center(
-                      child: loading
-                          ? const CircularProgressIndicator(
-                              color: secondaryAppColor,
-                            )
-                          : Text(widget.buttonLabel,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16))),
+                gap,
+                const FieldLabel("Remarks"),
+                SuggestField(
+                  docs: docs,
+                  tag: "remarks",
+                  value: remarks,
+                  hint: "Optional note",
+                  onChanged: (v) => remarks = v,
                 ),
-              ),
-            ],
-          )),
+                gap,
+                const FieldLabel("Location"),
+                LocationToggle(
+                  value: location,
+                  onChanged: (v) => setState(() => location = v),
+                ),
+                gap,
+                const FieldLabel("When"),
+                DateTimeRow(
+                  date: date,
+                  time: time,
+                  allowNoDate: !widget.isData,
+                  onDateChanged: (d) => setState(() => date = d),
+                  onTimeChanged: (t) => setState(() => time = t),
+                ),
+                const SizedBox(height: 14),
+                GroupField(
+                  group: group,
+                  docs: docs,
+                  onChanged: (g) => setState(() => group = g),
+                ),
+                const SizedBox(height: 28),
+                SubmitButton(
+                  label: widget.buttonLabel,
+                  loading: loading,
+                  onPressed: () => _submit(allItems),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

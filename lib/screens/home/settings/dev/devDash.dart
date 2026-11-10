@@ -31,7 +31,8 @@ class _DevDashState extends State<DevDash> {
         centerTitle: true,
         title: Text("Dev Dashboard"),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+          padding: const EdgeInsets.only(bottom: 24),
           child: Column(children: [
         InjectTestData(),
         Test(),

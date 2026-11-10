@@ -62,14 +62,7 @@ Widget groupitemWidget(
     // The child of the Slidable is what the user sees when the
     // component is not dragged.
     child: InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ExpandItem(item: item, id: item.id, date: iDate);
-          },
-        );
-      },
+      onTap: () => showExpenseDetails(context, item),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
         child: Row(

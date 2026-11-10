@@ -61,7 +61,6 @@ class DatabaseService {
   Future<bool> addItem(AddItem I) async {
     String year = I.date.year.toString();
     String day = I.date.day.toString();
-    String key = DateTime.now().toString();
     String month = DateFormat.MMM().format(I.date).toString();
     I.date = DateTime(
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
@@ -83,9 +82,10 @@ class DatabaseService {
     try {
       await FirebaseFirestore.instance
           .collection('$db/$uid/list')
-          .doc(key)
+          .doc()
           .set({
         "tags": tags,
+        "createdAt": FieldValue.serverTimestamp(),
         "isTrash": false,
         "group": I.group.trim(),
         "month": month,
@@ -149,7 +149,8 @@ class DatabaseService {
         "time": formattedTime,
         "itemName": I.itemName,
         "location": I.location,
-        "remarkTags": remarkTags
+        "remarkTags": remarkTags,
+        "updatedAt": FieldValue.serverTimestamp()
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());
@@ -162,7 +163,6 @@ class DatabaseService {
   Future<bool> addPointSpent(AddPoint I) async {
     String year = I.date.year.toString();
     String day = I.date.day.toString();
-    String key = DateTime.now().toString();
     String month = DateFormat.MMM().format(I.date).toString();
     I.date = DateTime(
         I.date.year, I.date.month, I.date.day, I.time.hour, I.time.minute);
@@ -173,10 +173,11 @@ class DatabaseService {
     try {
       await FirebaseFirestore.instance
           .collection('$db/$uid/points')
-          .doc(key)
+          .doc()
           .set({
         "cardName": I.cardName,
         "sourceId": I.sourceId,
+        "createdAt": FieldValue.serverTimestamp(),
         "isTrash": false,
         "tags": tags,
         "month": month,
@@ -226,7 +227,8 @@ class DatabaseService {
         "date": I.date.toString(),
         "time": formattedTime,
         "itemName": I.itemName,
-        "sourceId": I.sourceId
+        "sourceId": I.sourceId,
+        "updatedAt": FieldValue.serverTimestamp()
       }, SetOptions(merge: true));
     } catch (e) {
       print(e.toString());

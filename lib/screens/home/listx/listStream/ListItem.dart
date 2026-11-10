@@ -1,131 +1,185 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:xpens/shared/utils/formatCost.dart';
+import 'package:intl/intl.dart';
+
 import '../../../../shared/constants.dart';
+import '../../../../shared/utils/formatCost.dart';
 import 'deleteExpense.dart';
 import 'editMain.dart';
 import 'itemExpanded.dart';
+import 'listStream.dart';
 
-Widget itemWidget(
-    {required item, required iDate, required BuildContext context}) {
-  double wt = MediaQuery.of(context).size.width;
-  return Slidable(
-    groupTag: 'same',
+/// One expense row. Swipe right for edit and delete, tap for details.
+class ExpenseTile extends StatelessWidget {
+  final dynamic item;
+  final String dateLabel;
+  final bool showDivider;
 
-    startActionPane: ActionPane(
-      dragDismissible: true,
-      motion: const ScrollMotion(),
-      children: [
-        SlidableAction(
-          onPressed: (BuildContext context) => showDialog(
-            context: context,
-            builder: (context) {
-              return DeleteExpense(
-                  id: item.id,
-                  name: item['itemName'],
-                  cost: item['cost'].toString(),
-                  date: iDate);
-            },
+  /// Show the expense date in the subtitle (when rows aren't under a
+  /// date header).
+  final bool showDate;
+
+  const ExpenseTile({
+    super.key,
+    required this.item,
+    required this.dateLabel,
+    this.showDivider = true,
+    this.showDate = false,
+  });
+
+  static IconData _iconFor(String? location) => switch (location) {
+        "Home" => Icons.home_outlined,
+        "Personel" => Icons.person_outline,
+        _ => Icons.receipt_long_outlined,
+      };
+
+  static String _time(String? hhmm) {
+    if (hhmm == null || !hhmm.contains(":")) return "";
+    final parts = hhmm.split(":");
+    final h = int.tryParse(parts[0]);
+    final m = int.tryParse(parts[1]);
+    if (h == null || m == null) return "";
+    return DateFormat.jm().format(DateTime(0, 1, 1, h, m));
+  }
+
+  static String _shortDate(DateTime d) => d.year == DateTime.now().year
+      ? DateFormat("d MMM").format(d)
+      : DateFormat("d MMM y").format(d);
+
+  @override
+  Widget build(BuildContext context) {
+    final String name = item['itemName'] ?? "";
+    final String remarks = (item['remarks'] ?? "").toString().trim();
+    final String group = (item['group'] ?? "").toString().trim();
+    final hasGroup = group.isNotEmpty && group != "none";
+    final time = _time(item['time']);
+    final subtitle = [
+      if (showDate) _shortDate(DateTime.parse(item['date'])),
+      time,
+      if (remarks.isNotEmpty) remarks,
+    ].where((s) => s.isNotEmpty).join("  ·  ");
+
+    return Slidable(
+      key: ValueKey(item.id),
+      groupTag: 'expenses',
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.45,
+        children: [
+          SlidableAction(
+            onPressed: (context) => Navigator.push(
+              context,
+              CupertinoPageRoute(
+                  builder: (context) => EditxDetails(id: item.id, item: item)),
+            ),
+            backgroundColor: primaryAppColor,
+            foregroundColor: Colors.white,
+            icon: Icons.edit_outlined,
+            label: 'Edit',
           ),
-          backgroundColor: primaryAppColor,
-          foregroundColor: secondaryAppColor,
-          icon: Icons.delete,
-          // label: 'Delete',
-        ),
-        const VerticalDivider(
-          // color: Color.fromARGB(255, 29, 29, 29),
-          color: secondaryAppColor,
-          width: 1,
-          thickness: 1,
-        ),
-        SlidableAction(
-          // An action can be bigger than the others.
-          flex: 2,
-          onPressed: (BuildContext context) {
-            Navigator.push(
-                context,
-                CupertinoPageRoute(
-                    builder: (context) => EditxDetails(
-                          id: item.id,
-                          item: item,
-                        )));
-          },
-          backgroundColor: primaryAppColor,
-          foregroundColor: secondaryAppColor,
-          icon: Icons.edit,
-          // label: 'Edit',
-        ),
-      ],
-    ),
-
-    // The child of the Slidable is what the user sees when the
-    // component is not dragged.
-    child: InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ExpandItem(item: item, id: item.id, date: iDate);
-          },
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-        child: Row(
-          children: [
-            SizedBox(
-                width: wt * 0.43,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          SlidableAction(
+            onPressed: (context) => showDialog(
+              context: context,
+              builder: (context) => DeleteExpense(
+                id: item.id,
+                name: name,
+                cost: formatDouble(costOf(item)),
+                date: dateLabel,
+              ),
+            ),
+            backgroundColor: Colors.red.shade700,
+            foregroundColor: Colors.white,
+            icon: Icons.delete_outline,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: () => showExpenseDetails(context, item),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            decoration: showDivider
+                ? BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: Colors.grey.shade200)))
+                : null,
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(_iconFor(item['location']),
+                      size: 20, color: Colors.black87),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      if (subtitle.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      item['itemName'],
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    Text(
-                      item['remarks'],
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
+                      formatRupee(costOf(item)),
                       style: const TextStyle(
-                          fontSize: 16,
-                          color: Color.fromARGB(255, 143, 134, 134)),
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  ],
-                )),
-            const Spacer(),
-            item['group'] != "none"
-                ? Container(
-                    width: wt * 0.17,
-                    padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 201, 201, 201))),
-                    // width: 100,
-                    child: Center(
-                      child: Text(
-                        item['group'].toString(),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(fontSize: 16),
+                    if (hasGroup) ...[
+                      const SizedBox(height: 4),
+                      Container(
+                        constraints: const BoxConstraints(maxWidth: 110),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: secondaryAppColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          group,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFFB25E00)),
+                        ),
                       ),
-                    ))
-                : Container(),
-            const Spacer(),
-            SizedBox(
-                width: 100,
-                child: Text(
-                  "₹ ${formatDouble(item['cost'])}",
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  style: const TextStyle(fontSize: 18),
-                )),
-          ],
+                    ],
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

@@ -1,137 +1,100 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xpens/services/database.dart';
-import 'package:xpens/shared/utils/toast.dart';
 import 'package:xpens/shared/constants.dart';
 
-class DeleteExpense extends StatefulWidget {
+/// Confirms moving an expense to Trash, then offers Undo.
+/// Pops with `true` when the expense was deleted.
+class DeleteExpense extends StatelessWidget {
   final String id;
   final String name;
   final String cost;
   final String date;
-  const DeleteExpense(
-      {super.key,
-      required this.id,
-      required this.name,
-      required this.cost,
-      required this.date});
-  @override
-  State<DeleteExpense> createState() => _MyWidgetState();
-}
 
-class _MyWidgetState extends State<DeleteExpense> {
+  const DeleteExpense({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.cost,
+    required this.date,
+  });
+
+  Future<void> _delete(BuildContext context) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final messenger = ScaffoldMessenger.of(context);
+    final db = DatabaseService(uid: uid);
+    Navigator.pop(context, true);
+    await db.moveToTrash(id: id, type: 'expense');
+    messenger.showSnackBar(SnackBar(
+      backgroundColor: primaryAppColor,
+      content: Text("$name moved to Trash"),
+      action: SnackBarAction(
+        label: "Undo",
+        textColor: secondaryAppColor,
+        onPressed: () => db.restore(id: id, type: 'expense'),
+      ),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
-    return Center(
-        child: SizedBox(
-      height: ht * 0.5,
-      child: AlertDialog(
-          insetPadding: EdgeInsets.fromLTRB(
-            0,
-            0,
-            0,
-            ht * 0.1,
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text("Delete this expense?"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 2),
+                      Text(date,
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey.shade600)),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text("₹$cost",
+                    style: const TextStyle(fontWeight: FontWeight.w600)),
+              ],
+            ),
           ),
-          title: const Center(
-              child: Text(
-            "Delete Expense",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )),
-          content: Column(children: [
-            const Text("Press Confirm to delete this item."),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Item Name: "),
-                Text(
-                  widget.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Item Cost: "),
-                Text(
-                  "${widget.cost} ₹",
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Item Date: "),
-                Text(
-                  widget.date,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            SizedBox(
-              height: ht * 0.04,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.4,
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        DatabaseService(uid: user!.uid).moveToTrash(
-                          id: widget.id,
-                          type: 'expense',
-                        );
-                        Navigator.pop(context);
-                        showToast(context: context, msg: "Record deleted");
-                      },
-                      style: buttonDecoration,
-                      child: const Text(
-                        'Confirm',
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      )),
-                ),
-                SizedBox(
-                  width: wt * 0.025,
-                ),
-                SizedBox(
-                  height: ht * 0.06,
-                  width: wt * 0.4,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: secBtnDecoration,
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: primaryAppColor, fontSize: 16),
-                      )),
-                ),
-              ],
-            ),
-            // ElevatedButton(
-            //     onPressed: () {
-            //       Navigator.pop(context);
-            //     },
-            //     child: Text(
-            //       'Edit',
-            //       style: TextStyle(
-            //           color: primaryAppColor, fontSize: 16),
-            //     ),
-            //     style: ButtonStyle(
-            //         backgroundColor:
-            //             MaterialStateProperty.all<Color>(
-            //                 Color.fromARGB(236, 255, 255, 255)))),
-          ])),
-    ));
+          const SizedBox(height: 12),
+          Text(
+            "It moves to Trash, where you can restore it later.",
+            style: TextStyle(color: Colors.grey.shade700),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          style: TextButton.styleFrom(foregroundColor: Colors.black87),
+          child: const Text("Cancel"),
+        ),
+        TextButton(
+          onPressed: () => _delete(context),
+          style: TextButton.styleFrom(foregroundColor: Colors.red.shade700),
+          child: const Text("Delete",
+              style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
+      ],
+    );
   }
 }

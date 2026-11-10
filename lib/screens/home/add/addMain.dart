@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,121 +15,121 @@ import '../../../shared/dataModals/AddItemModal.dart';
 import '../../../shared/dataModals/AddPointModal.dart';
 import '../components/PointInput/PointInputMain.dart';
 
-class AddX extends StatefulWidget {
+/// Add tab: header with today's spend, then the Expense or Points form.
+class AddX extends StatelessWidget {
   const AddX({super.key});
 
   @override
-  State<AddX> createState() => _AddXState();
+  Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfoProvider>(context);
+    final user = Provider.of<User?>(context);
+    final List allItems = userInfo.items;
+    final cards = userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
+    final option = userInfo.option;
+    final optionDefault = userInfo.defaults
+        .firstWhereOrNull((e) => e["type"] == option.toLowerCase());
+
+    String def(String key, Object fallback) =>
+        optionDefault == null || optionDefault[key] == null
+            ? fallback.toString()
+            : optionDefault[key].toString();
+
+    Future<void> addItem(AddItem item) async {
+      final ok = await DatabaseService(uid: user!.uid).addItem(item);
+      if (!context.mounted) return;
+      showToast(
+          context: context,
+          msg: ok ? "Expense added" : "Couldn't add the expense");
+    }
+
+    Future<void> addPointSpent(AddPoint item) async {
+      final ok = await DatabaseService(uid: user!.uid).addPointSpent(item);
+      if (!context.mounted) return;
+      showToast(
+          context: context, msg: ok ? "Points added" : "Couldn't add the points");
+    }
+
+    Widget form;
+    if (option == "Expense") {
+      final now = TimeOfDay.now();
+      final time = def("time", "${now.hour}:${now.minute}").split(":");
+      form = ItemInputs(
+        // Rebuild the form once defaults finish loading.
+        key: ValueKey(optionDefault?.id ?? "no-default"),
+        optionDefault: optionDefault,
+        isData: true,
+        itemName: def("itemName", allItems[0]),
+        costS: def("cost", ""),
+        group: def("group", "none"),
+        date: DateTime.parse(def("date", DateTime.now())),
+        location: def("location", locationList[0]),
+        remarks: def("remarks", ""),
+        time: TimeOfDay(hour: int.parse(time[0]), minute: int.parse(time[1])),
+        buttonLabel: "Add expense",
+        buttonfunc: addItem,
+      );
+    } else if (cards.isEmpty) {
+      form = const _NoCards();
+    } else {
+      form = PointInputMain(
+        cardName: cards[0].name,
+        sourceId: cards[0].selfId,
+        costS: "",
+        group: "none",
+        date: DateTime.now(),
+        location: locationList[0],
+        itemName: "",
+        time: TimeOfDay.now(),
+        buttonLabel: "Add points",
+        buttonfunc: addPointSpent,
+      );
+    }
+
+    return Column(
+      children: [
+        const Welcome(),
+        Expanded(
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: form,
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class _AddXState extends State<AddX> {
+class _NoCards extends StatelessWidget {
+  const _NoCards();
+
   @override
   Widget build(BuildContext context) {
-    var userInfo = Provider.of<UserInfoProvider>(context);
-    List allItems = userInfo.items;
-    List defaults = userInfo.defaults;
-    List<PointSource> cards =
-        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
-    String option = userInfo.option;
-    var optionDefault = defaults
-        .firstWhereOrNull((element) => element["type"] == option.toLowerCase());
-    // if(defaults["expense"]!=null){
-
-    // }
-
-    double ht = MediaQuery.of(context).size.height;
-    final user = Provider.of<User?>(context);
-    void addItem(AddItem I) async {
-      bool res = await DatabaseService(uid: user!.uid).addItem(I);
-      String msg = res ? "successfully" : "failed";
-
-      showToast(context: context, msg: "Expense added $msg");
-    }
-
-    void addPointSpent(AddPoint I) async {
-      bool res = await DatabaseService(uid: user!.uid).addPointSpent(I);
-      String msg = res ? "successfully" : "failed";
-
-      showToast(context: context, msg: "Expense added $msg");
-    }
-
-    String notNullReturnValue(key, defaultValue) {
-      return optionDefault == null || optionDefault[key] == null
-          ? defaultValue.toString()
-          : optionDefault[key].toString();
-    }
-
-    return SingleChildScrollView(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(32, 80, 32, 32),
       child: Column(
         children: [
-          Welcome(),
-          SizedBox(
-            height: ht * 0.075,
+          Icon(Icons.credit_card, size: 56, color: Colors.grey.shade400),
+          const SizedBox(height: 12),
+          const Text("No cards yet",
+              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          Text("Add a card to start logging points.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey.shade600)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryAppColor,
+              elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const PointsMain())),
+            child: const Text("Add a card",
+                style: TextStyle(color: Colors.white)),
           ),
-          // AddxInputs()
-          option == "Expense"
-              ? ItemInputs(
-                  optionDefault: optionDefault,
-                  isData: true,
-                  itemName: notNullReturnValue("itemName", allItems[0]),
-                  costS: notNullReturnValue("cost", ""),
-                  group: notNullReturnValue("group", "none"),
-                  date: DateTime.parse(
-                      notNullReturnValue("date", DateTime.now())),
-                  location: notNullReturnValue("location", locationList[0]),
-                  remarks: notNullReturnValue("remarks", ""),
-                  time: TimeOfDay(
-                      hour: int.parse(
-                          notNullReturnValue("time", TimeOfDay.now())
-                              .split(":")[0]),
-                      minute: int.parse(
-                          notNullReturnValue("time", TimeOfDay.now())
-                              .split(":")[1])),
-                  buttonLabel: "Add",
-                  buttonfunc: addItem)
-              : (cards.isEmpty
-                  ? Column(
-                      children: [
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(20, ht * 0.2, 20, 0),
-                            child: Text(
-                                "No Cards added yet. Please add a card in settings to proceed.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w500)),
-                          ),
-                        ),
-                        SizedBox(
-                          height: ht * 0.03,
-                        ),
-                        ElevatedButton(
-                            style: buttonDecoration,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PointsMain()));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                              child: Text("Go to Cards",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16)),
-                            )),
-                      ],
-                    )
-                  : PointInputMain(
-                      cardName: cards[0].name,
-                      sourceId: cards[0].selfId,
-                      costS: "",
-                      group: "none",
-                      date: DateTime.now(),
-                      location: locationList[0],
-                      itemName: "",
-                      time: TimeOfDay.now(),
-                      buttonLabel: "Add",
-                      buttonfunc: addPointSpent))
         ],
       ),
     );

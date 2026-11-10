@@ -29,7 +29,7 @@ List applyFilter({required data, required filter}) {
   if (filter['query'] != null && filter['queryType'] != null) {
     List data1 = [];
     String value = filter['query'];
-    if (filter["queryType"] == "itemName" || filter["queryType"] == "remark") {
+    if (filter["queryType"] == "itemName" || filter["queryType"] == "remarks") {
       final List<String> tags = value
           .split(' ')
           .where((word) => word.isNotEmpty)
