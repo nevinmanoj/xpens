@@ -1,263 +1,150 @@
-// ignore_for_file: must_be_immutable
-
-import 'package:flutter/material.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/material.dart';
+import 'package:xpens/screens/home/components/ItemInput/formFields.dart'
+    show FieldLabel, SubmitButton, fieldDecoration;
 import 'package:xpens/services/database.dart';
+import 'package:xpens/shared/utils/toast.dart';
 
 import '../../../../shared/constants.dart';
 
+/// Edit your name and phone number. Email is shown but can't be changed.
 class Profile extends StatefulWidget {
-  String name;
-  String phoneNumber;
-  Profile({super.key, required this.name, required this.phoneNumber});
+  final String name;
+  final String phoneNumber;
+  const Profile({super.key, required this.name, required this.phoneNumber});
 
   @override
   State<Profile> createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  bool updateName = false;
-  bool updatePhone = false;
-  final _formKeyN = GlobalKey<FormState>();
-  final _formKeyP = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  late final _name = TextEditingController(text: widget.name);
+  late final _phone = TextEditingController(text: widget.phoneNumber);
+  bool _saving = false;
+
+  bool get _changed =>
+      _name.text.trim() != widget.name.trim() ||
+      _phone.text.trim() != widget.phoneNumber.trim();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    super.dispose();
+  }
+
+  String get _initials {
+    final parts = _name.text
+        .trim()
+        .split(RegExp(r"\s+"))
+        .where((p) => p.isNotEmpty)
+        .toList();
+    if (parts.isEmpty) return "";
+    return (parts.first[0] + (parts.length > 1 ? parts.last[0] : ""))
+        .toUpperCase();
+  }
+
+  Future<void> _save() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() => _saving = true);
+    final db = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
+    try {
+      if (_name.text.trim() != widget.name.trim()) {
+        await db.updateUserInfo("Name", _name.text.trim());
+      }
+      if (_phone.text.trim() != widget.phoneNumber.trim()) {
+        await db.updateUserInfo("PhoneNumber", _phone.text.trim());
+      }
+      if (!mounted) return;
+      showToast(context: context, msg: "Profile updated");
+      Navigator.pop(context);
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _saving = false);
+      showToast(context: context, msg: "Couldn't update your profile");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-
-    String? email123 = user?.email;
+    final email = FirebaseAuth.instance.currentUser?.email ?? "";
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(backgroundColor: primaryAppColor),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 12, 10, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Text('NAME',
-                style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: AppBar(
+          backgroundColor: primaryAppColor, title: const Text("Profile")),
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+          child: Form(
+            key: _formKey,
+            onChanged: () => setState(() {}),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (!updateName)
-                  Text(widget.name,
-                      style: TextStyle(
-                          color: Colors.grey[600], fontWeight: FontWeight.w400))
-                else
-                  Form(
-                    key: _formKeyN,
-                    child: TextFormField(
-                        initialValue: widget.name,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Name cannot be empty' : null,
-                        keyboardType: TextInputType.name,
-                        textAlign: TextAlign.left,
-                        onChanged: (value) {
-                          widget.name = value;
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          constraints: BoxConstraints(maxWidth: 0.8 * wt),
-                        )),
+                Center(
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                        color: secondaryAppColor, shape: BoxShape.circle),
+                    child: _initials.isEmpty
+                        ? const Icon(Icons.person, size: 40)
+                        : Text(_initials,
+                            style: const TextStyle(
+                                fontSize: 28, fontWeight: FontWeight.w700)),
                   ),
-                if (!updateName)
-                  InkWell(
-                      onTap: () {
-                        setState(() => updateName = true);
-                      },
-                      child: const Text('EDIT',
-                          style: TextStyle(
-                              color: secondaryAppColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold))),
+                ),
+                const SizedBox(height: 28),
+                const FieldLabel("Name"),
+                TextFormField(
+                  controller: _name,
+                  textCapitalization: TextCapitalization.words,
+                  cursorColor: primaryAppColor,
+                  decoration: fieldDecoration(hint: "Your name"),
+                  validator: (v) =>
+                      (v ?? "").trim().isEmpty ? "Enter your name" : null,
+                ),
+                const SizedBox(height: 20),
+                const FieldLabel("Phone number"),
+                TextFormField(
+                  controller: _phone,
+                  keyboardType: TextInputType.phone,
+                  cursorColor: primaryAppColor,
+                  decoration: fieldDecoration(hint: "Phone number"),
+                  validator: (v) =>
+                      (v ?? "").trim().isEmpty ? "Enter a phone number" : null,
+                ),
+                const SizedBox(height: 20),
+                const FieldLabel("Email"),
+                TextFormField(
+                  initialValue: email,
+                  enabled: false,
+                  decoration: fieldDecoration().copyWith(
+                    suffixIcon: const Icon(Icons.lock_outline, size: 18),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6, left: 2),
+                  child: Text("Your sign-in email can't be changed here.",
+                      style:
+                          TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                ),
+                const SizedBox(height: 32),
+                Opacity(
+                  opacity: _changed ? 1 : 0.4,
+                  child: SubmitButton(
+                    label: "Save",
+                    loading: _saving,
+                    onPressed: _changed ? _save : () {},
+                  ),
+                ),
               ],
             ),
-            if (updateName)
-              Container(
-                  child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 45,
-                        width: wt * 0.463,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKeyN.currentState!.validate()) {
-                                await DatabaseService(uid: user!.uid)
-                                    .updateUserInfo("Name", widget.name);
-                                setState(() => updateName = false);
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        primaryAppColor)),
-                            child: const Text(
-                              'UPDATE',
-                              // style: TextStyle(color: secondaryAppColor),
-                            )),
-                      ),
-                      SizedBox(
-                        height: 45,
-                        width: wt * 0.463,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              setState(() => updateName = false);
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color.fromARGB(236, 255, 255, 255))),
-                            child: const Text(
-                              'CANCEL',
-                              style: TextStyle(color: secondaryAppColor),
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-            const SizedBox(
-              height: 3,
-            ),
-            Divider(
-              color: Colors.grey[400],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text('PHONE NUMBER',
-                style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            const SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (!updatePhone)
-                  Text(widget.phoneNumber,
-                      style: TextStyle(
-                          color: Colors.grey[600], fontWeight: FontWeight.w400))
-                else
-                  Form(
-                    key: _formKeyP,
-                    child: TextFormField(
-                        initialValue: widget.phoneNumber,
-                        validator: (value) => value!.isEmpty
-                            ? 'Phone Number cannot be empty'
-                            : null,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.left,
-                        onChanged: (value) {
-                          widget.phoneNumber = value;
-                        },
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          constraints: BoxConstraints(maxWidth: 0.8 * wt),
-                        )),
-                  ),
-                if (!updatePhone)
-                  InkWell(
-                      onTap: () {
-                        setState(() => updatePhone = true);
-                      },
-                      child: const Text('EDIT',
-                          style: TextStyle(
-                              color: secondaryAppColor,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold))),
-              ],
-            ),
-            if (updatePhone)
-              Container(
-                  child: Column(
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 45,
-                        width: wt * 0.463,
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKeyP.currentState!.validate()) {
-                                await DatabaseService(uid: user!.uid)
-                                    .updateUserInfo(
-                                        "PhoneNumber", widget.phoneNumber);
-                                setState(() => updatePhone = false);
-                              }
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        primaryAppColor)),
-                            child: const Text(
-                              'UPDATE',
-                            )),
-                      ),
-                      SizedBox(
-                        height: 45,
-                        width: wt * 0.463,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              setState(() => updatePhone = false);
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        const Color.fromARGB(236, 255, 255, 255))),
-                            child: const Text(
-                              'CANCEL',
-                              style: TextStyle(color: secondaryAppColor),
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
-            const SizedBox(
-              height: 3,
-            ),
-            Divider(
-              color: Colors.grey[400],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text('EMAIL',
-                style: TextStyle(color: Colors.grey[400], fontSize: 12)),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(email123!,
-                style: TextStyle(
-                    color: Colors.grey[600], fontWeight: FontWeight.w400)),
-            const SizedBox(
-              height: 3,
-            ),
-            Divider(
-              color: Colors.grey[400],
-            ),
-          ],
+          ),
         ),
       ),
     );

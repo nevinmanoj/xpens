@@ -7,81 +7,93 @@ import 'package:xpens/shared/constants.dart';
 import '../../../services/providers/UserInfoProvider.dart';
 import 'Profile/Profile.dart';
 
+/// Black profile band at the top of Settings. Tapping it edits the profile.
 class SettingsHeader extends StatelessWidget {
   const SettingsHeader({super.key});
 
+  static String _initials(String name) {
+    final parts =
+        name.trim().split(RegExp(r"\s+")).where((p) => p.isNotEmpty).toList();
+    if (parts.isEmpty) return "";
+    final first = parts.first[0];
+    final last = parts.length > 1 ? parts.last[0] : "";
+    return (first + last).toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
-    User? user = Provider.of<User?>(context);
-    var userInfo = Provider.of<UserInfoProvider>(context);
-    return Row(
-      children: [
-        SizedBox(
-          width: wt * 0.06,
-        ),
-        Container(
-          decoration: const BoxDecoration(
-              color: secondaryAppColor, shape: BoxShape.circle),
-          height: ht * 0.095,
-          width: ht * 0.095,
-        ),
-        SizedBox(
-          width: wt * 0.04,
-        ),
-        SizedBox(
-          height: ht * 0.1,
-          // color: Colors.amber,
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final user = Provider.of<User?>(context);
+    final userInfo = Provider.of<UserInfoProvider>(context);
+    final name = userInfo.userName.trim();
+    final details = [
+      if ((user?.email ?? "").isNotEmpty) user!.email!,
+      if (userInfo.phone.trim().isNotEmpty) userInfo.phone.trim(),
+    ];
+
+    void openProfile() => Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (_) => Profile(
+                  name: userInfo.userName,
+                  phoneNumber: userInfo.phone,
+                )));
+
+    return Material(
+      color: primaryAppColor,
+      child: InkWell(
+        onTap: openProfile,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 12, 20),
+          child: Row(
             children: [
-              // SizedBox(
-              //   height: ht * 0.04,
-              // ),
-              Text(
-                userInfo.userName,
-                style: const TextStyle(color: Colors.white, fontSize: 18),
+              Container(
+                width: 56,
+                height: 56,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                    color: secondaryAppColor, shape: BoxShape.circle),
+                child: _initials(name).isEmpty
+                    ? const Icon(Icons.person, color: Colors.black, size: 28)
+                    : Text(_initials(name),
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700)),
               ),
-              SizedBox(
-                height: ht * 0.015,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name.isEmpty ? "Your profile" : name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    for (final line in details) ...[
+                      const SizedBox(height: 2),
+                      Text(line,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.white60, fontSize: 13)),
+                    ],
+                  ],
+                ),
               ),
-              Text(
-                userInfo.phone,
-                style: const TextStyle(color: Colors.white, fontSize: 15),
+              IconButton(
+                tooltip: "Edit profile",
+                onPressed: openProfile,
+                icon: const Icon(Icons.edit_outlined, color: Colors.white70),
               ),
-              Text(
-                user!.email ?? "",
-                style: const TextStyle(color: Colors.white, fontSize: 15),
-              )
             ],
           ),
         ),
-        const Spacer(),
-        Container(
-          padding: EdgeInsets.fromLTRB(0, ht * 0.005, wt * 0.02, 0),
-          alignment: Alignment.topCenter,
-          // color: Colors.amber,
-          child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                        builder: (context) => Profile(
-                              name: userInfo.userName,
-                              phoneNumber: userInfo.phone,
-                            )));
-              },
-              child: const Icon(
-                Icons.edit,
-                color: Color.fromARGB(255, 192, 192, 192),
-              )),
-        ),
-        // SizedBox(
-        //   width: wt * 0.03,
-        // ),
-      ],
+      ),
     );
   }
 }

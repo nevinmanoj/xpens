@@ -1,135 +1,171 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:xpens/screens/home/settings/points/cards/AddCard.dart';
-import 'package:xpens/screens/home/settings/points/cards/cardsPointsFunc.dart';
-import 'package:xpens/services/database.dart';
+import 'package:xpens/screens/home/listx/listStream/listStream.dart'
+    show formatRupee;
+import 'package:xpens/shared/constants.dart';
 import 'package:xpens/shared/dataModals/dbModals/card.dart';
 
 import '../../../../../services/providers/UserInfoProvider.dart';
+import 'cardSheets.dart';
+import 'cardsPointsFunc.dart';
 
-import '../../../components/ActionConfirm.dart';
-import 'cardsEdit.dart';
-
-class CardsMain extends StatefulWidget {
+/// Cards tab: each card with its rate and points used. Tap for details.
+class CardsMain extends StatelessWidget {
   const CardsMain({super.key});
 
   @override
-  State<CardsMain> createState() => _CardsMainState();
+  Widget build(BuildContext context) {
+    final userInfo = Provider.of<UserInfoProvider>(context);
+    final cards = userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
+    final now = DateTime.now();
+
+    return Scaffold(
+      backgroundColor: Colors.grey.shade50,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: primaryAppColor,
+        onPressed: () => showCardEditor(context),
+        icon: const Icon(Icons.add_card, color: secondaryAppColor),
+        label: const Text("Add card", style: TextStyle(color: Colors.white)),
+      ),
+      body: cards.isEmpty
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.credit_card,
+                        size: 56, color: Colors.grey.shade400),
+                    const SizedBox(height: 12),
+                    const Text("No cards yet",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 4),
+                    Text(
+                        "Add a card with its points-to-rupee rate to start tracking points.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+            )
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+              children: [
+                for (final card in cards)
+                  _CardTile(
+                    card: card,
+                    entries: userInfo.pointDocs
+                        .where((e) => cardOf(e, cards)?.selfId == card.selfId)
+                        .toList(),
+                    now: now,
+                  ),
+              ],
+            ),
+    );
+  }
 }
 
-class _CardsMainState extends State<CardsMain> {
+class _CardTile extends StatelessWidget {
+  final PointSource card;
+  final List entries;
+  final DateTime now;
+  const _CardTile(
+      {required this.card, required this.entries, required this.now});
+
   @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
-    double ht = MediaQuery.of(context).size.height;
-
-    UserInfoProvider userInfo = Provider.of<UserInfoProvider>(context);
-    List<double> sums = [];
-    List<PointSource> cards =
-        userInfo.cards.map((e) => PointSource.fromJson(e)).toList();
-    for (var card in cards) {
-      sums.add(calcCardpoints(
-          start: null,
-          end: null,
-          data: userInfo.pointDocs,
-          sourceId: card.selfId));
+    double all = 0, month = 0;
+    for (final e in entries) {
+      final pts = pointsOf(e);
+      all += pts;
+      final d = DateTime.parse(e['date']);
+      if (d.year == now.year && d.month == now.month) month += pts;
     }
-    User? user = Provider.of<User?>(context);
-    return Stack(
-      children: [
-        ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: cards.length,
-            itemBuilder: (BuildContext context, int i) {
-              double pointsPerRupee;
-              double points = cards[i].points;
-              double rupees = cards[i].rupees;
-              if (rupees == 0) {
-                pointsPerRupee = 0;
-              } else {
-                pointsPerRupee = points / rupees;
-              }
-              return InkWell(
-                onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return CardEdit(
-                          card: cards[i],
-                          sum: sums[i],
-                        );
-                      });
-                },
-                child: Padding(
-                  padding:
-                      EdgeInsets.fromLTRB(wt * 0.05, ht * 0.01, wt * 0.05, 0),
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(wt * 0.05, 0, 0, 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: const [
-                          BoxShadow(
-                              blurRadius: 1,
-                              color: Colors.grey,
-                              offset: Offset(0.0, 2))
-                        ],
-                        color: Colors.white,
-                      ),
-                      width: wt,
-                      height: ht * 0.075,
-                      child: Row(
+    final rate = rupeesPerPoint(card);
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Material(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(color: Colors.grey.shade200),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => showCardDetails(context, card),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const CardIcon(),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                cards[i].name,
-                                style: const TextStyle(fontSize: 18),
-                              ),
-                              Text(
-                                "${sums[i].toInt().toString()} points spent ≈ ${(sums[i] ~/ pointsPerRupee).toInt().toString()} ₹",
-                                style: const TextStyle(
-                                    fontSize: 13,
-                                    color: Color.fromARGB(255, 143, 134, 134)),
-                              ),
-                            ],
+                          Text(card.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600)),
+                          Text(
+                            rate == 0
+                                ? "No rate set"
+                                : "1 pt ≈ ₹${rate.toStringAsFixed(2)}",
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.grey.shade600),
                           ),
-                          const Spacer(),
-                          IconButton(
-
-                              // onPressed:null,
-                              onPressed: () async {
-                                await showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return ActionConfirm(
-                                        cancel: () {
-                                          Navigator.pop(context);
-                                        },
-                                        confirm: () async {
-                                          await DatabaseService(uid: user!.uid)
-                                              .deletePointSource(
-                                                  cards[i].selfId);
-
-                                          Navigator.pop(context);
-                                        },
-                                        title: "Delete Card",
-                                        msg:
-                                            "Press Confirm to delete ${cards[i].name}  from the List.",
-                                      );
-                                    });
-                                FocusManager.instance.primaryFocus!.unfocus();
-                              },
-                              icon: const Icon(Icons.delete))
                         ],
-                      )),
+                      ),
+                    ),
+                    Icon(Icons.chevron_right, color: Colors.grey.shade400),
+                  ],
                 ),
-              );
-            }),
-        const AddCard()
-      ],
+                const SizedBox(height: 14),
+                Row(
+                  children: [
+                    _Stat(label: "Used", value: formatPoints(all)),
+                    _Stat(
+                        label: "Worth",
+                        value: formatRupee((all * rate).round())),
+                    _Stat(label: "This month", value: formatPoints(month)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Stat extends StatelessWidget {
+  final String label;
+  final String value;
+  const _Stat({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label,
+              style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+          const SizedBox(height: 2),
+          Text(value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+        ],
+      ),
     );
   }
 }

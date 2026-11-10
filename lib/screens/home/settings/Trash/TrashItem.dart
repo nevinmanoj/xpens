@@ -1,180 +1,173 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+import 'package:xpens/screens/home/listx/listStream/listStream.dart'
+    show costOf, formatRupee;
 import 'package:xpens/services/database.dart';
-import '../../../../shared/utils/toast.dart';
 import '../../../../shared/constants.dart';
 
-import 'package:intl/intl.dart';
-
-import '../../components/ActionConfirm.dart';
+import '../points/cards/cardsPointsFunc.dart' show formatPoints, pointsOf;
 import 'TrashItemExapanded.dart';
 
-Widget trashItemWidget(
-    {required item,
-    required iDate,
-    required BuildContext context,
-    required type}) {
-  String display1 = item['itemName'];
-  String display2 = "";
-  String display3 = "";
-  String display4 = "";
-  final user = Provider.of<User?>(context);
-  switch (type) {
-    case "Expense":
-      display2 = item['remarks'];
-      display3 = DateFormat.yMMMd().format(DateTime.parse(item['date']));
-      display4 = item['cost'].toString();
-      break;
-    case "Points":
-      display2 = item['cardName'];
-      display3 = DateFormat.yMMMd().format(DateTime.parse(item['date']));
-      display4 = item['points'].toString();
-      break;
-  }
-  return Slidable(
-    groupTag: 'same',
-    startActionPane: ActionPane(
-      dragDismissible: true,
-      motion: const ScrollMotion(),
-      children: [
-        SlidableAction(
-          onPressed: (BuildContext context) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                // return DeleteConfirm(id: widget.id);
-                return ActionConfirm(
-                  cancel: () {
-                    Navigator.pop(context);
-                  },
-                  confirm: () async {
-                    await DatabaseService(uid: user!.uid).permaDelete(
-                      id: item.id,
-                      type: type,
-                    );
-                    Navigator.pop(context);
+DatabaseService _db() =>
+    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
 
-                    showToast(context: context, msg: "Record deleted");
-                  },
-                  title: "Delete Item",
-                  msg: "Press Confirm to delete this item.",
-                );
-              },
-            );
-          },
-          backgroundColor: primaryAppColor,
-          foregroundColor: secondaryAppColor,
-          icon: Icons.delete,
-        ),
-        const VerticalDivider(
-          color: secondaryAppColor,
-          width: 1,
-          thickness: 1,
-        ),
-        SlidableAction(
-          // An action can be bigger than the others.
-          flex: 2,
-          onPressed: (BuildContext context) {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return ActionConfirm(
-                  cancel: () {
-                    Navigator.pop(context);
-                  },
-                  confirm: () async {
-                    await DatabaseService(uid: user!.uid).restore(
-                      id: item.id,
-                      type: type,
-                    );
-                    Navigator.pop(context);
+/// "₹250" for an expense, "1,200 pts" for points.
+String trashAmount(dynamic item, String type) => type == "Expense"
+    ? formatRupee(costOf(item))
+    : formatPoints(pointsOf(item));
 
-                    showToast(context: context, msg: "Record Restored");
-                  },
-                  title: "Restore Item",
-                  msg: "Press Confirm to restore this item.",
-                );
-              },
-            );
-          },
-          backgroundColor: primaryAppColor,
-          foregroundColor: secondaryAppColor,
-          icon: Icons.replay,
-          // label: 'Edit',
+/// Restores [item] straight away, with Undo.
+Future<void> restoreTrashItem(
+    BuildContext context, dynamic item, String type) async {
+  final messenger = ScaffoldMessenger.of(context);
+  await _db().restore(id: item.id, type: type);
+  messenger.showSnackBar(SnackBar(
+    backgroundColor: primaryAppColor,
+    content: Text("${item['itemName']} restored"),
+    action: SnackBarAction(
+      label: "Undo",
+      textColor: secondaryAppColor,
+      onPressed: () => _db().moveToTrash(
+          id: item.id, type: type == "Expense" ? "expense" : "points"),
+    ),
+  ));
+}
+
+/// Asks, then deletes [item] for good. Returns true when deleted.
+Future<bool> deleteTrashItemForever(
+    BuildContext context, dynamic item, String type) async {
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text("Delete forever?"),
+      content: Text(
+          "${item['itemName']} · ${trashAmount(item, type)}\n\nThis can't be undone."),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          style: TextButton.styleFrom(foregroundColor: Colors.black87),
+          child: const Text("Cancel"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          style: TextButton.styleFrom(foregroundColor: Colors.red.shade700),
+          child: const Text("Delete forever",
+              style: TextStyle(fontWeight: FontWeight.w600)),
         ),
       ],
     ),
-    child: InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return TrashItemExpanded(
-              item: item,
-              type: type,
-            );
-          },
-        );
-      },
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 10, 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                  width: 150,
+  );
+  if (ok != true) return false;
+  await _db().permaDelete(id: item.id, type: type);
+  return true;
+}
+
+/// One trashed entry. Swipe right to restore or delete forever.
+class TrashTile extends StatelessWidget {
+  final dynamic item;
+  final String type;
+  final bool showDivider;
+  const TrashTile(
+      {super.key,
+      required this.item,
+      required this.type,
+      this.showDivider = true});
+
+  @override
+  Widget build(BuildContext context) {
+    final date = DateTime.parse(item['date']);
+    final detail = type == "Expense"
+        ? (item['remarks'] ?? "").toString().trim()
+        : (item['cardName'] ?? "").toString();
+    final subtitle = [
+      DateFormat(date.year == DateTime.now().year ? "d MMM" : "d MMM y")
+          .format(date),
+      if (detail.isNotEmpty) detail,
+    ].join("  ·  ");
+
+    return Slidable(
+      key: ValueKey(item.id),
+      groupTag: 'trash',
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.5,
+        children: [
+          SlidableAction(
+            onPressed: (context) => restoreTrashItem(context, item, type),
+            backgroundColor: primaryAppColor,
+            foregroundColor: Colors.white,
+            icon: Icons.restore,
+            label: 'Restore',
+          ),
+          SlidableAction(
+            onPressed: (context) => deleteTrashItemForever(context, item, type),
+            backgroundColor: Colors.red.shade700,
+            foregroundColor: Colors.white,
+            icon: Icons.delete_forever_outlined,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: () => showTrashItemDetails(context, item, type),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            decoration: showDivider
+                ? BoxDecoration(
+                    border:
+                        Border(bottom: BorderSide(color: Colors.grey.shade200)))
+                : null,
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                      type == "Expense"
+                          ? Icons.receipt_long_outlined
+                          : Icons.star_outline,
+                      size: 20,
+                      color: Colors.black45),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        display1,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        display2,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 143, 134, 134)),
-                      ),
+                      Text(item['itemName'] ?? "",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500)),
+                      const SizedBox(height: 2),
+                      Text(subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 13, color: Colors.grey.shade600)),
                     ],
-                  )),
-              // Spacer(),
-              Column(
-                children: [
-                  Container(
-                      alignment: Alignment.centerRight,
-                      width: 120,
-                      child: Text(
-                        display3,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Color.fromARGB(255, 144, 144, 144)),
-                      )),
-                  Container(
-                      alignment: Alignment.centerRight,
-                      width: 120,
-                      child: Text(
-                        display4,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(fontSize: 18),
-                      )),
-                ],
-              ),
-            ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(trashAmount(item, type),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey.shade700)),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }

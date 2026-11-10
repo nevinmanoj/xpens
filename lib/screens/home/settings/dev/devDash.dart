@@ -34,30 +34,30 @@ class _DevDashState extends State<DevDash> {
       body: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 24),
           child: Column(children: [
-        InjectTestData(),
-        Test(),
-        ElevatedButton(
-            style: buttonDecoration,
-            onPressed: () async {
-              DevService(uid: user!.uid).injectTestDataMS();
-            },
-            child: Text(
-              "Inject ms data",
-              style: TextStyle(color: Colors.white),
-            )),
-        ElevatedButton(
-            style: buttonDecoration,
-            onPressed: () async {
-              userInfo.init();
-            },
-            child: Text("Reload")),
-        ElevatedButton(
-            style: buttonDecoration,
-            onPressed: () async {
-              DevService(uid: user!.uid).updatePointsWithSourceIds();
-            },
-            child: Text("modify")),
-      ])),
+            InjectTestData(),
+            Test(),
+            ElevatedButton(
+                style: buttonDecoration,
+                onPressed: () async {
+                  DevService(uid: user!.uid).injectTestDataMS();
+                },
+                child: Text(
+                  "Inject ms data",
+                  style: TextStyle(color: Colors.white),
+                )),
+            ElevatedButton(
+                style: buttonDecoration,
+                onPressed: () async {
+                  userInfo.init();
+                },
+                child: Text("Reload")),
+            ElevatedButton(
+                style: buttonDecoration,
+                onPressed: () async {
+                  DevService(uid: user!.uid).updatePointsWithSourceIds();
+                },
+                child: Text("modify")),
+          ])),
     );
   }
 }

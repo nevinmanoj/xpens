@@ -4,73 +4,33 @@ import 'package:xpens/shared/constants.dart';
 import 'ListPoints/ListPointsMain.dart';
 import 'cards/cardsMain.dart';
 
-class PointsMain extends StatefulWidget {
+/// Points: your cards and the history of points used.
+class PointsMain extends StatelessWidget {
   const PointsMain({super.key});
 
   @override
-  State<PointsMain> createState() => _PointsMainState();
-}
-
-class _PointsMainState extends State<PointsMain> {
-  @override
   Widget build(BuildContext context) {
-    double wt = MediaQuery.of(context).size.width;
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: primaryAppColor,
-            bottom: TabBar(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-              indicatorSize: TabBarIndicatorSize.tab,
-              indicatorWeight: 3,
-              indicatorColor: secondaryAppColor,
-              labelColor: secondaryAppColor,
-              unselectedLabelColor: const Color(0xff778585),
-              tabs: [
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Cards",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                      SizedBox(
-                        width: wt * 0.02,
-                      ),
-                      const Icon(Icons.credit_card)
-                    ],
-                  ),
-                ),
-                Tab(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "List",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                      SizedBox(
-                        width: wt * 0.02,
-                      ),
-                      const Icon(Icons.list)
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          body: const TabBarView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              CardsMain(),
-              ListPointsMain(),
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryAppColor,
+          title: const Text("Points"),
+          bottom: const TabBar(
+            indicatorColor: secondaryAppColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: secondaryAppColor,
+            unselectedLabelColor: Colors.white70,
+            tabs: [
+              Tab(text: "Cards"),
+              Tab(text: "History"),
             ],
           ),
-        ));
+        ),
+        body: const TabBarView(
+          children: [CardsMain(), ListPointsMain()],
+        ),
+      ),
+    );
   }
 }

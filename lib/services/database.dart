@@ -80,10 +80,7 @@ class DatabaseService {
           .toList();
     }
     try {
-      await FirebaseFirestore.instance
-          .collection('$db/$uid/list')
-          .doc()
-          .set({
+      await FirebaseFirestore.instance.collection('$db/$uid/list').doc().set({
         "tags": tags,
         "createdAt": FieldValue.serverTimestamp(),
         "isTrash": false,
@@ -171,10 +168,7 @@ class DatabaseService {
     final List<String> tags =
         I.itemName.split(' ').map((word) => word.toLowerCase()).toList();
     try {
-      await FirebaseFirestore.instance
-          .collection('$db/$uid/points')
-          .doc()
-          .set({
+      await FirebaseFirestore.instance.collection('$db/$uid/points').doc().set({
         "cardName": I.cardName,
         "sourceId": I.sourceId,
         "createdAt": FieldValue.serverTimestamp(),
@@ -294,6 +288,36 @@ class DatabaseService {
       } catch (e) {
         print(e.toString());
       }
+    }
+  }
+
+  /// Permanently deletes every trashed entry of [type] ("expense" or
+  /// "points"). Returns how many were deleted, or null on failure.
+  Future<int?> emptyTrash({required String type}) async {
+    final collection = switch (type.toLowerCase()) {
+      "expense" => "list",
+      "points" => "points",
+      _ => null,
+    };
+    if (collection == null) return null;
+    try {
+      final fs = FirebaseFirestore.instance;
+      final snap = await fs
+          .collection('$db/$uid/$collection')
+          .where("isTrash", isEqualTo: true)
+          .get();
+      // Firestore batches hold at most 500 writes.
+      for (var i = 0; i < snap.docs.length; i += 450) {
+        final batch = fs.batch();
+        for (final doc in snap.docs.skip(i).take(450)) {
+          batch.delete(doc.reference);
+        }
+        await batch.commit();
+      }
+      return snap.docs.length;
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 

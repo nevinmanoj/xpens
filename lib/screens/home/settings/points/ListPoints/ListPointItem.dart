@@ -1,247 +1,164 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:xpens/services/providers/UserInfoProvider.dart';
-import 'package:xpens/shared/dataModals/dbModals/card.dart';
+import 'package:intl/intl.dart';
+import 'package:xpens/services/database.dart';
+import 'package:xpens/shared/constants.dart';
 
-import '../../../../../shared/constants.dart';
+import '../cards/cardsPointsFunc.dart';
+import 'EditListPointItem.dart';
 import 'ListPointExpanded.dart';
 
-Widget pointItemWidget(
-    {required item, required iDate, required BuildContext context}) {
-  return Slidable(
-    groupTag: 'same',
+String _time(String? hhmm) {
+  final parts = (hhmm ?? "").split(":");
+  if (parts.length != 2) return "";
+  final h = int.tryParse(parts[0]), m = int.tryParse(parts[1]);
+  if (h == null || m == null) return "";
+  return DateFormat.jm().format(DateTime(0, 1, 1, h, m));
+}
 
-    startActionPane: const ActionPane(
-      dragDismissible: true,
-      motion: ScrollMotion(),
-      children: [
-        // SlidableAction(
-        //   onPressed: (BuildContext context) => showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return DeleteExpense(
-        //           id: item.id,
-        //           name: item['itemName'],
-        //           cost: item['cost'].toString(),
-        //           date: iDate);
-        //     },
-        //   ),
-        //   backgroundColor: primaryAppColor,
-        //   foregroundColor: secondaryAppColor,
-        //   icon: Icons.delete,
-        //   // label: 'Delete',
-        // ),
-        VerticalDivider(
-          // color: Color.fromARGB(255, 29, 29, 29),
-          color: secondaryAppColor,
-          width: 1,
-          thickness: 1,
+void editPointEntry(BuildContext context, dynamic entry) => Navigator.push(
+    context,
+    CupertinoPageRoute(
+        builder: (_) => EditPointItem(id: entry.id, item: entry)));
+
+/// Confirms, moves a points entry to Trash, and offers Undo.
+/// Returns true when it was deleted.
+Future<bool> deletePointEntry(BuildContext context, dynamic entry) async {
+  final messenger = ScaffoldMessenger.of(context);
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text("Delete this entry?"),
+      content: Text(
+          "${entry['itemName']} · ${formatPoints(pointsOf(entry))}\n\nIt moves to Trash, where you can restore it later."),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          style: TextButton.styleFrom(foregroundColor: Colors.black87),
+          child: const Text("Cancel"),
         ),
-        // SlidableAction(
-        //   // An action can be bigger than the others.
-        //   flex: 2,
-        //   onPressed: (BuildContext context) {
-        //     Navigator.push(
-        //         context,
-        //         CupertinoPageRoute(
-        //             builder: (context) => EditxDetails(
-        //                   id: item.id,
-        //                   item: item,
-        //                 )));
-        //   },
-        //   backgroundColor: primaryAppColor,
-        //   foregroundColor: secondaryAppColor,
-        //   icon: Icons.edit,
-        //   // label: 'Edit',
-        // ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, true),
+          style: TextButton.styleFrom(foregroundColor: Colors.red.shade700),
+          child: const Text("Delete",
+              style: TextStyle(fontWeight: FontWeight.w600)),
+        ),
       ],
     ),
+  );
+  if (ok != true) return false;
+  final db = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid);
+  await db.moveToTrash(id: entry.id, type: 'points');
+  messenger.showSnackBar(SnackBar(
+    backgroundColor: primaryAppColor,
+    content: Text("${entry['itemName']} moved to Trash"),
+    action: SnackBarAction(
+      label: "Undo",
+      textColor: secondaryAppColor,
+      onPressed: () => db.restore(id: entry.id, type: 'points'),
+    ),
+  ));
+  return true;
+}
 
-    // The child of the Slidable is what the user sees when the
-    // component is not dragged.
-    child: InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ExpandPointItem(item: item, id: item.id, date: iDate);
-          },
-        );
-      },
-      child: Container(
-        decoration: const BoxDecoration(
-            // borderRadius: BorderRadius.circular(5),
-            // boxShadow: [
-            //   BoxShadow(
-            //       blurRadius: 2.5, color: Colors.grey, offset: Offset(0.0, 1))
-            // ],
-            // color: const Color.fromARGB(255, 232, 232, 232),
-            ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 0, 20),
-          child: Row(
-            children: [
-              SizedBox(
-                  // color: Colors.amber,
-                  width: 150,
+/// One points entry. Swipe right for edit and delete, tap for details.
+class PointTile extends StatelessWidget {
+  final dynamic entry;
+  final String cardName;
+  final bool showDivider;
+
+  const PointTile({
+    super.key,
+    required this.entry,
+    required this.cardName,
+    this.showDivider = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final subtitle = [cardName, _time(entry['time'])]
+        .where((s) => s.isNotEmpty)
+        .join("  ·  ");
+
+    return Slidable(
+      key: ValueKey(entry.id),
+      groupTag: 'points',
+      startActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.45,
+        children: [
+          SlidableAction(
+            onPressed: (context) => editPointEntry(context, entry),
+            backgroundColor: primaryAppColor,
+            foregroundColor: Colors.white,
+            icon: Icons.edit_outlined,
+            label: 'Edit',
+          ),
+          SlidableAction(
+            onPressed: (context) => deletePointEntry(context, entry),
+            backgroundColor: Colors.red.shade700,
+            foregroundColor: Colors.white,
+            icon: Icons.delete_outline,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: () => showPointDetails(context, entry),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            decoration: showDivider
+                ? BoxDecoration(
+                    border:
+                        Border(bottom: BorderSide(color: Colors.grey.shade200)))
+                : null,
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.star_outline,
+                      size: 20, color: Colors.black87),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        item['itemName'],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      Text(
-                        item['cardName'],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 143, 134, 134)),
-                      ),
+                      Text(entry['itemName'] ?? "",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500)),
+                      if (subtitle.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 13, color: Colors.grey.shade600)),
+                      ],
                     ],
-                  )),
-              const Spacer(),
-              SizedBox(
-                  width: 100,
-                  child: Text(
-                    item['points'].toString(),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 3,
-                    style: const TextStyle(fontSize: 18),
-                  )),
-            ],
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(formatPoints(pointsOf(entry)),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600)),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
-
-// Widget item(String id, var item, BuildContext context, bool dispDate) {
-//   String iDate =
-//       DateFormat.yMMMd().format(DateTime.parse(item['date'])).toString();
-//   double wt = MediaQuery.of(context).size.width;
-
-//   return Column(
-//     mainAxisAlignment: MainAxisAlignment.start,
-//     children: [
-//       dispDate
-//           ? Container(
-//               width: wt,
-//               color: const Color.fromARGB(255, 232, 232, 232),
-//               // color: flag
-//               //     ? const Color.fromARGB(255, 206, 206, 206)
-//               //     : const Color.fromARGB(255, 232, 232, 232),
-//               child: Padding(
-//                 padding: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-//                 child: Text(
-//                   iDate,
-//                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-//                 ),
-//               ),
-//             )
-//           : Container(),
-//       Slidable(
-//         groupTag: 'same',
-
-//         startActionPane: ActionPane(
-//           dragDismissible: true,
-//           motion: ScrollMotion(),
-//           children: [
-//             SlidableAction(
-//               onPressed: (BuildContext context) => showDialog(
-//                 context: context,
-//                 builder: (context) {
-//                   return DeleteExpense(
-//                       id: id,
-//                       name: item['itemName'],
-//                       cost: item['cost'].toString(),
-//                       date: iDate);
-//                 },
-//               ),
-//               backgroundColor: primaryAppColor,
-//               foregroundColor: secondaryAppColor,
-//               icon: Icons.delete,
-//               // label: 'Delete',
-//             ),
-//             const VerticalDivider(
-//               // color: Color.fromARGB(255, 29, 29, 29),
-//               color: secondaryAppColor,
-//               width: 1,
-//               thickness: 1,
-//             ),
-//             SlidableAction(
-//               // An action can be bigger than the others.
-//               flex: 2,
-//               onPressed: (BuildContext context) {
-//                 Navigator.push(
-//                     context,
-//                     CupertinoPageRoute(
-//                         builder: (context) => EditxDetails(
-//                               id: id,
-//                               item: item,
-//                             )));
-//               },
-//               backgroundColor: primaryAppColor,
-//               foregroundColor: secondaryAppColor,
-//               icon: Icons.edit,
-//               // label: 'Edit',
-//             ),
-//           ],
-//         ),
-
-//         // The child of the Slidable is what the user sees when the
-//         // component is not dragged.
-//         child: InkWell(
-//           onTap: () {
-//             showDialog(
-//               context: context,
-//               builder: (context) {
-//                 return ExpandItem(item: item, id: id, date: iDate);
-//               },
-//             );
-//           },
-//           child: Container(
-//             decoration: BoxDecoration(
-//                 // borderRadius: BorderRadius.circular(5),
-//                 // boxShadow: [
-//                 //   BoxShadow(
-//                 //       blurRadius: 2.5, color: Colors.grey, offset: Offset(0.0, 1))
-//                 // ],
-//                 // color: const Color.fromARGB(255, 232, 232, 232),
-//                 ),
-//             child: Padding(
-//               padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
-//               child: Row(
-//                 children: [
-//                   Container(
-//                       width: 150,
-//                       child: Text(
-//                         item['itemName'],
-//                         overflow: TextOverflow.ellipsis,
-//                         maxLines: 3,
-//                         style: TextStyle(fontSize: 18),
-//                       )),
-//                   Spacer(),
-//                   Container(
-//                       width: 100,
-//                       child: Text(
-//                         "₹ ${item['cost'].toString()}",
-//                         overflow: TextOverflow.ellipsis,
-//                         maxLines: 3,
-//                         style: TextStyle(fontSize: 18),
-//                       )),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     ],
-//   );
-// }

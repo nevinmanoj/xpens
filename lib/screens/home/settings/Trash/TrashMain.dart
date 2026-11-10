@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/constants.dart';
 import 'TrashBody.dart';
-import 'TrashSelector.dart';
 
-class TrashMain extends StatefulWidget {
+/// Trash: deleted expenses and points, which can be restored or deleted
+/// for good.
+class TrashMain extends StatelessWidget {
   const TrashMain({super.key});
 
   @override
-  State<TrashMain> createState() => _TrashMainState();
-}
-
-class _TrashMainState extends State<TrashMain> {
-  String type = inputTypes[0];
-  void ontypeChange(newType) {
-    setState(() {
-      type = newType;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryAppColor,
-      ),
-      body: Stack(
-        children: [
-          TrashBody(
-            type: type,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryAppColor,
+          title: const Text("Trash"),
+          bottom: const TabBar(
+            indicatorColor: secondaryAppColor,
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: secondaryAppColor,
+            unselectedLabelColor: Colors.white70,
+            tabs: [Tab(text: "Expenses"), Tab(text: "Points")],
           ),
-          TrashSelector(
-            value: type,
-            onValChange: ontypeChange,
-          ),
-        ],
+        ),
+        body: const TabBarView(
+          children: [TrashBody(type: "Expense"), TrashBody(type: "Points")],
+        ),
       ),
     );
   }
