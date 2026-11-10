@@ -24,15 +24,18 @@ class _AddFromCalState extends State<AddFromCal> {
     final user = Provider.of<User?>(context);
     dynamic addItem(AddItem item) async {
       bool res = await DatabaseService(uid: user!.uid).addItem(item);
-      String msg = res ? "successfully" : "failed";
+      if (!context.mounted) return;
       Navigator.pop(context);
-      showToast(context: context, msg: "Expense added $msg");
+      showToast(
+          context: context,
+          msg: res ? "Expense added" : "Couldn't add the expense");
     }
 
     List allItems = Provider.of<UserInfoProvider>(context).items;
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: AppBar(backgroundColor: primaryAppColor),
+      appBar: AppBar(
+          backgroundColor: primaryAppColor, title: const Text("Add expense")),
       body: Center(
         child: SingleChildScrollView(
           child: ItemInputs(
@@ -45,7 +48,7 @@ class _AddFromCalState extends State<AddFromCal> {
               location: locationList[0],
               remarks: "",
               time: TimeOfDay.now(),
-              buttonLabel: "Add",
+              buttonLabel: "Add expense",
               buttonfunc: addItem),
         ),
       ),

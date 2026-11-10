@@ -1,113 +1,120 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-
 import 'package:table_calendar/table_calendar.dart';
-import 'package:xpens/screens/home/details/calendar/calendarExpanded.dart';
 import 'package:xpens/shared/constants.dart';
-import 'package:xpens/shared/utils/formatCost.dart';
 
+import '../spendChart.dart' show shortRupee;
+
+/// Week or month calendar with each day's total. Tapping a day calls
+/// [onDayTap].
 class CalendarDisp extends StatefulWidget {
-  final Map<DateTime, double> testmap;
+  final Map<DateTime, double> dayTotals;
+  final ValueChanged<DateTime> onDayTap;
 
-  const CalendarDisp({super.key, required this.testmap});
+  const CalendarDisp(
+      {super.key, required this.dayTotals, required this.onDayTap});
 
   @override
   State<CalendarDisp> createState() => _CalendarDispState();
 }
 
 class _CalendarDispState extends State<CalendarDisp> {
-  // DateTime _selectedDate = DateTime.now();
-  var _calendarFormat = CalendarFormat.week;
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _selectedDate = DateTime.now();
-  // }
+  var _format = CalendarFormat.week;
+  DateTime _focused = DateTime.now();
 
-  void _onDaySelected(DateTime selectedDate, DateTime selectedDate2) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          DateTime date =
-              DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-
-          return CalendarExp(
-            date: date,
-          );
-        });
-    // setState(() {
-    //   _selectedDate =
-    //       DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
-    // });
+  Widget _cell(DateTime day, {bool today = false, bool outside = false}) {
+    final total = widget.dayTotals[DateTime(day.year, day.month, day.day)];
+    // Fill the whole cell so every pill is the same size, whatever its text.
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      alignment: Alignment.center,
+      margin: const EdgeInsets.symmetric(horizontal: 1, vertical: 2),
+      decoration: BoxDecoration(
+        color: today
+            ? primaryAppColor
+            : (outside ? Colors.transparent : Colors.grey.shade100),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "${day.day}",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: today ? FontWeight.w700 : FontWeight.w500,
+              color: today
+                  ? Colors.white
+                  : (outside ? Colors.grey.shade400 : Colors.black87),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            total == null ? "" : shortRupee(total),
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              color: today
+                  ? secondaryAppColor
+                  : (outside ? Colors.grey.shade400 : Colors.grey.shade700),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isWeek = _format == CalendarFormat.week;
     return TableCalendar(
       startingDayOfWeek: StartingDayOfWeek.monday,
-      rowHeight: 90,
+      rowHeight: 56,
+      daysOfWeekHeight: 20,
+      firstDay: DateTime(2019),
       lastDay: DateTime.now().add(const Duration(days: 30)),
-      firstDay: DateTime(2022),
-      focusedDay: DateTime.now(),
+      focusedDay: _focused,
+      calendarFormat: _format,
       availableCalendarFormats: const {
         CalendarFormat.week: "Week",
-        CalendarFormat.month: "Month"
+        CalendarFormat.month: "Month",
       },
-      calendarFormat: _calendarFormat,
-      onFormatChanged: (format) {
-        setState(() {
-          _calendarFormat = format;
-        });
+      onFormatChanged: (f) => setState(() => _format = f),
+      onPageChanged: (d) => _focused = d,
+      onDaySelected: (day, focused) {
+        setState(() => _focused = focused);
+        widget.onDayTap(DateTime(day.year, day.month, day.day));
       },
-      onDaySelected: _onDaySelected,
-      selectedDayPredicate: (day) => isSameDay(DateTime.now(), day),
+      headerStyle: HeaderStyle(
+        titleTextStyle:
+            const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        headerPadding: const EdgeInsets.only(bottom: 8),
+        leftChevronPadding: EdgeInsets.zero,
+        rightChevronPadding: EdgeInsets.zero,
+        leftChevronMargin: EdgeInsets.zero,
+        rightChevronMargin: EdgeInsets.zero,
+        formatButtonShowsNext: true,
+        formatButtonTextStyle: const TextStyle(fontSize: 12),
+        formatButtonDecoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekdayStyle: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+        weekendStyle: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+      ),
       calendarStyle: CalendarStyle(
-        defaultDecoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.1),
-          shape: BoxShape.rectangle,
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-        ),
-        weekendDecoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.1),
-          shape: BoxShape.rectangle,
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-        ),
-        selectedDecoration: const BoxDecoration(
-          color: primaryAppColor,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-        ),
-        todayDecoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            color: secondaryAppColor.withOpacity(0.5),
-            shape: BoxShape.rectangle),
+        outsideDaysVisible: !isWeek,
+        cellMargin: EdgeInsets.zero,
       ),
       calendarBuilders: CalendarBuilders(
-        markerBuilder: (context, day, events) {
-          final value = widget.testmap[DateTime(day.year, day.month, day.day)];
-
-          if (value != null) {
-            return Center(
-              child: Container(
-                width: 40,
-                margin: const EdgeInsets.only(top: 50),
-                child: Text(
-                  textAlign: TextAlign.center,
-                  '₹ ${formatDouble(value)}',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: isSameDay(DateTime.now(), day)
-                          ? Colors.white
-                          : Colors.black),
-                ),
-              ),
-            );
-          } else {
-            return Container();
-          }
-        },
+        defaultBuilder: (context, day, _) => _cell(day),
+        todayBuilder: (context, day, _) => _cell(day, today: true),
+        outsideBuilder: (context, day, _) => _cell(day, outside: true),
+        disabledBuilder: (context, day, _) => _cell(day, outside: true),
       ),
     );
   }

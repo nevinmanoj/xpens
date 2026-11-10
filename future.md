@@ -49,3 +49,7 @@ Context: xpens is a personal app, so these features are tailored to my own habit
 - **Web dashboard**
   A Flutter web build of the Analyze and List screens lets me review, bulk edit and fix data on my laptop.
   It reuses the same Firestore backend.
+
+- **Breakdown by group on Analyze**
+  Add an Item / Group switch to the Analyze tab's breakdown, so trips and events show their totals for the selected period alongside items.
+  The Group report in Settings already does this per group; this would bring it into the main period view.
